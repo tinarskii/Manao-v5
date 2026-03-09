@@ -10,10 +10,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "paths": {
-      "@core/*": ["core/*"],
-      "@db/*": ["db/*"],
-      "@i18n/*": ["i18n/*"],
-      "@helpers/*": ["helpers/*"],
       "@/*": ["*"]
     },
     // Bundler mode
