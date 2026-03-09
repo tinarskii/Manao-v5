@@ -1,9 +1,10 @@
-import { logger } from "@helpers/logger";
+import { logger } from "@/helpers/logger";
 import { addBalance, initAccount } from "@/db";
-import { runCommand } from "@core/runner";
+import { runCommand } from "@/core/runner";
 import { KICK } from "@/config";
-import type { Configuration, CommandContext, MessageHandler, PlatformAdapter } from "@core/types";
-import type { CommandRegistry } from "@core/registry";
+import type { Configuration, CommandContext, MessageHandler, PlatformAdapter } from "@/core/types";
+import type { CommandRegistry } from "@/core/registry";
+import type { ChatMessageEvent } from "@manaobot/kick/types";
 import { KickIt } from "@manaobot/kickit";
 import { io } from "@/server/services/socket.io";
 
@@ -45,17 +46,18 @@ export class KickAdapter implements PlatformAdapter {
         port: 3002,
       },
       ngrok: {
-        authtoken: Bun.env.NGROK_AUTHTOKEN!,
-        domain: Bun.env.NGROK_DOMAIN,
+        authtoken: KICK.NGROK_AUTHTOKEN,
+        domain: KICK.NGROK_DOMAIN,
         port: 8080,
       },
     });
 
-    this.bot.onMessage(async (event: MessageEvent) => {
+    await this.bot.start();
+
+    this.bot.kickClient.webhooks.on("chat.message.sent", async (event: ChatMessageEvent) => {
       await this.handleMessage(event);
     });
 
-    await this.bot.start();
     logger.info("[Kick] Adapter started");
   }
 
@@ -63,18 +65,21 @@ export class KickAdapter implements PlatformAdapter {
     logger.info("[Kick] Adapter stopped");
   }
 
-  async sendMessage(channel: string, message: string): Promise<void> {
-    await this.bot.say(channel, message);
+  async sendMessage(_channel: string, message: string): Promise<void> {
+    await this.bot.kickClient.chat.send({ content: message });
   }
 
   onMessage(handler: MessageHandler): void {
     this.messageHandler = handler;
   }
 
+  private async handleMessage(event: ChatMessageEvent): Promise<void> {
+    const userId = event.sender.user_id.toString();
+    const user = event.sender.username;
+    const message = event.content;
+    const channel = event.broadcaster.username;
 
-
-  private async handleMessage(event: any): Promise<void> {
-    const { channel, user, userId, message, isMod, isBroadcaster, isSubscriber } = event;
+    if (event.sender.identity?.badges?.some((b: any) => b.type === "bot")) return;
 
     try {
       const prefix = this.config.prefix.kick;
@@ -82,6 +87,8 @@ export class KickAdapter implements PlatformAdapter {
 
       if (message.startsWith(prefix)) {
         const lang = this.config.language;
+        const isBroadcaster = event.sender.user_id === event.broadcaster.user_id;
+        const isMod = event.sender.identity?.badges?.some((b: any) => b.type === "moderator") || isBroadcaster;
 
         const ctx: CommandContext = {
           user: {
@@ -91,18 +98,18 @@ export class KickAdapter implements PlatformAdapter {
             platformID: userId,
             roles: {
               isFollower: false,
-              isSubscriber: isSubscriber ?? false,
-              isVIP: false,
-              isModerator: isMod ?? false,
-              isBroadcaster: isBroadcaster ?? false,
+              isSubscriber: event.sender.identity?.badges?.some((b: any) => b.type === "subscriber") ?? false,
+              isVIP: event.sender.identity?.badges?.some((b: any) => b.type === "vip") ?? false,
+              isModerator: isMod,
+              isBroadcaster,
             },
           },
           channel,
           language: lang,
           currency: this.config.currency,
-          say: (msg) => this.bot.say(channel, msg),
-          reply: (msg) => this.bot.say(channel, `@${user}, ${msg}`),
-          whisper: (msg) => this.bot.say(channel, `@${user}, ${msg}`), // Kick has no whisper
+          say: async (msg) => { await this.bot.kickClient.chat.send({ content: msg }); },
+          reply: async (msg) => { await this.bot.kickClient.chat.send({ content: `@${user}, ${msg}` }); },
+          whisper: async (msg) => { await this.bot.kickClient.chat.send({ content: `@${user}, ${msg}` }); }, // Kick has no whisper
           emit: (event, data) => io.emit(event, data),
         };
 
@@ -110,7 +117,7 @@ export class KickAdapter implements PlatformAdapter {
         await this.messageHandler?.(ctx, message);
       } else {
         await this.handleChatReward(id);
-        await this.handleCustomReply(channel, message);
+        await this.handleCustomReply(message);
       }
     } catch (err) {
       logger.error(`[Kick] Error handling message from ${user}: ${err}`);
@@ -131,7 +138,7 @@ export class KickAdapter implements PlatformAdapter {
     }
   }
 
-  private async handleCustomReply(channel: string, message: string): Promise<void> {
+  private async handleCustomReply(message: string): Promise<void> {
     const lowerMsg = message.toLowerCase();
 
     for (const reply of this.config.customReplies) {
@@ -155,7 +162,7 @@ export class KickAdapter implements PlatformAdapter {
         }
 
         if (response) {
-          await this.bot.say(channel, response);
+          await this.bot.kickClient.chat.send({ content: response });
           logger.info("[Kick] Custom reply sent");
         }
         return;
