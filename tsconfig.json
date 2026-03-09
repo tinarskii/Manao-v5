@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["*"],
-      "@web/*": ["dashboard/src/*"],
+      "@web/*": ["dashboard/src/*"]
     },
     // Bundler mode
     "moduleResolution": "node",

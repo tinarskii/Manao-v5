@@ -1,4 +1,12 @@
-import { Box, Grid, Paper, Typography, Button, Stack, Chip } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  Stack,
+  Chip,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -51,8 +59,16 @@ const QUICK_LINKS = [
 
 const OVERLAY_LINKS = [
   { label: "Chat", path: "/overlay/chat", icon: <ChatIcon fontSize="small" /> },
-  { label: "Feed", path: "/overlay/feed", icon: <GraphicEqIcon fontSize="small" /> },
-  { label: "Music", path: "/overlay/music", icon: <MusicNoteIcon fontSize="small" /> },
+  {
+    label: "Feed",
+    path: "/overlay/feed",
+    icon: <GraphicEqIcon fontSize="small" />,
+  },
+  {
+    label: "Music",
+    path: "/overlay/music",
+    icon: <MusicNoteIcon fontSize="small" />,
+  },
 ];
 
 export function HomePage() {
@@ -87,7 +103,11 @@ export function HomePage() {
       </Box>
 
       {/* Quick access cards */}
-      <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: "0.1em" }}>
+      <Typography
+        variant="overline"
+        color="text.secondary"
+        sx={{ fontWeight: 700, letterSpacing: "0.1em" }}
+      >
         Quick Access
       </Typography>
       <Grid container spacing={2} sx={{ mt: 0.5, mb: 4 }}>
@@ -124,7 +144,11 @@ export function HomePage() {
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {item.title}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ flex: 1, mb: 2 }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ flex: 1, mb: 2 }}
+              >
                 {item.description}
               </Typography>
               <Stack direction="row" spacing={1}>
@@ -135,7 +159,13 @@ export function HomePage() {
                     to={a.to}
                     size="small"
                     variant="contained"
-                    sx={{ bgcolor: item.color, "&:hover": { bgcolor: item.color, filter: "brightness(1.15)" } }}
+                    sx={{
+                      bgcolor: item.color,
+                      "&:hover": {
+                        bgcolor: item.color,
+                        filter: "brightness(1.15)",
+                      },
+                    }}
                   >
                     {a.label}
                   </Button>
@@ -147,7 +177,11 @@ export function HomePage() {
       </Grid>
 
       {/* Overlays */}
-      <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: "0.1em" }}>
+      <Typography
+        variant="overline"
+        color="text.secondary"
+        sx={{ fontWeight: 700, letterSpacing: "0.1em" }}
+      >
         Stream Overlays
       </Typography>
       <Paper sx={{ mt: 1, p: 2 }}>

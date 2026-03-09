@@ -19,7 +19,10 @@ export function ChatOverlay() {
 
   useSocketEvent<MessageData>("message", (data) => {
     setMessages((prev) => {
-      const next = [...prev, { ...data, key: `${Date.now()}-${Math.random()}` }];
+      const next = [
+        ...prev,
+        { ...data, key: `${Date.now()}-${Math.random()}` },
+      ];
       return next.slice(-50); // keep last 50
     });
   });
@@ -62,16 +65,42 @@ export function ChatOverlay() {
         >
           {/* Badges */}
           {msg.badges.length > 0 && (
-            <Box sx={{ display: "inline-flex", gap: 0.25, mr: 0.5, verticalAlign: "middle" }}>
+            <Box
+              sx={{
+                display: "inline-flex",
+                gap: 0.25,
+                mr: 0.5,
+                verticalAlign: "middle",
+              }}
+            >
               {msg.badges.map((badge, i) => (
-                <img key={i} src={badge} alt="" style={{ width: 16, height: 16, borderRadius: 2 }} />
+                <img
+                  key={i}
+                  src={badge}
+                  alt=""
+                  style={{ width: 16, height: 16, borderRadius: 2 }}
+                />
               ))}
             </Box>
           )}
-          <span style={{ fontWeight: 700, color: msg.color || "#fff", fontSize: 14 }}>
+          <span
+            style={{
+              fontWeight: 700,
+              color: msg.color || "#fff",
+              fontSize: 14,
+            }}
+          >
             {msg.user}
           </span>
-          <span style={{ color: "rgba(255,255,255,0.4)", margin: "0 4px", fontSize: 12 }}>·</span>
+          <span
+            style={{
+              color: "rgba(255,255,255,0.4)",
+              margin: "0 4px",
+              fontSize: 12,
+            }}
+          >
+            ·
+          </span>
           <span
             style={{ color: "#e8e8e8", fontSize: 14 }}
             dangerouslySetInnerHTML={{ __html: msg.message }}

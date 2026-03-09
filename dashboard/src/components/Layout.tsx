@@ -36,11 +36,21 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", icon: <DashboardIcon />, path: "/" },
-  { label: "Commands", icon: <TerminalIcon />, path: "/commands", section: "Manager" },
+  {
+    label: "Commands",
+    icon: <TerminalIcon />,
+    path: "/commands",
+    section: "Manager",
+  },
   { label: "Config", icon: <SettingsIcon />, path: "/config" },
   { label: "Custom Replies", icon: <ForumIcon />, path: "/replies" },
   { label: "Channel Points", icon: <RedeemIcon />, path: "/channel-points" },
-  { label: "Song Queue", icon: <QueueMusicIcon />, path: "/queue", section: "Overlays" },
+  {
+    label: "Song Queue",
+    icon: <QueueMusicIcon />,
+    path: "/queue",
+    section: "Overlays",
+  },
   { label: "Chat Overlay", icon: <ChatIcon />, path: "/overlay/chat" },
   { label: "Feed Overlay", icon: <GraphicEqIcon />, path: "/overlay/feed" },
   { label: "Music Overlay", icon: <MusicNoteIcon />, path: "/overlay/music" },
@@ -56,7 +66,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   if (isOverlay) return <>{children}</>;
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+      }}
+    >
       <Drawer
         variant="permanent"
         sx={{
@@ -87,7 +103,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             🍋 Manao v5
           </Typography>
           <Chip
-            icon={connected ? <WifiIcon sx={{ fontSize: "12px !important" }} /> : <WifiOffIcon sx={{ fontSize: "12px !important" }} />}
+            icon={
+              connected ? (
+                <WifiIcon sx={{ fontSize: "12px !important" }} />
+              ) : (
+                <WifiOffIcon sx={{ fontSize: "12px !important" }} />
+              )
+            }
             label={connected ? "Connected" : "Disconnected"}
             size="small"
             color={connected ? "success" : "error"}
@@ -111,7 +133,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {showSection && (
                   <Typography
                     variant="caption"
-                    sx={{ px: 1.5, py: 0.5, display: "block", color: "text.secondary", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", fontSize: "0.65rem", mt: 1 }}
+                    sx={{
+                      px: 1.5,
+                      py: 0.5,
+                      display: "block",
+                      color: "text.secondary",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      fontSize: "0.65rem",
+                      mt: 1,
+                    }}
                   >
                     {item.section}
                   </Typography>
@@ -129,7 +161,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     "&.Mui-selected": {
                       bgcolor: "rgba(124,58,237,0.15)",
                       "& .MuiListItemIcon-root": { color: "primary.main" },
-                      "& .MuiListItemText-primary": { color: "primary.light", fontWeight: 600 },
+                      "& .MuiListItemText-primary": {
+                        color: "primary.light",
+                        fontWeight: 600,
+                      },
                       "&:hover": { bgcolor: "rgba(124,58,237,0.2)" },
                     },
                     "&:hover": {
@@ -140,7 +175,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <ListItemIcon
                     sx={{
                       minWidth: 36,
-                      color: isActive ? "primary.main" : hoveredPath === item.path ? "text.primary" : "text.secondary",
+                      color: isActive
+                        ? "primary.main"
+                        : hoveredPath === item.path
+                          ? "text.primary"
+                          : "text.secondary",
                       transition: "color 0.15s ease",
                       "& svg": { fontSize: "1.1rem" },
                     }}
@@ -149,7 +188,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </ListItemIcon>
                   <ListItemText
                     primary={item.label}
-                    primaryTypographyProps={{ fontSize: "0.875rem", fontWeight: isActive ? 600 : 400 }}
+                    primaryTypographyProps={{
+                      fontSize: "0.875rem",
+                      fontWeight: isActive ? 600 : 400,
+                    }}
                   />
                 </ListItemButton>
               </Box>

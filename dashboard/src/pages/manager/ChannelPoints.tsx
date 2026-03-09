@@ -1,9 +1,28 @@
 import { useEffect, useState, useCallback } from "react";
 import {
-  Box, Paper, Typography, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, IconButton, Button, Stack, Switch, Chip, Dialog,
-  DialogTitle, DialogContent, DialogActions, TextField, Divider,
-  Alert, CircularProgress, Tooltip,
+  Box,
+  Paper,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Button,
+  Stack,
+  Switch,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Divider,
+  Alert,
+  CircularProgress,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -42,7 +61,9 @@ export function ChannelPointsPage() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const saveAll = async (next: SoundReward[]) => {
     await api.post("/api/config", { soundRewards: next });
@@ -57,7 +78,15 @@ export function ChannelPointsPage() {
 
   const openEdit = (r: SoundReward) => {
     setEditId(r.id);
-    setForm({ title: r.title, cost: r.cost, prompt: r.prompt, isEnabled: r.isEnabled, userInputRequired: r.userInputRequired, globalCooldown: r.globalCooldown, soundFile: r.soundFile });
+    setForm({
+      title: r.title,
+      cost: r.cost,
+      prompt: r.prompt,
+      isEnabled: r.isEnabled,
+      userInputRequired: r.userInputRequired,
+      globalCooldown: r.globalCooldown,
+      soundFile: r.soundFile,
+    });
     setDialogOpen(true);
   };
 
@@ -83,28 +112,56 @@ export function ChannelPointsPage() {
   };
 
   const toggleEnabled = async (id: string, val: boolean) => {
-    const next = rewards.map((r) => (r.id === id ? { ...r, isEnabled: val } : r));
+    const next = rewards.map((r) =>
+      r.id === id ? { ...r, isEnabled: val } : r,
+    );
     await saveAll(next);
   };
 
-  if (loading) return <Box sx={{ display: "flex", justifyContent: "center", pt: 8 }}><CircularProgress /></Box>;
+  if (loading)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", pt: 8 }}>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
         <Box>
-          <Typography variant="h5" fontWeight={700}>Channel Points</Typography>
-          <Typography variant="body2" color="text.secondary">Sound rewards redeemable via Twitch Channel Points.</Typography>
+          <Typography variant="h5" fontWeight={700}>
+            Channel Points
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Sound rewards redeemable via Twitch Channel Points.
+          </Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={openCreate}>Add Reward</Button>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={openCreate}
+        >
+          Add Reward
+        </Button>
       </Stack>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       <Paper>
         {rewards.length === 0 ? (
           <Box sx={{ p: 4, textAlign: "center" }}>
-            <Typography color="text.secondary">No sound rewards yet.</Typography>
+            <Typography color="text.secondary">
+              No sound rewards yet.
+            </Typography>
           </Box>
         ) : (
           <TableContainer>
@@ -123,23 +180,60 @@ export function ChannelPointsPage() {
                 {rewards.map((r) => (
                   <TableRow key={r.id} hover>
                     <TableCell>
-                      <Switch size="small" checked={r.isEnabled} onChange={(_, v) => toggleEnabled(r.id, v)} />
+                      <Switch
+                        size="small"
+                        checked={r.isEnabled}
+                        onChange={(_, v) => toggleEnabled(r.id, v)}
+                      />
                     </TableCell>
-                    <TableCell><Typography variant="body2" fontWeight={600}>{r.title}</Typography></TableCell>
-                    <TableCell><Chip label={r.cost.toLocaleString()} size="small" color="primary" variant="outlined" /></TableCell>
                     <TableCell>
-                      <Typography variant="body2" color="text.secondary">{r.globalCooldown}s</Typography>
+                      <Typography variant="body2" fontWeight={600}>
+                        {r.title}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={r.cost.toLocaleString()}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary">
+                        {r.globalCooldown}s
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       {r.soundFile ? (
-                        <Chip icon={<VolumeUpIcon />} label={r.soundFile.split("/").pop()} size="small" color="success" variant="outlined" />
+                        <Chip
+                          icon={<VolumeUpIcon />}
+                          label={r.soundFile.split("/").pop()}
+                          size="small"
+                          color="success"
+                          variant="outlined"
+                        />
                       ) : (
-                        <Typography variant="caption" color="text.disabled">No file</Typography>
+                        <Typography variant="caption" color="text.disabled">
+                          No file
+                        </Typography>
                       )}
                     </TableCell>
                     <TableCell align="right">
-                      <Tooltip title="Edit"><IconButton size="small" onClick={() => openEdit(r)}><EditIcon fontSize="small" /></IconButton></Tooltip>
-                      <Tooltip title="Delete"><IconButton size="small" color="error" onClick={() => handleDelete(r.id)}><DeleteIcon fontSize="small" /></IconButton></Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton size="small" onClick={() => openEdit(r)}>
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleDelete(r.id)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -149,16 +243,63 @@ export function ChannelPointsPage() {
         )}
       </Paper>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>{editId ? "Edit Reward" : "New Reward"}</DialogTitle>
         <Divider />
         <DialogContent sx={{ pt: 2 }}>
           <Stack spacing={2}>
-            <TextField size="small" fullWidth label="Title" required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-            <TextField size="small" fullWidth label="Cost" type="number" value={form.cost} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} inputProps={{ min: 0 }} />
-            <TextField size="small" fullWidth label="Description/Prompt" value={form.prompt} onChange={(e) => setForm({ ...form, prompt: e.target.value })} />
-            <TextField size="small" fullWidth label="Cooldown (seconds)" type="number" value={form.globalCooldown} onChange={(e) => setForm({ ...form, globalCooldown: Number(e.target.value) })} inputProps={{ min: 0 }} />
-            <TextField size="small" fullWidth label="Sound file path" value={form.soundFile ?? ""} onChange={(e) => setForm({ ...form, soundFile: e.target.value || null })} placeholder="./sounds/mySound.mp3" />
+            <TextField
+              size="small"
+              fullWidth
+              label="Title"
+              required
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+            />
+            <TextField
+              size="small"
+              fullWidth
+              label="Cost"
+              type="number"
+              value={form.cost}
+              onChange={(e) =>
+                setForm({ ...form, cost: Number(e.target.value) })
+              }
+              inputProps={{ min: 0 }}
+            />
+            <TextField
+              size="small"
+              fullWidth
+              label="Description/Prompt"
+              value={form.prompt}
+              onChange={(e) => setForm({ ...form, prompt: e.target.value })}
+            />
+            <TextField
+              size="small"
+              fullWidth
+              label="Cooldown (seconds)"
+              type="number"
+              value={form.globalCooldown}
+              onChange={(e) =>
+                setForm({ ...form, globalCooldown: Number(e.target.value) })
+              }
+              inputProps={{ min: 0 }}
+            />
+            <TextField
+              size="small"
+              fullWidth
+              label="Sound file path"
+              value={form.soundFile ?? ""}
+              onChange={(e) =>
+                setForm({ ...form, soundFile: e.target.value || null })
+              }
+              placeholder="./sounds/mySound.mp3"
+            />
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>

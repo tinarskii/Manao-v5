@@ -35,12 +35,12 @@ export default {
       }
 
       const argsList = (cmd.arguments ?? [])
-      .map((arg) =>
-        arg.required
-          ? ` | <${arg.name[lang]}> - ${arg.description[lang]}`
-          : ` | [${arg.name[lang]}] - ${arg.description[lang]}`,
-      )
-      .join("");
+        .map((arg) =>
+          arg.required
+            ? ` | <${arg.name[lang]}> - ${arg.description[lang]}`
+            : ` | [${arg.name[lang]}] - ${arg.description[lang]}`,
+        )
+        .join("");
 
       const aliases = cmd.aliases?.[lang]?.join(", ");
       const aliasStr = aliases ? ` (${aliases})` : "";

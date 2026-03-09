@@ -53,6 +53,8 @@ export default {
       name: `System ➡ ${targetName}`,
       action: `${amount} ${ctx.currency}`,
     });
-    await ctx.reply(t.economy.transactionSuccess(amount, ctx.currency, targetName));
+    await ctx.reply(
+      t.economy.transactionSuccess(amount, ctx.currency, targetName),
+    );
   },
 } satisfies Command;

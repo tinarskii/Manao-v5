@@ -191,7 +191,7 @@ export class KickAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-              ] ?? "";
+            ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;

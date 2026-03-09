@@ -119,7 +119,10 @@ export class DiscordAdapter implements PlatformAdapter {
         },
         emit: (event, data) => io.emit(event, data),
         lookupUser: async (name) => {
-          const members = await message.guild?.members.search({ query: name, limit: 1 });
+          const members = await message.guild?.members.search({
+            query: name,
+            limit: 1,
+          });
           const member = members?.first();
           if (!member) return null;
           return initAccount(member.id, "discord");

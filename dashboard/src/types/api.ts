@@ -115,7 +115,12 @@ export interface MessageData {
   badges: string[];
 }
 
-export type FeedStatus = "neutral" | "normal" | "success" | "warning" | "danger";
+export type FeedStatus =
+  | "neutral"
+  | "normal"
+  | "success"
+  | "warning"
+  | "danger";
 
 export interface FeedEvent {
   status: FeedStatus;

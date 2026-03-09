@@ -31,14 +31,24 @@ export default {
             return;
           }
           const balance = getBalance(targetId);
-          ctx.emit("feed", { status: "normal", icon: "👛", name: targetName, action: `${balance} ${ctx.currency}` });
+          ctx.emit("feed", {
+            status: "normal",
+            icon: "👛",
+            name: targetName,
+            action: `${balance} ${ctx.currency}`,
+          });
           await ctx.reply(t.economy.currentBalance(balance, ctx.currency));
         },
       });
     } else {
       const id = initAccount(ctx.user.platformID, ctx.user.platform);
       const balance = getBalance(id);
-      ctx.emit("feed", { status: "normal", icon: "👛", name: ctx.user.name, action: `${balance} ${ctx.currency}` });
+      ctx.emit("feed", {
+        status: "normal",
+        icon: "👛",
+        name: ctx.user.name,
+        action: `${balance} ${ctx.currency}`,
+      });
       await ctx.reply(t.economy.currentBalance(balance, ctx.currency));
     }
   },

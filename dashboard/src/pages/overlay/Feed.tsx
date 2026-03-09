@@ -65,9 +65,13 @@ export function FeedOverlay() {
           >
             <Box
               sx={{
-                width: 32, height: 32, borderRadius: "8px",
+                width: 32,
+                height: 32,
+                borderRadius: "8px",
                 background: `${color}22`,
-                display: "flex", alignItems: "center", justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 fontSize: "1rem",
                 flexShrink: 0,
               }}
@@ -75,8 +79,19 @@ export function FeedOverlay() {
               {item.icon}
             </Box>
             <Box sx={{ minWidth: 0 }}>
-              <Box sx={{ fontSize: 13, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{item.name}</Box>
-              <Box sx={{ fontSize: 12, color: color, lineHeight: 1.2 }}>{item.action}</Box>
+              <Box
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "#fff",
+                  lineHeight: 1.2,
+                }}
+              >
+                {item.name}
+              </Box>
+              <Box sx={{ fontSize: 12, color: color, lineHeight: 1.2 }}>
+                {item.action}
+              </Box>
             </Box>
           </Box>
         );

@@ -67,7 +67,13 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: { borderColor: "rgba(255,255,255,0.06)" },
-        head: { fontWeight: 700, color: "#94A3B8", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" },
+        head: {
+          fontWeight: 700,
+          color: "#94A3B8",
+          fontSize: "0.75rem",
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+        },
       },
     },
     MuiSwitch: {

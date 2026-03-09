@@ -50,7 +50,13 @@ export function MusicOverlay() {
           ref={iframeRef}
           src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&enablejsapi=1`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+          style={{
+            position: "absolute",
+            width: 1,
+            height: 1,
+            opacity: 0,
+            pointerEvents: "none",
+          }}
           title="music-player"
         />
       )}
@@ -81,7 +87,11 @@ export function MusicOverlay() {
             src={song.thumbnail}
             alt="thumbnail"
             sx={{
-              width: 56, height: 56, borderRadius: "10px", objectFit: "cover", flexShrink: 0,
+              width: 56,
+              height: 56,
+              borderRadius: "10px",
+              objectFit: "cover",
+              flexShrink: 0,
               animation: "spin 8s linear infinite",
               "@keyframes spin": { from: { borderRadius: "50%" }, to: {} },
             }}
@@ -89,10 +99,27 @@ export function MusicOverlay() {
 
           {/* Info */}
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Box sx={{ fontSize: 13, fontWeight: 800, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <Box
+              sx={{
+                fontSize: 13,
+                fontWeight: 800,
+                color: "#fff",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {song.title}
             </Box>
-            <Box sx={{ fontSize: 11, color: "rgba(255,255,255,0.6)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <Box
+              sx={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.6)",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {song.author}
             </Box>
             <Box sx={{ fontSize: 10, color: "#7C3AED", mt: 0.25 }}>
@@ -104,7 +131,8 @@ export function MusicOverlay() {
           <Box
             sx={{
               position: "absolute",
-              bottom: 0, left: 0,
+              bottom: 0,
+              left: 0,
               height: 2,
               width: `${progress}%`,
               background: "linear-gradient(90deg, #7C3AED, #06B6D4)",
