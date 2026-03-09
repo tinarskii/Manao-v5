@@ -2,7 +2,7 @@ import { logger } from "@/helpers/logger";
 import { addBalance, initAccount, getNickname } from "@/db";
 import { runCommand } from "@/core/runner";
 import { TWITCH } from "@/config";
-// import { initializeEventSub } from "./eventsub";
+import { initializeEventSub } from "./eventsub.ts";
 import type { Configuration, MessageData } from "@/core/types";
 import type {
   CommandContext,
