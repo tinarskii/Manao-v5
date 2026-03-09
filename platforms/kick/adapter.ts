@@ -140,6 +140,10 @@ export class KickAdapter implements PlatformAdapter {
             });
           }, // Kick has no whisper
           emit: (event, data) => io.emit(event, data),
+          lookupUser: async (_name) => {
+            // Kick API has no user lookup by name — return null
+            return null;
+          },
         };
 
         await runCommand(message.slice(prefix.length), ctx, this.registry);
@@ -187,7 +191,7 @@ export class KickAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-            ] ?? "";
+              ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;
