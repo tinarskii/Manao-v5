@@ -201,7 +201,6 @@ export class TwitchAdapter implements PlatformAdapter {
       if (message.startsWith(prefix)) {
         const id = initAccount(userId, "twitch");
         const lang = this.config.language;
-        const t = i18n[lang];
 
         const isMod = msgObj.userInfo.isMod;
         const isBroadcaster = userId === channelId;
