@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, file } from "elysia";
 import { staticPlugin } from "@elysiajs/static";
 import { PORT } from "@/config";
 import { logger } from "@/helpers/logger";
@@ -14,7 +14,14 @@ export { io } from "./services/socket.io";
 export function createServer(registry: CommandRegistry, lang: Language) {
   const app = new Elysia();
 
-  app.use(staticPlugin({ prefix: "/", assets: "./server/public" }));
+  app.onError((ctx) => {
+    if (ctx.code === 'NOT_FOUND') {
+      ctx.set.redirect = '/';
+      return '';
+    }
+  })
+
+  app.get("/", () => file("./server/public/index.html")).use(staticPlugin({ prefix: "/", assets: "./server/public" }))
 
   app.get("/scripts/socket.io/socket.io.js", () =>
     Bun.file("./node_modules/socket.io/client-dist/socket.io.js"),
