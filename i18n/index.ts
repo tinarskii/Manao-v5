@@ -1,7 +1,7 @@
-//#region English
+
 
 const en = {
-  //#region Command
+  
   command: {
     notFound: (name: string, suggestion: string) =>
       `Command "${name}" not found, did you mean "${suggestion}"?`,
@@ -12,9 +12,9 @@ const en = {
     error: "An error occurred while executing the command. The bot may have stopped working.",
     permissionDenied: "You don't have permission to run this command",
   },
-  //#endregion
+  
 
-  //#region Economy
+  
   economy: {
     userNotFound: (user: string) => `User not found: ${user}`,
     accountNotFound: (user: string) => `Account not found for user: ${user}`,
@@ -36,9 +36,9 @@ const en = {
     setBalance: (user: string, amount: number, currency: string) =>
       `Set ${user}'s balance to ${amount} ${currency}`,
   },
-  //#endregion
+  
 
-  //#region Song
+  
   song: {
     noPlaylist: "Can't add songs from a playlist",
     notFound: "Song not found, try using a URL instead",
@@ -65,9 +65,9 @@ const en = {
       `Skipped song #${index} "${title}" (${user})`,
     currentlyPlaying: "Currently playing",
   },
-  //#endregion
+  
 
-  //#region Info
+  
   info: {
     version: (botVersion: string, bunVersion: string) =>
       `ManaoBot v${botVersion} running on Bun v${bunVersion}`,
@@ -79,9 +79,9 @@ const en = {
     help: (url: string) =>
       `📚 View all commands at ${url} — Type !help followed by a command to see its details.`,
   },
-  //#endregion
+  
 
-  //#region Config
+  
   config: {
     invalidLanguage: (available: string) => `Invalid language. Available languages: ${available}`,
     nicknameTooLong: "Nickname is too long",
@@ -103,9 +103,9 @@ const en = {
     linkCodeGenerated: (code: string) => `Your link code is: ${code} (expires in 60 seconds)`,
     linkSuccess: "Account successfully linked",
   },
-  //#endregion
+  
 
-  //#region Moderation
+  
   moderation: {
     announceFailed: "An error occurred while trying to announce",
     shoutoutFailed: "Shoutout failed",
@@ -118,9 +118,9 @@ const en = {
     shoutoutSuccess: (user: string) => `Everyone go follow @${user}!`,
     announced: "Announcement sent",
   },
-  //#endregion
+  
 
-  //#region Social
+  
   social: {
     eat: (food: string) => `🍲 You should eat ${food}`,
     love: (user: string, target: string, percent: number) =>
@@ -129,9 +129,9 @@ const en = {
       `💢 ${user} hates ${target} ${percent}%`,
     stomp: (user: string, target: string) => `👟 ${user} stomped ${target}!`,
   },
-  //#endregion
+  
 
-  //#region Discord
+  
   discord: {
     link: {
       notLinked: "Link your account using the `!link` command on Twitch or Kick first.",
@@ -160,15 +160,15 @@ const en = {
       noUsers: "No users found.",
     },
   },
-  //#endregion
+  
 };
 
-//#endregion
 
-//#region Thai
+
+
 
 const th: typeof en = {
-  //#region Command
+  
   command: {
     notFound: (name, suggestion) =>
       `ไม่พบคำสั่ง "${name}" คุณหมายถึง "${suggestion}" หรือเปล่า?`,
@@ -179,9 +179,9 @@ const th: typeof en = {
     error: "เกิดข้อผิดพลาดขณะเรียกใช้คำสั่ง บอทอาจหยุดทำงาน",
     permissionDenied: "คุณไม่มีสิทธิ์สั่งคำสั่งนี้",
   },
-  //#endregion
+  
 
-  //#region Economy
+  
   economy: {
     userNotFound: (user) => `ไม่พบผู้ใช้: ${user}`,
     accountNotFound: (user) => `ไม่พบบัญชีของผู้ใช้: ${user}`,
@@ -202,9 +202,9 @@ const th: typeof en = {
     setBalance: (user, amount, currency) =>
       `ตั้งยอดเงินของ ${user} เป็น ${amount} ${currency}`,
   },
-  //#endregion
+  
 
-  //#region Song
+  
   song: {
     noPlaylist: "ไม่สามารถเพิ่มเพลงจาก Playlist ได้",
     notFound: "ไม่เจอเพลง ลองใช้ URL แทน",
@@ -228,9 +228,9 @@ const th: typeof en = {
     skipped: (index, title, user) => `ข้ามเพลง #${index} "${title}" (${user})`,
     currentlyPlaying: "กำลังเล่นอยู่",
   },
-  //#endregion
+  
 
-  //#region Info
+  
   info: {
     version: (botVersion, bunVersion) =>
       `ManaoBot v${botVersion} รันบน Bun v${bunVersion}`,
@@ -242,9 +242,9 @@ const th: typeof en = {
     help: (url) =>
       `📚 ดูคำสั่งทั้งหมดได้ที่ ${url} — พิมพ์ !help ตามด้วยคำสั่ง เพื่อดูรายละเอียด`,
   },
-  //#endregion
+  
 
-  //#region Config
+  
   config: {
     invalidLanguage: (available) => `ภาษาไม่ถูกต้อง ภาษาที่รองรับ: ${available}`,
     nicknameTooLong: "ชื่อเล่นยาวเกินไป",
@@ -266,9 +266,9 @@ const th: typeof en = {
     linkCodeGenerated: (code) => `รหัสเชื่อมต่อของคุณคือ: ${code} (หมดอายุใน 60 วินาที)`,
     linkSuccess: "บัญชีถูกเชื่อมต่อเรียบร้อยแล้ว",
   },
-  //#endregion
+  
 
-  //#region Moderation
+  
   moderation: {
     announceFailed: "เกิดข้อผิดพลาดขณะพยายามประกาศ",
     shoutoutFailed: "ไม่สามารถ Shoutout ได้",
@@ -281,18 +281,18 @@ const th: typeof en = {
     shoutoutSuccess: (user) => `ทุกคนไปกดฟอลให้ @${user} กันนะ!`,
     announced: "ส่งประกาศแล้ว",
   },
-  //#endregion
+  
 
-  //#region Social
+  
   social: {
     eat: (food) => `🍲 กิน ${food} ละกัน`,
     love: (user, target, percent) => `💕 ${user} รัก ${target} ${percent}%`,
     hate: (user, target, percent) => `💢 ${user} เกลียด ${target} ${percent}%`,
     stomp: (user, target) => `👟 ${user} เหยียบ ${target}!`,
   },
-  //#endregion
+  
 
-  //#region Discord
+  
   discord: {
     link: {
       notLinked: "เชื่อมต่อบัญชีโดยใช้คำสั่ง `!link` บน Twitch หรือ Kick ก่อน",
@@ -320,10 +320,10 @@ const th: typeof en = {
       noUsers: "ไม่พบผู้ใช้",
     },
   },
-  //#endregion
+  
 };
 
-//#endregion
+
 
 export const i18n = { en, th } as const;
 export type I18n = typeof en

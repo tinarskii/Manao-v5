@@ -4,14 +4,14 @@ import { drizzle } from "drizzle-orm/bun-sqlite";
 import type { Platform } from "@core/types";
 import * as schema from "./schema";
 
-//#region Client
+
 
 const sqlite = new Database("./bot-data.sqlite", { create: true });
 export const db = drizzle(sqlite, { schema });
 
-//#endregion
 
-//#region Account Linking
+
+
 
 export function getLinkedId(platformId: string, platform: Platform): string | undefined {
   const column = platformToColumn(platform);
@@ -96,9 +96,9 @@ function mergeAccounts(targetId: string, orphanId: string): void {
   }
 }
 
-//#endregion
 
-//#region Balance
+
+
 
 export function getBalance(id: string): number {
   const row = db
@@ -125,9 +125,9 @@ export function subtractBalance(id: string, amount: number): number {
   return setBalance(id, getBalance(id) - amount);
 }
 
-//#endregion
 
-//#region Nickname
+
+
 
 export function getNickname(id: string): string | null {
   const row = db
@@ -145,9 +145,9 @@ export function setNickname(id: string, nickname: string | null): void {
   .run();
 }
 
-//#endregion
 
-//#region Leaderboard
+
+
 
 export function getLeaderboard(limit = 5) {
   return db
@@ -162,9 +162,9 @@ export function getLeaderboard(limit = 5) {
   .all();
 }
 
-//#endregion
 
-//#region Custom Commands
+
+
 
 export function getCustomCommands() {
   return db
@@ -206,9 +206,9 @@ export function deleteCustomCommand(id: string): void {
   .run();
 }
 
-//#endregion
 
-//#region Helpers
+
+
 
 function platformToColumn(platform: Platform) {
   switch (platform) {
@@ -218,4 +218,3 @@ function platformToColumn(platform: Platform) {
   }
 }
 
-//#endregion
