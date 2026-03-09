@@ -32,7 +32,10 @@ export function registerCustomCommandsAPI(app: Elysia) {
     const command = getCustomCommand(id);
     if (!command) return { error: "Command not found" };
     try {
-      updateCustomCommand(id, body as Parameters<typeof updateCustomCommand>[1]);
+      updateCustomCommand(
+        id,
+        body as Parameters<typeof updateCustomCommand>[1],
+      );
       return { success: true };
     } catch (err) {
       return { success: false, error: String(err) };

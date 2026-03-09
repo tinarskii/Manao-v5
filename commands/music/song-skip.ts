@@ -15,7 +15,10 @@ export default {
       return;
     }
 
-    const canSkip = current.requestedBy === ctx.user.name || ctx.user.roles.isModerator || ctx.user.roles.isBroadcaster;
+    const canSkip =
+      current.requestedBy === ctx.user.name ||
+      ctx.user.roles.isModerator ||
+      ctx.user.roles.isBroadcaster;
     if (!canSkip) {
       await ctx.reply(t.song.errorSongRemovedNoPermission());
       return;
@@ -25,9 +28,10 @@ export default {
     songQueue.shift();
     ctx.emit("songSkip", songQueue);
 
-    const queueStatus = songQueue.length === 0
-      ? t.song.queueEmpty()
-      : t.song.queueLength(songQueue.length);
+    const queueStatus =
+      songQueue.length === 0
+        ? t.song.queueEmpty()
+        : t.song.queueLength(songQueue.length);
 
     await ctx.reply(t.song.songSkipped(1, title, queueStatus));
   },

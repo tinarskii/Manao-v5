@@ -2,7 +2,12 @@ import { logger } from "@/helpers/logger";
 import { addBalance, initAccount } from "@/db";
 import { runCommand } from "@/core/runner";
 import { KICK } from "@/config";
-import type { Configuration, CommandContext, MessageHandler, PlatformAdapter } from "@/core/types";
+import type {
+  Configuration,
+  CommandContext,
+  MessageHandler,
+  PlatformAdapter,
+} from "@/core/types";
 import type { CommandRegistry } from "@/core/registry";
 import type { ChatMessageEvent } from "@manaobot/kick/types";
 import { KickIt } from "@manaobot/kickit";
@@ -54,9 +59,12 @@ export class KickAdapter implements PlatformAdapter {
 
     await this.bot.start();
 
-    this.bot.kickClient.webhooks.on("chat.message.sent", async (event: ChatMessageEvent) => {
-      await this.handleMessage(event);
-    });
+    this.bot.kickClient.webhooks.on(
+      "chat.message.sent",
+      async (event: ChatMessageEvent) => {
+        await this.handleMessage(event);
+      },
+    );
 
     logger.info("[Kick] Adapter started");
   }
@@ -79,7 +87,8 @@ export class KickAdapter implements PlatformAdapter {
     const message = event.content;
     const channel = event.broadcaster.username;
 
-    if (event.sender.identity?.badges?.some((b: any) => b.type === "bot")) return;
+    if (event.sender.identity?.badges?.some((b: any) => b.type === "bot"))
+      return;
 
     try {
       const prefix = this.config.prefix.kick;
@@ -87,8 +96,12 @@ export class KickAdapter implements PlatformAdapter {
 
       if (message.startsWith(prefix)) {
         const lang = this.config.language;
-        const isBroadcaster = event.sender.user_id === event.broadcaster.user_id;
-        const isMod = event.sender.identity?.badges?.some((b: any) => b.type === "moderator") || isBroadcaster;
+        const isBroadcaster =
+          event.sender.user_id === event.broadcaster.user_id;
+        const isMod =
+          event.sender.identity?.badges?.some(
+            (b: any) => b.type === "moderator",
+          ) || isBroadcaster;
 
         const ctx: CommandContext = {
           user: {
@@ -98,8 +111,14 @@ export class KickAdapter implements PlatformAdapter {
             platformID: userId,
             roles: {
               isFollower: false,
-              isSubscriber: event.sender.identity?.badges?.some((b: any) => b.type === "subscriber") ?? false,
-              isVIP: event.sender.identity?.badges?.some((b: any) => b.type === "vip") ?? false,
+              isSubscriber:
+                event.sender.identity?.badges?.some(
+                  (b: any) => b.type === "subscriber",
+                ) ?? false,
+              isVIP:
+                event.sender.identity?.badges?.some(
+                  (b: any) => b.type === "vip",
+                ) ?? false,
               isModerator: isMod,
               isBroadcaster,
             },
@@ -107,9 +126,19 @@ export class KickAdapter implements PlatformAdapter {
           channel,
           language: lang,
           currency: this.config.currency,
-          say: async (msg) => { await this.bot.kickClient.chat.send({ content: msg }); },
-          reply: async (msg) => { await this.bot.kickClient.chat.send({ content: `@${user}, ${msg}` }); },
-          whisper: async (msg) => { await this.bot.kickClient.chat.send({ content: `@${user}, ${msg}` }); }, // Kick has no whisper
+          say: async (msg) => {
+            await this.bot.kickClient.chat.send({ content: msg });
+          },
+          reply: async (msg) => {
+            await this.bot.kickClient.chat.send({
+              content: `@${user}, ${msg}`,
+            });
+          },
+          whisper: async (msg) => {
+            await this.bot.kickClient.chat.send({
+              content: `@${user}, ${msg}`,
+            });
+          }, // Kick has no whisper
           emit: (event, data) => io.emit(event, data),
         };
 
@@ -131,7 +160,9 @@ export class KickAdapter implements PlatformAdapter {
 
     if (now - last > reward.cooldown * 1000) {
       if (Math.random() < reward.chance / 100) {
-        const amount = Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) + reward.minimum;
+        const amount =
+          Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) +
+          reward.minimum;
         addBalance(id, amount);
       }
       this.cooldowns.set(id, now);
@@ -153,7 +184,10 @@ export class KickAdapter implements PlatformAdapter {
 
         let response = "";
         if (reply.responseType === "random") {
-          response = reply.responses[Math.floor(Math.random() * reply.responses.length)] ?? "";
+          response =
+            reply.responses[
+              Math.floor(Math.random() * reply.responses.length)
+            ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;

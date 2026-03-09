@@ -2,7 +2,11 @@ import type { Elysia } from "elysia";
 import type { CommandRegistry } from "@/core/registry";
 import type { Language } from "@/core/types";
 
-export function registerCommandsAPI(app: Elysia, registry: CommandRegistry, lang: Language) {
+export function registerCommandsAPI(
+  app: Elysia,
+  registry: CommandRegistry,
+  lang: Language,
+) {
   app.get("/api/commands", () => {
     return registry.all().map((command) => ({
       name: command.name[lang],

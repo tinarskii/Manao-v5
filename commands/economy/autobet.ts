@@ -4,7 +4,10 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "autobet", th: "พนันอัตโนมัติ" },
-  description: { en: "Automatically gamble multiple times", th: "พนันอัตโนมัติหลายครั้ง" },
+  description: {
+    en: "Automatically gamble multiple times",
+    th: "พนันอัตโนมัติหลายครั้ง",
+  },
   aliases: { en: ["ab"], th: [] },
   arguments: [
     {
@@ -14,7 +17,10 @@ export default {
     },
     {
       name: { en: "times", th: "จำนวนครั้ง" },
-      description: { en: "Number of times to auto-bet", th: "จำนวนครั้งที่จะพนันอัตโนมัติ" },
+      description: {
+        en: "Number of times to auto-bet",
+        th: "จำนวนครั้งที่จะพนันอัตโนมัติ",
+      },
       required: true,
     },
   ],
@@ -55,6 +61,8 @@ export default {
       currentBalance = getBalance(id);
     }
 
-    await ctx.reply(`🎲 ${t.economy.autobetResult(times, totalWon, totalLost, currentBalance, ctx.currency)}`);
+    await ctx.reply(
+      `🎲 ${t.economy.autobetResult(times, totalWon, totalLost, currentBalance, ctx.currency)}`,
+    );
   },
 } satisfies Command;

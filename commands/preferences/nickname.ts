@@ -4,7 +4,10 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "nickname", th: "ชื่อเล่น" },
-  description: { en: "Change or show your nickname", th: "เปลี่ยนหรือแสดงชื่อเล่นของคุณ" },
+  description: {
+    en: "Change or show your nickname",
+    th: "เปลี่ยนหรือแสดงชื่อเล่นของคุณ",
+  },
   aliases: { en: ["nick", "name"], th: ["ชื่อ"] },
   arguments: [
     {
@@ -19,7 +22,9 @@ export default {
 
     if (!args[0]) {
       const nickname = getNickname(ctx.user.id);
-      await ctx.reply(t.configuration.currentNickname(nickname || ctx.user.name));
+      await ctx.reply(
+        t.configuration.currentNickname(nickname || ctx.user.name),
+      );
       return;
     }
 
@@ -40,7 +45,12 @@ export default {
     }
 
     setNickname(ctx.user.id, name);
-    ctx.emit("feed", { status: "normal", icon: "✍️", name: `${ctx.user.name} (${name})`, action: "Rename" });
+    ctx.emit("feed", {
+      status: "normal",
+      icon: "✍️",
+      name: `${ctx.user.name} (${name})`,
+      action: "Rename",
+    });
     await ctx.reply(t.configuration.currentNicknameChanged(name));
   },
 } satisfies Command;

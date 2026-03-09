@@ -9,7 +9,10 @@ export default {
   arguments: [
     {
       name: { en: "user", th: "ผู้ใช้" },
-      description: { en: "User to check balance", th: "ผู้ใช้ที่ต้องการตรวจสอบยอดเงิน" },
+      description: {
+        en: "User to check balance",
+        th: "ผู้ใช้ที่ต้องการตรวจสอบยอดเงิน",
+      },
       required: false,
     },
   ],

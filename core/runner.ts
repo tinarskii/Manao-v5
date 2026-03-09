@@ -29,7 +29,10 @@ export async function runCommand(
     }
 
     // Platform filter
-    if (command.platforms && !command.platforms.includes(context.user.platform as never)) {
+    if (
+      command.platforms &&
+      !command.platforms.includes(context.user.platform as never)
+    ) {
       return;
     }
 
@@ -42,14 +45,20 @@ export async function runCommand(
       return;
     }
 
-    if (permission === "moderator" && !roles.isModerator && !roles.isBroadcaster) {
+    if (
+      permission === "moderator" &&
+      !roles.isModerator &&
+      !roles.isBroadcaster
+    ) {
       await context.reply(t.command.moderatorOnly);
       return;
     }
 
     // Required args check
     if (command.arguments) {
-      const missing = command.arguments.filter((arg, i) => arg.required && !args[i]);
+      const missing = command.arguments.filter(
+        (arg, i) => arg.required && !args[i],
+      );
       if (missing.length > 0) {
         const names = missing.map((arg) => arg.name[language]).join(", ");
         await context.reply(t.command.argsRequired(names));
@@ -58,7 +67,9 @@ export async function runCommand(
     }
 
     await command.execute(context, args);
-    logger.info(`[Runner] ${context.user.platform} | ${commandName} by ${context.user.name}`);
+    logger.info(
+      `[Runner] ${context.user.platform} | ${commandName} by ${context.user.name}`,
+    );
   } catch (error) {
     await context.reply(t.command.error);
     logger.error(`[Runner] Error executing "${commandName}": ${error}`);

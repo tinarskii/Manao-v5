@@ -10,7 +10,10 @@ export default {
   arguments: [
     {
       name: { en: "name", th: "ชื่อใหม่" },
-      description: { en: "The name you want to change to", th: "ชื่อที่คุณต้องการเปลี่ยน" },
+      description: {
+        en: "The name you want to change to",
+        th: "ชื่อที่คุณต้องการเปลี่ยน",
+      },
       required: true,
     },
   ],

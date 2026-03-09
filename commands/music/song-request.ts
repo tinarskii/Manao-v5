@@ -1,6 +1,10 @@
 import { i18n } from "@/i18n";
 import { songQueue } from "@/server/services/socket.io";
-import { searchYoutubeVideo, getYouTubeVideoInfo, isPlaylistUrl } from "@/helpers/youtube";
+import {
+  searchYoutubeVideo,
+  getYouTubeVideoInfo,
+  isPlaylistUrl,
+} from "@/helpers/youtube";
 import type { Command } from "@/core/types";
 
 export default {
@@ -10,7 +14,10 @@ export default {
   arguments: [
     {
       name: { en: "song", th: "เพลง" },
-      description: { en: "The song you want to request", th: "เพลงที่คุณต้องการขอ" },
+      description: {
+        en: "The song you want to request",
+        th: "เพลงที่คุณต้องการขอ",
+      },
       required: true,
     },
   ],
@@ -46,9 +53,10 @@ export default {
 
     ctx.emit("songRequest", { index: songQueue.length - 1, queue: songQueue });
 
-    const position = songQueue.length - 1 === 0
-      ? t.song.songCurrentlyPlaying()
-      : t.song.queueAt(songQueue.length - 1);
+    const position =
+      songQueue.length - 1 === 0
+        ? t.song.songCurrentlyPlaying()
+        : t.song.queueAt(songQueue.length - 1);
 
     await ctx.reply(t.song.songAdded(info.title, info.author, position));
   },

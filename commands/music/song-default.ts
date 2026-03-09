@@ -1,6 +1,10 @@
 import { i18n } from "@/i18n";
 import { getUserConfig, updateUserConfig } from "@/server/api/config";
-import { searchYoutubeVideo, getYouTubeVideoInfo, isPlaylistUrl } from "@/helpers/youtube";
+import {
+  searchYoutubeVideo,
+  getYouTubeVideoInfo,
+  isPlaylistUrl,
+} from "@/helpers/youtube";
 import type { Command } from "@/core/types";
 
 export default {
@@ -11,12 +15,18 @@ export default {
   arguments: [
     {
       name: { en: "action", th: "คำสั่ง" },
-      description: { en: "Action to perform (set, add)", th: "คำสั่งที่ต้องการทำ (set, add)" },
+      description: {
+        en: "Action to perform (set, add)",
+        th: "คำสั่งที่ต้องการทำ (set, add)",
+      },
       required: true,
     },
     {
       name: { en: "song(s)", th: "เพลง" },
-      description: { en: "Song(s) separated by commas", th: "เพลงที่คั่นด้วยเครื่องหมายคอมม่า" },
+      description: {
+        en: "Song(s) separated by commas",
+        th: "เพลงที่คั่นด้วยเครื่องหมายคอมม่า",
+      },
       required: true,
     },
   ],
@@ -29,7 +39,12 @@ export default {
       return;
     }
 
-    const songs = args.slice(1).join(" ").split(",").map((s) => s.trim()).filter(Boolean);
+    const songs = args
+      .slice(1)
+      .join(" ")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     if (songs.length === 0) {
       await ctx.reply(t.song.errorSongNotFound());
       return;
@@ -41,7 +56,12 @@ export default {
       if (!result || isPlaylistUrl(result.url)) continue;
       const info = await getYouTubeVideoInfo(result.videoId);
       if (!info || info.lengthSeconds > 600 || info.isLiveContent) continue;
-      validSongs.push({ title: info.title, author: info.author, thumbnail: info.thumbnail, id: info.videoId });
+      validSongs.push({
+        title: info.title,
+        author: info.author,
+        thumbnail: info.thumbnail,
+        id: info.videoId,
+      });
     }
 
     if (validSongs.length === 0) {

@@ -1,14 +1,16 @@
-
-export type Language = "en" | "th"
-export type Platform = "twitch" | "kick" | "discord"
-export type Permission = "everyone" | "follower" | "subscriber" | "vip" | "moderator" | "broadcaster";
+export type Language = "en" | "th";
+export type Platform = "twitch" | "kick" | "discord";
+export type Permission =
+  | "everyone"
+  | "follower"
+  | "subscriber"
+  | "vip"
+  | "moderator"
+  | "broadcaster";
 export interface Localized<T = string> {
   en: T;
   th: T;
 }
-
-
-
 
 export interface CommandArgument {
   name: Localized;
@@ -32,8 +34,6 @@ export interface Command {
   execute: (context: CommandContext, args: string[]) => Promise<void>;
 }
 
-
-
 export interface CommandUser {
   id: string;
   name: string;
@@ -45,7 +45,7 @@ export interface CommandUser {
     isVIP: boolean;
     isModerator: boolean;
     isBroadcaster: boolean;
-  }
+  };
 }
 
 export interface CommandContext {
@@ -61,8 +61,6 @@ export interface CommandContext {
   emit: <T = unknown>(event: string, data: T) => void;
 }
 
-
-
 export interface PlatformAdapter {
   readonly platform: Platform;
   start: () => Promise<void>;
@@ -71,11 +69,17 @@ export interface PlatformAdapter {
   onMessage: (handler: MessageHandler) => void;
 }
 
-export type MessageHandler = (context: CommandContext, message: string) => Promise<void>;
+export type MessageHandler = (
+  context: CommandContext,
+  message: string,
+) => Promise<void>;
 
-
-
-export type FeedStatus = "neutral" | "normal" | "success" | "warning" | "danger";
+export type FeedStatus =
+  | "neutral"
+  | "normal"
+  | "success"
+  | "warning"
+  | "danger";
 
 export interface FeedEvent {
   status: FeedStatus;
@@ -95,12 +99,10 @@ export interface MessageData {
     isVIP: boolean;
     isModerator: boolean;
     isBroadcaster: boolean;
-  }
+  };
   color: string;
   badges: string[];
 }
-
-
 
 export interface SongData {
   title: string;
@@ -113,15 +115,11 @@ export interface SongRequestData extends SongData {
   requestedBy: string;
 }
 
-
-
 export interface UserData {
   id: string;
   money: number;
   nickname: string | null;
 }
-
-
 
 export interface CustomMessages {
   onFollow: Localized;
@@ -165,5 +163,5 @@ export interface Configuration {
   customMessages: CustomMessages;
   customReplies: CustomReplies[];
   soundRewards: SoundReward[];
-  chatRewards: Record<Platform, ChatReward>
+  chatRewards: Record<Platform, ChatReward>;
 }

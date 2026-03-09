@@ -4,7 +4,8 @@ const en = {
       `Command "${name}" not found, did you mean "${suggestion}"?`,
     notFoundNoSuggestion: (name: string) => `Command "${name}" not found`,
     permissionDenied: "You don't have permission to run this command",
-    argsRequired: (args: string) => `Please provide the required arguments: ${args}`,
+    argsRequired: (args: string) =>
+      `Please provide the required arguments: ${args}`,
     error: "An error occurred while executing the command",
   },
 
@@ -14,13 +15,30 @@ const en = {
     errorUserNotFound: (user: string) => `User not found: ${user}`,
     errorInvalidAmount: () => "Invalid amount",
     errorInsufficientFunds: () => "You have insufficient funds",
-    errorInvalidTimes: () => "Invalid number of times, please enter a number between 1 and 100",
+    errorInvalidTimes: () =>
+      "Invalid number of times, please enter a number between 1 and 100",
     errorSelfTransfer: () => "You cannot transfer money to yourself",
-    gambleWin: (amount: number, currency: string, remaining: number, remainingCurrency: string) =>
+    gambleWin: (
+      amount: number,
+      currency: string,
+      remaining: number,
+      remainingCurrency: string,
+    ) =>
       `Won ${amount} ${currency} — Balance: ${remaining} ${remainingCurrency}`,
-    gambleLose: (amount: number, currency: string, remaining: number, remainingCurrency: string) =>
+    gambleLose: (
+      amount: number,
+      currency: string,
+      remaining: number,
+      remainingCurrency: string,
+    ) =>
       `Lost ${amount} ${currency} — Balance: ${remaining} ${remainingCurrency}`,
-    autobetResult: (times: number, won: number, lost: number, remaining: number, currency: string) =>
+    autobetResult: (
+      times: number,
+      won: number,
+      lost: number,
+      remaining: number,
+      currency: string,
+    ) =>
       `${times} round(s) — Won ${won} Lost ${lost} — Balance: ${remaining} ${currency}`,
     transactionSuccess: (amount: number, currency: string, target: string) =>
       `Transferred ${amount} ${currency} to ${target}`,
@@ -29,7 +47,8 @@ const en = {
   song: {
     queueEmpty: () => "No songs in queue",
     queueLength: (count: number) => `${count} song(s) in queue`,
-    queuePageTitle: (page: number, total: number) => `[Page ${page} of ${total}]`,
+    queuePageTitle: (page: number, total: number) =>
+      `[Page ${page} of ${total}]`,
     queuePageFooter: (count: number) => `...and ${count} more`,
     queueAt: (position: number) => `Queue position: ${position}`,
     songCurrentlyPlaying: () => "Currently playing",
@@ -42,12 +61,15 @@ const en = {
     songSkipped: (count: number, title: string, queueStatus: string) =>
       `Skipped ${count} song(s): "${title}" — ${queueStatus}`,
     songDefaultSet: (count: number) => `Default songs set (${count} song(s))`,
-    songDefaultAdd: (count: number) => `Default songs updated (${count} song(s) total)`,
+    songDefaultAdd: (count: number) =>
+      `Default songs updated (${count} song(s) total)`,
     errorSongNotFound: () => "Song not found, try using a URL instead",
     errorSongRequestPlaylist: () => "Can't add songs from a playlist",
-    errorSongAlreadyInQueue: (position: number) => `Song is already in queue at position ${position}`,
+    errorSongAlreadyInQueue: (position: number) =>
+      `Song is already in queue at position ${position}`,
     errorSongIndex: () => "Please enter a valid song index",
-    errorSongRemovedNoPermission: () => "You don't have permission to remove this song",
+    errorSongRemovedNoPermission: () =>
+      "You don't have permission to remove this song",
     errorSongInvalidAction: () => "Invalid action, valid actions are: set, add",
   },
 
@@ -66,20 +88,24 @@ const en = {
   configuration: {
     currentLanguage: (lang: string) => `Current language: ${lang}`,
     currentLanguageChanged: (lang: string) => `Language changed to: ${lang}`,
-    errorInvalidLanguage: (available: string) => `Invalid language. Available: ${available}`,
+    errorInvalidLanguage: (available: string) =>
+      `Invalid language. Available: ${available}`,
     currentNickname: (nick: string) => `Your nickname: ${nick}`,
     currentNicknameChanged: (nick: string) => `Nickname changed to: ${nick}`,
     currentNicknameRemoved: () => "Nickname removed",
     errorNicknameTooLong: () => "Nickname is too long (max 32 characters)",
-    errorNicknameContainsSpecialChars: () => "Nickname can only contain letters, numbers, and spaces",
+    errorNicknameContainsSpecialChars: () =>
+      "Nickname can only contain letters, numbers, and spaces",
     currentCurrency: (currency: string) => `Current currency: ${currency}`,
-    currentCurrencyChanged: (currency: string) => `Currency changed to: ${currency}`,
+    currentCurrencyChanged: (currency: string) =>
+      `Currency changed to: ${currency}`,
     currentGame: (game: string) => `Current game: ${game}`,
     currentGameChanged: (game: string) => `Game changed to: ${game}`,
     errorGameNotFound: (game: string) => `Game not found: ${game}`,
     linkCodeGenerated: () => "Your link code is",
     linkSuccess: () => "Account successfully linked",
-    errorCodeInvalidOrExpired: () => "Code is invalid or has expired, please generate a new one",
+    errorCodeInvalidOrExpired: () =>
+      "Code is invalid or has expired, please generate a new one",
     errorAlreadyLinked: () => "This account is already linked to another user",
     errorLinkSelf: () => "You cannot link an account to itself",
   },
@@ -88,8 +114,10 @@ const en = {
     errorCannotAnnounce: () => "Failed to send announcement",
     errorCannotShoutout: () => "Shoutout failed",
     errorUserNotFound: (user: string) => `User not found: ${user}`,
-    errorInvalidAction: () => "Invalid action, valid actions are: connect, disconnect",
-    errorEventAlreadyConnected: () => "An event is already connected, use !event disconnect first",
+    errorInvalidAction: () =>
+      "Invalid action, valid actions are: connect, disconnect",
+    errorEventAlreadyConnected: () =>
+      "An event is already connected, use !event disconnect first",
     errorUrlRequired: () => "Please provide a URL to connect to",
     errorEventNotConnected: () => "No event is currently connected",
     shoutoutSuccess: (user: string) => `Go follow @${user}!`,
@@ -203,7 +231,8 @@ const th: typeof en = {
     currentNicknameChanged: (nick) => `เปลี่ยนชื่อเล่นเป็น: ${nick}`,
     currentNicknameRemoved: () => "ลบชื่อเล่นแล้ว",
     errorNicknameTooLong: () => "ชื่อเล่นยาวเกินไป (สูงสุด 32 ตัวอักษร)",
-    errorNicknameContainsSpecialChars: () => "ชื่อเล่นใช้ได้เฉพาะตัวอักษร ตัวเลข และช่องว่าง",
+    errorNicknameContainsSpecialChars: () =>
+      "ชื่อเล่นใช้ได้เฉพาะตัวอักษร ตัวเลข และช่องว่าง",
     currentCurrency: (currency) => `สกุลเงินปัจจุบัน: ${currency}`,
     currentCurrencyChanged: (currency) => `เปลี่ยนสกุลเงินเป็น: ${currency}`,
     currentGame: (game) => `เกมปัจจุบัน: ${game}`,
@@ -221,7 +250,8 @@ const th: typeof en = {
     errorCannotShoutout: () => "ไม่สามารถ Shoutout ได้",
     errorUserNotFound: (user) => `ไม่พบผู้ใช้: ${user}`,
     errorInvalidAction: () => "คำสั่งไม่ถูกต้อง คำสั่งที่ถูกต้อง: connect, disconnect",
-    errorEventAlreadyConnected: () => "มีอีเวนต์เชื่อมต่ออยู่แล้ว ใช้ !event disconnect ก่อน",
+    errorEventAlreadyConnected: () =>
+      "มีอีเวนต์เชื่อมต่ออยู่แล้ว ใช้ !event disconnect ก่อน",
     errorUrlRequired: () => "กรุณาใส่ URL ที่ต้องการเชื่อมต่อ",
     errorEventNotConnected: () => "ไม่มีอีเวนต์ที่เชื่อมต่ออยู่",
     shoutoutSuccess: (user) => `ไปกดฟอลให้ @${user} กันด้วยนะ!`,
@@ -247,7 +277,8 @@ const th: typeof en = {
       latency: (ms) => `ความหน่วง: ${ms}ms`,
     },
     help: {
-      pageTitle: (page, total, category) => `(หน้า ${page} จาก ${total}) หมวด: ${category}`,
+      pageTitle: (page, total, category) =>
+        `(หน้า ${page} จาก ${total}) หมวด: ${category}`,
       footer: "ใช้ /help command ตามด้วยชื่อคำสั่งเพื่อดูรายละเอียด",
       backToAll: "ใช้ /help all เพื่อดูคำสั่งทั้งหมด",
       descriptionField: "คำอธิบาย",

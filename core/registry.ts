@@ -15,11 +15,13 @@ export class CommandRegistry {
 
   find(input: string): Command | undefined {
     for (const command of this.commands.values()) {
-      if (command.name.en === input || command.name.th === input) return command;
+      if (command.name.en === input || command.name.th === input)
+        return command;
 
       const enAliases = command.aliases?.en ?? [];
       const thAliases = command.aliases?.th ?? [];
-      if (enAliases.includes(input) || thAliases.includes(input)) return command;
+      if (enAliases.includes(input) || thAliases.includes(input))
+        return command;
     }
     return undefined;
   }

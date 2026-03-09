@@ -6,7 +6,11 @@ import { runCommand } from "@/core/runner";
 import { i18n } from "@/i18n";
 import { TWITCH } from "@/config";
 import type { Configuration, MessageData } from "@/core/types";
-import type { CommandContext, MessageHandler, PlatformAdapter } from "@/core/types";
+import type {
+  CommandContext,
+  MessageHandler,
+  PlatformAdapter,
+} from "@/core/types";
 import type { CommandRegistry } from "@/core/registry";
 import { ApiClient } from "@twurple/api";
 import {
@@ -18,13 +22,7 @@ import {
 import { type AccessToken, RefreshingAuthProvider } from "@twurple/auth";
 import { io } from "@/server/services/socket.io";
 
-
-
 type UserType = "bot" | "broadcaster";
-
-
-
-
 
 function persistTokenToEnv(userType: UserType, token: AccessToken): void {
   try {
@@ -32,14 +30,14 @@ function persistTokenToEnv(userType: UserType, token: AccessToken): void {
     let envContent = readFileSync(envPath, "utf-8");
     const prefix = userType === "bot" ? "TWITCH_BOT" : "BROADCASTER";
     envContent = envContent
-    .replace(
-      new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
-      `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
-    )
-    .replace(
-      new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
-      `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
-    );
+      .replace(
+        new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
+        `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
+      )
+      .replace(
+        new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
+        `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
+      );
     writeFileSync(envPath, envContent, "utf-8");
     logger.info(`[Twitch] Persisted refreshed ${userType} token`);
   } catch (err) {
@@ -84,22 +82,27 @@ function buildAuthProvider(): RefreshingAuthProvider {
   authProvider.addUser(TWITCH.BOT.ID as string, buildTokens("bot"), ["chat"]);
 
   if (TWITCH.BROADCASTER.ACCESS_TOKEN && TWITCH.BROADCASTER.REFRESH_TOKEN) {
-    authProvider.addUser(TWITCH.BROADCASTER.ID as string, buildTokens("broadcaster"));
+    authProvider.addUser(
+      TWITCH.BROADCASTER.ID as string,
+      buildTokens("broadcaster"),
+    );
   }
 
   return authProvider;
 }
 
-
-
-
-
-async function processEmotes(message: string, msgObj: ChatMessage): Promise<string> {
+async function processEmotes(
+  message: string,
+  msgObj: ChatMessage,
+): Promise<string> {
   let processed = message;
   const emotes = parseEmotePositions(message, msgObj.emoteOffsets);
   for (const emote of emotes) {
     const url = buildEmoteImageUrl(emote.id, { size: "3.0" });
-    processed = processed.replaceAll(emote.name, `<img src="${url}" alt="${emote.name}" /> `);
+    processed = processed.replaceAll(
+      emote.name,
+      `<img src="${url}" alt="${emote.name}" /> `,
+    );
   }
   return processed;
 }
@@ -113,7 +116,9 @@ async function processBadges(
     const badgeList: string[] = [];
     for (const badge of badges.keys()) {
       const found = globalBadges.find(
-        (b) => b.getVersion("1")?.title?.toLowerCase().split(" ").join("-") === badge,
+        (b) =>
+          b.getVersion("1")?.title?.toLowerCase().split(" ").join("-") ===
+          badge,
       );
       const link = found?.getVersion("1")?.getImageUrl(4);
       if (link) badgeList.push(link);
@@ -124,10 +129,6 @@ async function processBadges(
     return [];
   }
 }
-
-
-
-
 
 export class TwitchAdapter implements PlatformAdapter {
   readonly platform = "twitch" as const;
@@ -161,7 +162,14 @@ export class TwitchAdapter implements PlatformAdapter {
       const channelId = msgObj.channelId;
       if (!userId || !channelId) return;
 
-      await this.handleMessage(channelName, user, userId, channelId, message, msgObj);
+      await this.handleMessage(
+        channelName,
+        user,
+        userId,
+        channelId,
+        message,
+        msgObj,
+      );
     });
 
     this.chatClient.connect();
@@ -180,8 +188,6 @@ export class TwitchAdapter implements PlatformAdapter {
   onMessage(handler: MessageHandler): void {
     this.messageHandler = handler;
   }
-
-  
 
   private async handleMessage(
     channel: string,
@@ -221,7 +227,8 @@ export class TwitchAdapter implements PlatformAdapter {
           currency: this.config.currency,
           say: (msg) => this.chatClient.say(channel, msg),
           reply: (msg) => this.chatClient.say(channel, `@${user}, ${msg}`),
-          whisper: (msg) => this.apiClient.whispers.sendWhisper(TWITCH.BOT.ID, userId, msg),
+          whisper: (msg) =>
+            this.apiClient.whispers.sendWhisper(TWITCH.BOT.ID, userId, msg),
           emit: (event, data) => io.emit(event, data),
         };
 
@@ -249,7 +256,9 @@ export class TwitchAdapter implements PlatformAdapter {
 
     if (now - last > reward.cooldown * 1000) {
       if (Math.random() < reward.chance / 100) {
-        const amount = Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) + reward.minimum;
+        const amount =
+          Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) +
+          reward.minimum;
         addBalance(id, amount);
       }
       this.cooldowns.set(id, now);
@@ -290,7 +299,10 @@ export class TwitchAdapter implements PlatformAdapter {
     io.emit("message", messageData);
   }
 
-  private async handleCustomReply(channel: string, message: string): Promise<void> {
+  private async handleCustomReply(
+    channel: string,
+    message: string,
+  ): Promise<void> {
     const lowerMsg = message.toLowerCase();
 
     for (const reply of this.config.customReplies) {
@@ -305,7 +317,10 @@ export class TwitchAdapter implements PlatformAdapter {
 
         let response = "";
         if (reply.responseType === "random") {
-          response = reply.responses[Math.floor(Math.random() * reply.responses.length)] ?? "";
+          response =
+            reply.responses[
+              Math.floor(Math.random() * reply.responses.length)
+            ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;
@@ -321,7 +336,4 @@ export class TwitchAdapter implements PlatformAdapter {
       }
     }
   }
-
-  
 }
-

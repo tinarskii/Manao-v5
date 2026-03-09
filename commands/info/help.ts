@@ -3,7 +3,9 @@ import type { Command, CommandRegistry } from "@/core/types";
 
 // Registry is injected at startup — passed via emit or closure
 let registry: CommandRegistry;
-export function setRegistry(r: CommandRegistry) { registry = r; }
+export function setRegistry(r: CommandRegistry) {
+  registry = r;
+}
 
 export default {
   name: { en: "help", th: "ช่วยเหลือ" },
@@ -38,7 +40,9 @@ export default {
       const aliases = cmd.aliases?.[lang]?.join(", ");
       const aliasStr = aliases ? ` (${aliases})` : "";
 
-      await ctx.say(`📚 ${cmd.name[lang]}${aliasStr}: ${cmd.description[lang]}${argsList}`);
+      await ctx.say(
+        `📚 ${cmd.name[lang]}${aliasStr}: ${cmd.description[lang]}${argsList}`,
+      );
     } else {
       await ctx.reply(t.info.help());
     }

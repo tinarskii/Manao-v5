@@ -4,7 +4,10 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "announce", th: "ประกาศ" },
-  description: { en: "Announce a message to the channel", th: "ประกาศข้อความไปยังช่อง" },
+  description: {
+    en: "Announce a message to the channel",
+    th: "ประกาศข้อความไปยังช่อง",
+  },
   aliases: { en: ["a", "an"], th: ["ป", "แจ้ง"] },
   permission: "moderator",
   platforms: ["twitch"],

@@ -27,10 +27,19 @@ function getDefaultConfig(): Configuration {
     currency: "COIN",
     customMessages: {
       onFollow: { en: "[user] just followed!", th: "[user] ติดตามแล้ว!" },
-      onSubscribe: { en: "[user] just subscribed!", th: "[user] สมัครสมาชิกแล้ว!" },
+      onSubscribe: {
+        en: "[user] just subscribed!",
+        th: "[user] สมัครสมาชิกแล้ว!",
+      },
       onGiftSubscribe: { en: "[user] gifted a sub!", th: "[user] ของขวัญซับ!" },
-      onRaid: { en: "[user] raided with [viewers] viewers!", th: "[user] บุกมาพร้อม [viewers] คน!" },
-      onCheer: { en: "[user] cheered [amount] bits!", th: "[user] เชียร์ [amount] บิต!" },
+      onRaid: {
+        en: "[user] raided with [viewers] viewers!",
+        th: "[user] บุกมาพร้อม [viewers] คน!",
+      },
+      onCheer: {
+        en: "[user] cheered [amount] bits!",
+        th: "[user] เชียร์ [amount] บิต!",
+      },
     },
     customReplies: [],
     soundRewards: [],

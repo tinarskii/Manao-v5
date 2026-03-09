@@ -10,7 +10,10 @@ export default {
   arguments: [
     {
       name: { en: "game", th: "เกม" },
-      description: { en: "The game you want to change to", th: "เกมที่คุณต้องการเปลี่ยนไป" },
+      description: {
+        en: "The game you want to change to",
+        th: "เกมที่คุณต้องการเปลี่ยนไป",
+      },
       required: false,
     },
   ],

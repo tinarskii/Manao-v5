@@ -8,7 +8,10 @@ export default {
   arguments: [
     {
       name: { en: "user", th: "ผู้ใช้" },
-      description: { en: "The user you want to stomp", th: "ผู้ใช้ที่คุณต้องการกระทืบ" },
+      description: {
+        en: "The user you want to stomp",
+        th: "ผู้ใช้ที่คุณต้องการกระทืบ",
+      },
       required: false,
     },
   ],
@@ -16,7 +19,12 @@ export default {
     const t = i18n[ctx.language];
     const target = args[0] || ctx.user.name;
     const times = Math.floor(Math.random() * 1000);
-    ctx.emit("feed", { status: "neutral", icon: "👣", name: `${ctx.user.name} ➡ ${target}`, action: `${times} times` });
+    ctx.emit("feed", {
+      status: "neutral",
+      icon: "👣",
+      name: `${ctx.user.name} ➡ ${target}`,
+      action: `${times} times`,
+    });
     await ctx.say(`${ctx.user.name} 👣 ${target} ${times} ${t.misc.times()}`);
   },
 } satisfies Command;

@@ -30,8 +30,9 @@ export default {
   execute: async (ctx, args) => {
     const t = i18n[ctx.language];
     const code = args[0]?.trim().toUpperCase();
-    const internalID = getLinkedId(ctx.user.platformID, ctx.user.platform)
-      ?? initAccount(ctx.user.platformID, ctx.user.platform);
+    const internalID =
+      getLinkedId(ctx.user.platformID, ctx.user.platform) ??
+      initAccount(ctx.user.platformID, ctx.user.platform);
 
     // Clean expired codes
     for (const [k, v] of linkCodes) {

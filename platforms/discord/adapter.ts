@@ -1,10 +1,21 @@
 import { logger } from "@/helpers/logger";
 import { addBalance, initAccount } from "@/db";
 import { DISCORD } from "@/config";
-import type { Configuration, CommandContext, MessageHandler, PlatformAdapter } from "@/core/types";
+import type {
+  Configuration,
+  CommandContext,
+  MessageHandler,
+  PlatformAdapter,
+} from "@/core/types";
 import type { CommandRegistry } from "@/core/registry";
 import { dirname, importx } from "@discordx/importer";
-import {BaseGuildTextChannel, Events, IntentsBitField, type Interaction, type Message} from "discord.js";
+import {
+  BaseGuildTextChannel,
+  Events,
+  IntentsBitField,
+  type Interaction,
+  type Message,
+} from "discord.js";
 import { Client } from "discordx";
 import { io } from "@/server/services/socket.io";
 
@@ -103,8 +114,12 @@ export class DiscordAdapter implements PlatformAdapter {
             await message.channel.send(msg);
           }
         },
-        reply: async (msg) => { await message.reply(msg); },
-        whisper: async (msg) => { await message.author.send(msg); },
+        reply: async (msg) => {
+          await message.reply(msg);
+        },
+        whisper: async (msg) => {
+          await message.author.send(msg);
+        },
         emit: (event, data) => io.emit(event, data),
       };
 
@@ -122,7 +137,9 @@ export class DiscordAdapter implements PlatformAdapter {
 
     if (now - last > reward.cooldown * 1000) {
       if (Math.random() < reward.chance / 100) {
-        const amount = Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) + reward.minimum;
+        const amount =
+          Math.floor(Math.random() * (reward.maximum - reward.minimum + 1)) +
+          reward.minimum;
         addBalance(id, amount);
       }
       this.cooldowns.set(id, now);

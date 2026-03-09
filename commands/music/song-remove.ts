@@ -9,7 +9,10 @@ export default {
   arguments: [
     {
       name: { en: "index", th: "ลำดับ" },
-      description: { en: "The index of the song to remove", th: "ลำดับของเพลงที่ต้องการลบ" },
+      description: {
+        en: "The index of the song to remove",
+        th: "ลำดับของเพลงที่ต้องการลบ",
+      },
       required: true,
     },
   ],
@@ -23,7 +26,10 @@ export default {
     }
 
     const song = songQueue[index]!;
-    const canRemove = song.requestedBy === ctx.user.name || ctx.user.roles.isModerator || ctx.user.roles.isBroadcaster;
+    const canRemove =
+      song.requestedBy === ctx.user.name ||
+      ctx.user.roles.isModerator ||
+      ctx.user.roles.isBroadcaster;
     if (!canRemove) {
       await ctx.reply(t.song.errorSongRemovedNoPermission());
       return;
@@ -33,9 +39,10 @@ export default {
     songQueue.splice(index, 1);
     ctx.emit("songQueue", songQueue);
 
-    const queueStatus = songQueue.length - 1 === 0
-      ? t.song.queueEmpty()
-      : t.song.queueLength(songQueue.length - 1);
+    const queueStatus =
+      songQueue.length - 1 === 0
+        ? t.song.queueEmpty()
+        : t.song.queueLength(songQueue.length - 1);
 
     await ctx.reply(t.song.songRemoved(index, title, queueStatus));
   },

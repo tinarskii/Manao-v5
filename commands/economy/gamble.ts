@@ -9,7 +9,10 @@ export default {
   arguments: [
     {
       name: { en: "amount", th: "จำนวนเงิน" },
-      description: { en: "Amount of money to gamble", th: "จำนวนเงินที่ต้องการพนัน" },
+      description: {
+        en: "Amount of money to gamble",
+        th: "จำนวนเงินที่ต้องการพนัน",
+      },
       required: false,
     },
   ],
@@ -36,12 +39,26 @@ export default {
 
     if (win) {
       addBalance(id, amount);
-      ctx.emit("feed", { status: "success", icon: "🎰", name: ctx.user.name, action: `+ ${amount} ${ctx.currency}` });
-      await ctx.reply(`🎉 ${t.economy.gambleWin(amount, ctx.currency, balance + amount, ctx.currency)}`);
+      ctx.emit("feed", {
+        status: "success",
+        icon: "🎰",
+        name: ctx.user.name,
+        action: `+ ${amount} ${ctx.currency}`,
+      });
+      await ctx.reply(
+        `🎉 ${t.economy.gambleWin(amount, ctx.currency, balance + amount, ctx.currency)}`,
+      );
     } else {
       subtractBalance(id, amount);
-      ctx.emit("feed", { status: "danger", icon: "🎰", name: ctx.user.name, action: `- ${amount} ${ctx.currency}` });
-      await ctx.reply(`❌ ${t.economy.gambleLose(amount, ctx.currency, balance - amount, ctx.currency)}`);
+      ctx.emit("feed", {
+        status: "danger",
+        icon: "🎰",
+        name: ctx.user.name,
+        action: `- ${amount} ${ctx.currency}`,
+      });
+      await ctx.reply(
+        `❌ ${t.economy.gambleLose(amount, ctx.currency, balance - amount, ctx.currency)}`,
+      );
     }
   },
 } satisfies Command;

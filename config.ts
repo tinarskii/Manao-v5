@@ -40,9 +40,15 @@ const useTwitch = Bun.env.USE_TWITCH === "true";
 const useDiscord = Bun.env.USE_DISCORD === "true";
 const useKick = Bun.env.USE_KICK === "true";
 
-const twitch = useTwitch ? twitchSchema.parse(Bun.env) : twitchSchema.partial().parse(Bun.env);
-const discord = useDiscord ? discordSchema.parse(Bun.env) : discordSchema.partial().parse(Bun.env);
-const kick = useKick ? kickSchema.parse(Bun.env) : kickSchema.partial().parse(Bun.env);
+const twitch = useTwitch
+  ? twitchSchema.parse(Bun.env)
+  : twitchSchema.partial().parse(Bun.env);
+const discord = useDiscord
+  ? discordSchema.parse(Bun.env)
+  : discordSchema.partial().parse(Bun.env);
+const kick = useKick
+  ? kickSchema.parse(Bun.env)
+  : kickSchema.partial().parse(Bun.env);
 
 export const IS_PRODUCTION = base.NODE_ENV === "production";
 export const PORT = base.PORT;

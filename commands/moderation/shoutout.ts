@@ -10,7 +10,10 @@ export default {
   arguments: [
     {
       name: { en: "user", th: "ผู้ใช้" },
-      description: { en: "The user you want to shoutout", th: "ผู้ใช้ที่คุณต้องการแนะนำ" },
+      description: {
+        en: "The user you want to shoutout",
+        th: "ผู้ใช้ที่คุณต้องการแนะนำ",
+      },
       required: true,
     },
   ],

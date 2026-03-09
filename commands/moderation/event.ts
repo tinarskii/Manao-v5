@@ -1,5 +1,9 @@
 import { i18n } from "@/i18n";
-import { isEventConnected, initializeConnection, disconnectConnection } from "@/helpers/event";
+import {
+  isEventConnected,
+  initializeConnection,
+  disconnectConnection,
+} from "@/helpers/event";
 import type { Command } from "@/core/types";
 
 export default {
@@ -10,7 +14,10 @@ export default {
   arguments: [
     {
       name: { en: "action", th: "คำสั่ง" },
-      description: { en: "Action to perform (connect, disconnect)", th: "คำสั่งที่ต้องการ (connect, disconnect)" },
+      description: {
+        en: "Action to perform (connect, disconnect)",
+        th: "คำสั่งที่ต้องการ (connect, disconnect)",
+      },
       required: true,
     },
     {

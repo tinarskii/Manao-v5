@@ -32,6 +32,8 @@ export default {
 
     await updateUserConfig("language", requested);
     const langName = requested === "en" ? "English" : "ไทย";
-    await ctx.reply(i18n[requested].configuration.currentLanguageChanged(langName));
+    await ctx.reply(
+      i18n[requested].configuration.currentLanguageChanged(langName),
+    );
   },
 } satisfies Command;

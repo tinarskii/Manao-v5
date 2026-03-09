@@ -3,7 +3,10 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "uptime", th: "เวลาสตรีม" },
-  description: { en: "Get the current uptime of the stream", th: "ตรวจสอบระยะเวลาที่สตรีมเปิดอยู่" },
+  description: {
+    en: "Get the current uptime of the stream",
+    th: "ตรวจสอบระยะเวลาที่สตรีมเปิดอยู่",
+  },
   platforms: ["twitch"],
   execute: async (ctx) => {
     const t = i18n[ctx.language];
