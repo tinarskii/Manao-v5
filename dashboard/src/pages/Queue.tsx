@@ -15,12 +15,8 @@ import {
   LinearProgress,
   Alert,
   CircularProgress,
-  IconButton,
-  Tooltip,
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import DeleteIcon from "@mui/icons-material/Delete";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import { useSocketEvent } from "@/hooks/useSocket";
 import { api } from "@/hooks/useApi";

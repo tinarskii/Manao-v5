@@ -270,7 +270,7 @@ export function ChannelPointsPage() {
               onChange={(e) =>
                 setForm({ ...form, cost: Number(e.target.value) })
               }
-              inputProps={{ min: 0 }}
+              slotProps={{ htmlInput: { min: 0 } }}
             />
             <TextField
               size="small"
@@ -288,7 +288,7 @@ export function ChannelPointsPage() {
               onChange={(e) =>
                 setForm({ ...form, globalCooldown: Number(e.target.value) })
               }
-              inputProps={{ min: 0 }}
+              slotProps={{ htmlInput: { min: 0 } }}
             />
             <TextField
               size="small"

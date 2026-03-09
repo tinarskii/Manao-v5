@@ -186,7 +186,7 @@ export function ConfigPage() {
                       prefix: { ...config.prefix, [p]: e.target.value },
                     })
                   }
-                  inputProps={{ maxLength: 3 }}
+                  slotProps={{ htmlInput: { maxLength: 3 } }}
                 />
               </Grid>
             ))}
@@ -240,7 +240,7 @@ export function ConfigPage() {
                               },
                             })
                           }
-                          InputProps={
+                          slotProps={{ htmlInput:
                             field === "cooldown"
                               ? {
                                   endAdornment: (
@@ -250,7 +250,7 @@ export function ConfigPage() {
                                   ),
                                 }
                               : undefined
-                          }
+                          }}
                         />
                       </Grid>
                     ),

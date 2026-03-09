@@ -10,7 +10,6 @@ import {
   Typography,
   Divider,
   Chip,
-  Tooltip,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -24,6 +23,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import WifiIcon from "@mui/icons-material/Wifi";
 import WifiOffIcon from "@mui/icons-material/WifiOff";
 import { useSocket } from "@/hooks/useSocket";
+import * as React from "react";
 
 const DRAWER_WIDTH = 240;
 
@@ -188,10 +188,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </ListItemIcon>
                   <ListItemText
                     primary={item.label}
-                    primaryTypographyProps={{
+                    slotProps={{ primary: {
                       fontSize: "0.875rem",
                       fontWeight: isActive ? 600 : 400,
-                    }}
+                    }}}
                   />
                 </ListItemButton>
               </Box>
