@@ -80,8 +80,6 @@ export class DiscordAdapter implements PlatformAdapter {
     this.messageHandler = handler;
   }
 
-  //#region Private
-
   private async handleMessage(message: Message): Promise<void> {
     const discordId = message.author.id;
     const id = initAccount(discordId, "discord");
@@ -121,6 +119,12 @@ export class DiscordAdapter implements PlatformAdapter {
           await message.author.send(msg);
         },
         emit: (event, data) => io.emit(event, data),
+        lookupUser: async (name) => {
+          const members = await message.guild?.members.search({ query: name, limit: 1 });
+          const member = members?.first();
+          if (!member) return null;
+          return initAccount(member.id, "discord");
+        },
       };
 
       await this.messageHandler?.(ctx, message.content);
@@ -145,6 +149,4 @@ export class DiscordAdapter implements PlatformAdapter {
       this.cooldowns.set(id, now);
     }
   }
-
-  //#endregion
 }
