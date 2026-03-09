@@ -1,4 +1,4 @@
-//#region Primitive Types
+
 export type Language = "en" | "th"
 export type Platform = "twitch" | "kick" | "discord"
 export type Permission = "everyone" | "follower" | "subscriber" | "vip" | "moderator" | "broadcaster";
@@ -7,9 +7,9 @@ export interface Localized<T = string> {
   th: T;
 }
 
-//#endregion
 
-//#region Command Types
+
+
 export interface CommandArgument {
   name: Localized;
   description: Localized;
@@ -31,9 +31,9 @@ export interface Command {
   platforms?: Platform[];
   execute: (context: CommandContext, args: string[]) => Promise<void>;
 }
-//#endregion
 
-//#region Command Context
+
+
 export interface CommandUser {
   id: string;
   name: string;
@@ -60,9 +60,9 @@ export interface CommandContext {
   whisper: (message: string) => Promise<void>;
   emit: <T = unknown>(event: string, data: T) => void;
 }
-//#endregion
 
-//#region Platform Adapter
+
+
 export interface PlatformAdapter {
   readonly platform: Platform;
   start: () => Promise<void>;
@@ -72,9 +72,9 @@ export interface PlatformAdapter {
 }
 
 export type MessageHandler = (context: CommandContext, message: string) => Promise<void>;
-//#endregion
 
-//#region Feed & Overlays
+
+
 export type FeedStatus = "neutral" | "normal" | "success" | "warning" | "danger";
 
 export interface FeedEvent {
@@ -99,9 +99,9 @@ export interface MessageData {
   color: string;
   badges: string[];
 }
-//#endregion
 
-//#region Music
+
+
 export interface SongData {
   title: string;
   author: string;
@@ -112,17 +112,17 @@ export interface SongData {
 export interface SongRequestData extends SongData {
   requestedBy: string;
 }
-//#endregion
 
-//#region User Data
+
+
 export interface UserData {
   id: string;
   money: number;
   nickname: string | null;
 }
-//#endregion
 
-//#region Configuration
+
+
 export interface CustomMessages {
   onFollow: Localized;
   onSubscribe: Localized;
@@ -167,4 +167,3 @@ export interface Configuration {
   soundRewards: SoundReward[];
   chatRewards: Record<Platform, ChatReward>
 }
-//#endregion
