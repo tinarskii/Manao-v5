@@ -1,5 +1,3 @@
-import { writeFileSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { logger } from "@/helpers/logger";
 import { addBalance, initAccount, getNickname } from "@/db";
 import { runCommand } from "@/core/runner";
@@ -24,21 +22,21 @@ import { io } from "@/server/services/socket.io";
 
 type UserType = "bot" | "broadcaster";
 
-function persistTokenToEnv(userType: UserType, token: AccessToken): void {
+async function persistTokenToEnv(userType: UserType, token: AccessToken): Promise<void> {
   try {
-    const envPath = join(process.cwd(), ".env");
-    let envContent = readFileSync(envPath, "utf-8");
+    const envPath = `${process.cwd()}/.env`;
     const prefix = userType === "bot" ? "TWITCH_BOT" : "BROADCASTER";
+    let envContent = await Bun.file(envPath).text();
     envContent = envContent
-      .replace(
-        new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
-        `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
-      )
-      .replace(
-        new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
-        `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
-      );
-    writeFileSync(envPath, envContent, "utf-8");
+    .replace(
+      new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
+      `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
+    )
+    .replace(
+      new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
+      `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
+    );
+    await Bun.write(envPath, envContent);
     logger.info(`[Twitch] Persisted refreshed ${userType} token`);
   } catch (err) {
     logger.error(`[Twitch] Failed to persist token: ${err}`);
@@ -60,7 +58,7 @@ function buildAuthProvider(): RefreshingAuthProvider {
     const target = userType === "bot" ? TWITCH.BOT : TWITCH.BROADCASTER;
     target.ACCESS_TOKEN = newToken.accessToken;
     target.REFRESH_TOKEN = newToken.refreshToken ?? "";
-    persistTokenToEnv(userType, newToken);
+    await persistTokenToEnv(userType, newToken);
     logger.info(`[Twitch] Refreshed ${userType} token`);
   });
 
@@ -230,6 +228,11 @@ export class TwitchAdapter implements PlatformAdapter {
           whisper: (msg) =>
             this.apiClient.whispers.sendWhisper(TWITCH.BOT.ID, userId, msg),
           emit: (event, data) => io.emit(event, data),
+          lookupUser: async (name) => {
+            const twitchUser = await this.apiClient.users.getUserByName(name);
+            if (!twitchUser) return null;
+            return initAccount(twitchUser.id, "twitch");
+          },
         };
 
         await runCommand(message.slice(prefix.length), ctx, this.registry);
@@ -267,16 +270,6 @@ export class TwitchAdapter implements PlatformAdapter {
     const nickname = getNickname(id);
     const processedMessage = await processEmotes(message, msgObj);
     const badges = await processBadges(msgObj.userInfo.badges, this.apiClient);
-
-    const role = msgObj.userInfo.isBroadcaster
-      ? "broadcaster"
-      : msgObj.userInfo.isMod
-        ? "mod"
-        : msgObj.userInfo.isVip
-          ? "vip"
-          : msgObj.userInfo.isSubscriber
-            ? "sub"
-            : "normal";
 
     const messageData: MessageData = {
       from: "twitch",
@@ -320,7 +313,7 @@ export class TwitchAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-            ] ?? "";
+              ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;
