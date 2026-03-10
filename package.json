@@ -1,13 +1,22 @@
 {
   "name": "manao-v5",
   "module": "index.ts",
-  "version": "5.0.0-alpha.1",
+  "version": "5.0.0-alpha.0",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "dashboard",
+    "setup"
+  ],
   "scripts": {
     "start": "bun index",
     "format": "biome format --write .",
-    "lint": "biome lint"
+    "lint": "biome lint",
+    "setup": "bun run setup/server/run.ts",
+    "setup:build": "bun run --filter manao-setup build",
+    "dashboard:build": "bun run --filter manao-dashboard build",
+    "dashboard:dev": "bun run --filter manao-dashboard dev",
+    "build": "bun run dashboard:build && bun run setup:build"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
