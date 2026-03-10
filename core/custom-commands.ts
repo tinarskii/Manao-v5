@@ -30,7 +30,7 @@ export function buildCustomCommand(row: CustomCommandRow): Command {
     isCustom: true,
     execute: async (context: CommandContext, cmdArgs: string[]) => {
       try {
-        const fn = new Function("context", "args", `"use strict";\n${row.code}`);
+        const fn = new Function("context", "args", `return (async (context, args) => {\n${row.code}\n})(context, args)`);
         await fn(context, cmdArgs);
       } catch (err) {
         logger.error(`[CustomCommand] "${row.name}" error: ${err}`);
