@@ -16,8 +16,8 @@ export default function TwitchPage({
   onReload: () => Promise<void>;
 }) {
   const [enabled, setEnabled] = useState(config.twitch.enabled);
-  const [clientId, setClientId] = useState(config.twitch.clientId);
-  const [clientSecret, setClientSecret] = useState(config.twitch.clientSecret);
+  const [clientId, setClientId] = useState(config.twitch.clientId ?? "");
+  const [clientSecret, setClientSecret] = useState(config.twitch.clientSecret ?? "");
   const [botAuthed, setBotAuthed] = useState(config.twitch.hasTokens);
   const [broadcasterAuthed, setBroadcasterAuthed] = useState(config.twitch.hasTokens);
   const [authorizing, setAuthorizing] = useState<"bot" | "broadcaster" | null>(null);
