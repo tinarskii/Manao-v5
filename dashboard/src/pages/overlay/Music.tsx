@@ -32,7 +32,10 @@ let ytApiReady = false;
 const ytReadyCallbacks: (() => void)[] = [];
 
 function loadYTApi(onReady: () => void) {
-  if (ytApiReady) { onReady(); return; }
+  if (ytApiReady) {
+    onReady();
+    return;
+  }
   ytReadyCallbacks.push(onReady);
   if (ytApiLoaded) return;
   ytApiLoaded = true;
@@ -56,9 +59,12 @@ export function MusicOverlay() {
   const { socket } = useSocket();
 
   useEffect(() => {
-    api.get<SongRequestData[]>("/api/queue").then((queue) => {
-      setSong(queue[0] ?? null);
-    }).catch(() => {});
+    api
+      .get<SongRequestData[]>("/api/queue")
+      .then((queue) => {
+        setSong(queue[0] ?? null);
+      })
+      .catch(() => {});
   }, []);
 
   useSocketEvent<{ queue: SongRequestData[] }>("songRequest", (data) => {
@@ -92,7 +98,11 @@ export function MusicOverlay() {
       if (!duration) return;
       const percent = (current / duration) * 100;
       setProgress(percent);
-      socket.emit("currentSongProgress", { percent, currentTime: current, duration });
+      socket.emit("currentSongProgress", {
+        percent,
+        currentTime: current,
+        duration,
+      });
     }, 1000);
   }, [socket, stopProgressTimer]);
 

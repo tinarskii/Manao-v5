@@ -244,12 +244,12 @@ export function ConfigPage() {
                             htmlInput:
                               field === "cooldown"
                                 ? {
-                                  endAdornment: (
-                                    <InputAdornment position="end">
-                                      s
-                                    </InputAdornment>
-                                  ),
-                                }
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        s
+                                      </InputAdornment>
+                                    ),
+                                  }
                                 : undefined,
                           }}
                         />

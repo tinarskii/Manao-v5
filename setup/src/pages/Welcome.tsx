@@ -4,9 +4,9 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import type { SetupConfig } from "../App";
 
 export default function WelcomePage({
-                                      config,
-                                      onNext,
-                                    }: {
+  config,
+  onNext,
+}: {
   config: SetupConfig;
   onNext: () => void;
 }) {
@@ -22,18 +22,30 @@ export default function WelcomePage({
         Welcome to Manao v5
       </Typography>
       <Typography color="text.secondary" sx={{ mb: 3 }}>
-        This wizard will help you connect your streaming platforms.
-        You only need to set up the platforms you use.
+        This wizard will help you connect your streaming platforms. You only
+        need to set up the platforms you use.
       </Typography>
 
       <Stack spacing={1.5} sx={{ mb: 4 }}>
         {platforms.map((p) => (
-          <Box key={p.name} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-            {p.ok
-              ? <CheckCircleIcon color="success" />
-              : <RadioButtonUncheckedIcon color="disabled" />}
+          <Box
+            key={p.name}
+            sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+          >
+            {p.ok ? (
+              <CheckCircleIcon color="success" />
+            ) : (
+              <RadioButtonUncheckedIcon color="disabled" />
+            )}
             <Typography>{p.name}</Typography>
-            {p.ok && <Chip label="Configured" size="small" color="success" variant="outlined" />}
+            {p.ok && (
+              <Chip
+                label="Configured"
+                size="small"
+                color="success"
+                variant="outlined"
+              />
+            )}
           </Box>
         ))}
       </Stack>
@@ -44,12 +56,17 @@ export default function WelcomePage({
             variant="outlined"
             size="large"
             fullWidth
-            onClick={() => window.location.href = "http://localhost:3000"}
+            onClick={() => (window.location.href = "http://localhost:3000")}
           >
             Open Dashboard
           </Button>
         )}
-        <Button variant={config.complete ? "text" : "contained"} size="large" fullWidth onClick={onNext}>
+        <Button
+          variant={config.complete ? "text" : "contained"}
+          size="large"
+          fullWidth
+          onClick={onNext}
+        >
           {config.complete ? "Reconfigure platforms" : "Get Started"}
         </Button>
       </Stack>

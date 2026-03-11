@@ -1,12 +1,32 @@
-import { Paper, Typography, Button, Alert, Stack, Box, Chip } from "@mui/material";
+import {
+  Paper,
+  Typography,
+  Button,
+  Alert,
+  Stack,
+  Box,
+  Chip,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { SetupConfig } from "../App";
 
 export default function DonePage({ config }: { config: SetupConfig }) {
   const platforms = [
-    { name: "Twitch", ok: config.twitch.enabled && config.twitch.hasTokens, color: "#9147ff" },
-    { name: "Discord", ok: config.discord.enabled && config.discord.hasToken, color: "#5865f2" },
-    { name: "Kick", ok: config.kick.enabled && config.kick.hasTokens, color: "#53fc18" },
+    {
+      name: "Twitch",
+      ok: config.twitch.enabled && config.twitch.hasTokens,
+      color: "#9147ff",
+    },
+    {
+      name: "Discord",
+      ok: config.discord.enabled && config.discord.hasToken,
+      color: "#5865f2",
+    },
+    {
+      name: "Kick",
+      ok: config.kick.enabled && config.kick.hasTokens,
+      color: "#53fc18",
+    },
   ];
   const anyEnabled = platforms.some((p) => p.ok);
 
@@ -23,19 +43,33 @@ export default function DonePage({ config }: { config: SetupConfig }) {
       </Typography>
 
       <Stack direction="row" spacing={1} justifyContent="center" sx={{ mb: 4 }}>
-        {platforms.filter((p) => p.ok).map((p) => (
-          <Chip key={p.name} label={p.name} color="success" variant="outlined" />
-        ))}
+        {platforms
+          .filter((p) => p.ok)
+          .map((p) => (
+            <Chip
+              key={p.name}
+              label={p.name}
+              color="success"
+              variant="outlined"
+            />
+          ))}
       </Stack>
 
       {anyEnabled && (
         <Box
           sx={{
-            bgcolor: "grey.900", borderRadius: 2, p: 2, mb: 3,
-            fontFamily: "monospace", fontSize: 14, textAlign: "left",
+            bgcolor: "grey.900",
+            borderRadius: 2,
+            p: 2,
+            mb: 3,
+            fontFamily: "monospace",
+            fontSize: 14,
+            textAlign: "left",
           }}
         >
-          <Typography fontFamily="monospace" color="primary.light">bun start</Typography>
+          <Typography fontFamily="monospace" color="primary.light">
+            bun start
+          </Typography>
         </Box>
       )}
 
@@ -46,15 +80,17 @@ export default function DonePage({ config }: { config: SetupConfig }) {
 
       <Stack direction="row" spacing={2}>
         <Button
-          variant="outlined" fullWidth
-          onClick={() => window.location.href = "/"}
+          variant="outlined"
+          fullWidth
+          onClick={() => (window.location.href = "/")}
         >
           Back to Welcome
         </Button>
         {anyEnabled && (
           <Button
-            variant="contained" fullWidth
-            onClick={() => window.location.href = "http://localhost:3000"}
+            variant="contained"
+            fullWidth
+            onClick={() => (window.location.href = "http://localhost:3000")}
           >
             Open Dashboard
           </Button>

@@ -24,8 +24,12 @@ export function SoundOverlay() {
   const mutedRef = useRef(muted);
 
   // Keep refs in sync so socket callback always uses latest value
-  useEffect(() => { volumeRef.current = volume; }, [volume]);
-  useEffect(() => { mutedRef.current = muted; }, [muted]);
+  useEffect(() => {
+    volumeRef.current = volume;
+  }, [volume]);
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
 
   useSocketEvent<PlaySoundData>("play-sound", (data) => {
     audioRef.current?.pause();
@@ -43,13 +47,15 @@ export function SoundOverlay() {
   const handleVolumeChange = (_: Event, v: number | number[]) => {
     const val = v as number;
     setVolume(val);
-    if (audioRef.current) audioRef.current.volume = mutedRef.current ? 0 : val / 100;
+    if (audioRef.current)
+      audioRef.current.volume = mutedRef.current ? 0 : val / 100;
   };
 
   const toggleMute = () => {
     const next = !muted;
     setMuted(next);
-    if (audioRef.current) audioRef.current.volume = next ? 0 : volumeRef.current / 100;
+    if (audioRef.current)
+      audioRef.current.volume = next ? 0 : volumeRef.current / 100;
   };
 
   return (
@@ -79,9 +85,17 @@ export function SoundOverlay() {
         <Stack direction="row" alignItems="center" gap={1} sx={{ mb: 1 }}>
           <Box
             onClick={toggleMute}
-            sx={{ cursor: "pointer", color: muted ? "error.main" : "primary.main", display: "flex" }}
+            sx={{
+              cursor: "pointer",
+              color: muted ? "error.main" : "primary.main",
+              display: "flex",
+            }}
           >
-            {muted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
+            {muted ? (
+              <VolumeOffIcon fontSize="small" />
+            ) : (
+              <VolumeUpIcon fontSize="small" />
+            )}
           </Box>
           <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
             Volume
@@ -136,11 +150,24 @@ export function SoundOverlay() {
             <VolumeUpIcon sx={{ fontSize: 18, color: "primary.main" }} />
           </Box>
           <Box>
-            <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>
+            <Typography
+              sx={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: "#fff",
+                lineHeight: 1.2,
+              }}
+            >
               {nowPlaying.name}
             </Typography>
             {nowPlaying.redeemedBy && (
-              <Typography sx={{ fontSize: 11, color: "rgba(255,255,255,0.5)", lineHeight: 1.2 }}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.5)",
+                  lineHeight: 1.2,
+                }}
+              >
                 by {nowPlaying.redeemedBy}
               </Typography>
             )}

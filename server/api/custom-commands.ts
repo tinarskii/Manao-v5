@@ -40,7 +40,10 @@ function reloadCustomCommands(registry: CommandRegistry) {
   }
 }
 
-export function registerCustomCommandsAPI(app: Elysia, registry: CommandRegistry) {
+export function registerCustomCommandsAPI(
+  app: Elysia,
+  registry: CommandRegistry,
+) {
   app.get("/api/custom-commands", () => {
     return getCustomCommands();
   });

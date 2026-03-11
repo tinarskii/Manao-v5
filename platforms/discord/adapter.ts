@@ -65,9 +65,13 @@ export class DiscordAdapter implements PlatformAdapter {
     });
 
     try {
-      await importx(`${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`);
+      await importx(
+        `${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`,
+      );
     } catch {
-      logger.info("[Discord] No slash commands or events found — skipping importx");
+      logger.info(
+        "[Discord] No slash commands or events found — skipping importx",
+      );
     }
     await this.bot.login(DISCORD.BOT_TOKEN);
   }
@@ -189,7 +193,7 @@ export class DiscordAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-              ] ?? "";
+            ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;
@@ -198,7 +202,8 @@ export class DiscordAdapter implements PlatformAdapter {
         }
 
         if (response) {
-          if (!message.channel.isDMBased()) await message.channel.send(response);
+          if (!message.channel.isDMBased())
+            await message.channel.send(response);
           logger.info("[Discord] Custom reply sent");
         }
         return;

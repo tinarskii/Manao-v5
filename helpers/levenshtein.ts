@@ -151,7 +151,11 @@ const distance = (a: string, b: string): number => {
   return myers_x(a, b);
 };
 
-const closest = (str: string, arr: readonly string[], maxDistance = 3): string | undefined => {
+const closest = (
+  str: string,
+  arr: readonly string[],
+  maxDistance = 3,
+): string | undefined => {
   let min_distance = Infinity;
   let min_index = -1;
   for (let i = 0; i < arr.length; i++) {

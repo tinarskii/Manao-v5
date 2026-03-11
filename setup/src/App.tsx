@@ -51,8 +51,8 @@ export default function App() {
 
   useEffect(() => {
     fetch("/setup/api/config")
-    .then((r) => r.json())
-    .then((c: SetupConfig) => setConfig(c));
+      .then((r) => r.json())
+      .then((c: SetupConfig) => setConfig(c));
   }, []);
 
   const next = () => setStep((s) => Math.min(s + 1, 4));
@@ -86,7 +86,11 @@ export default function App() {
           py: 4,
         }}
       >
-        <Typography variant="h4" fontWeight={800} sx={{ mb: 4, letterSpacing: -1 }}>
+        <Typography
+          variant="h4"
+          fontWeight={800}
+          sx={{ mb: 4, letterSpacing: -1 }}
+        >
           🤖 Manao Setup
         </Typography>
 
@@ -100,9 +104,30 @@ export default function App() {
 
         <Box sx={{ width: "100%", maxWidth: 600 }}>
           {step === 0 && <WelcomePage config={config} onNext={next} />}
-          {step === 1 && <TwitchPage config={config} onNext={next} onBack={back} onReload={reload} />}
-          {step === 2 && <DiscordPage config={config} onNext={next} onBack={back} onReload={reload} />}
-          {step === 3 && <KickPage config={config} onNext={next} onBack={back} onReload={reload} />}
+          {step === 1 && (
+            <TwitchPage
+              config={config}
+              onNext={next}
+              onBack={back}
+              onReload={reload}
+            />
+          )}
+          {step === 2 && (
+            <DiscordPage
+              config={config}
+              onNext={next}
+              onBack={back}
+              onReload={reload}
+            />
+          )}
+          {step === 3 && (
+            <KickPage
+              config={config}
+              onNext={next}
+              onBack={back}
+              onReload={reload}
+            />
+          )}
           {step === 4 && <DonePage config={config} />}
         </Box>
       </Box>

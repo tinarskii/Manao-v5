@@ -53,7 +53,10 @@ export function SoundboardPage() {
       // Auto-populate from local files on first load
       if ((cfg.soundboard ?? []).length === 0 && files.length > 0) {
         const defaults: SoundEntry[] = files.map((f) => ({
-          name: f.replace("/sounds/", "").replace(/\.[^.]+$/, "").replace(/[-_]/g, " "),
+          name: f
+            .replace("/sounds/", "")
+            .replace(/\.[^.]+$/, "")
+            .replace(/[-_]/g, " "),
           url: f,
         }));
         await api.post("/api/soundboard", { soundboard: defaults });
@@ -68,7 +71,9 @@ export function SoundboardPage() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const save = async (next: SoundEntry[]) => {
     await api.post("/api/soundboard", { soundboard: next });
@@ -146,7 +151,11 @@ export function SoundboardPage() {
           >
             Open Player
           </Button>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={openCreate}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={openCreate}
+          >
             Add Sound
           </Button>
         </Stack>
@@ -195,7 +204,9 @@ export function SoundboardPage() {
               }}
               onClick={() => playSound(s.url, s.name)}
             >
-              <VolumeUpIcon sx={{ fontSize: 28, color: "primary.main", mb: 1 }} />
+              <VolumeUpIcon
+                sx={{ fontSize: 28, color: "primary.main", mb: 1 }}
+              />
               <Typography
                 variant="body2"
                 fontWeight={700}
@@ -229,7 +240,11 @@ export function SoundboardPage() {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
-                  <IconButton size="small" color="error" onClick={() => handleDelete(idx)}>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleDelete(idx)}
+                  >
                     <DeleteIcon sx={{ fontSize: 14 }} />
                   </IconButton>
                 </Tooltip>
@@ -239,8 +254,15 @@ export function SoundboardPage() {
         </Box>
       )}
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>{editIdx !== null ? "Edit Sound" : "Add Sound"}</DialogTitle>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>
+          {editIdx !== null ? "Edit Sound" : "Add Sound"}
+        </DialogTitle>
         <Divider />
         <DialogContent sx={{ pt: 2 }}>
           <Stack spacing={2}>
@@ -261,7 +283,9 @@ export function SoundboardPage() {
                   label="Local file"
                   onChange={(e) => setForm({ ...form, url: e.target.value })}
                 >
-                  <MenuItem value=""><em>None</em></MenuItem>
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
                   {localFiles.map((f) => (
                     <MenuItem key={f} value={f}>
                       {f.replace("/sounds/", "")}

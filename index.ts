@@ -86,7 +86,9 @@ for (const row of customCommands) {
   registry.register(buildCustomCommand(row));
 }
 
-logger.info(`[Manao] Loaded ${registry.size()} commands (${customCommands.length} custom)`);
+logger.info(
+  `[Manao] Loaded ${registry.size()} commands (${customCommands.length} custom)`,
+);
 
 if (TWITCH.ENABLED) {
   const { TwitchAdapter } = await import("@/platforms/twitch/adapter");

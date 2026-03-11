@@ -8,14 +8,16 @@ import { registerCustomCommandsAPI } from "./api/custom-commands";
 import { registerMusicAPI } from "./api/music";
 import type { CommandRegistry } from "@/core/registry";
 import type { Language } from "@/core/types";
-import {registerSoundboardAPI} from "@/server/api/soundboard.ts";
+import { registerSoundboardAPI } from "@/server/api/soundboard.ts";
 
 export { io } from "./services/socket.io";
 
 export function createServer(registry: CommandRegistry, lang: Language) {
   const app = new Elysia();
 
-  app.use(staticPlugin({ prefix: "/assets", assets: "./server/public/assets" }));
+  app.use(
+    staticPlugin({ prefix: "/assets", assets: "./server/public/assets" }),
+  );
 
   app.get("/favicon.ico", () => Bun.file("./server/public/favicon.ico"));
   app.get("/scripts/socket.io/socket.io.js", () =>

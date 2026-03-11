@@ -14,11 +14,19 @@ interface CustomCommandRow {
 
 export function buildCustomCommand(row: CustomCommandRow): Command {
   const aliases = (() => {
-    try { return JSON.parse(row.aliases) as string[]; } catch { return []; }
+    try {
+      return JSON.parse(row.aliases) as string[];
+    } catch {
+      return [];
+    }
   })();
 
   const args = (() => {
-    try { return JSON.parse(row.arguments); } catch { return []; }
+    try {
+      return JSON.parse(row.arguments);
+    } catch {
+      return [];
+    }
   })();
 
   return {
@@ -30,7 +38,11 @@ export function buildCustomCommand(row: CustomCommandRow): Command {
     isCustom: true,
     execute: async (context: CommandContext, cmdArgs: string[]) => {
       try {
-        const fn = new Function("context", "args", `return (async (context, args) => {\n${row.code}\n})(context, args)`);
+        const fn = new Function(
+          "context",
+          "args",
+          `return (async (context, args) => {\n${row.code}\n})(context, args)`,
+        );
         await fn(context, cmdArgs);
       } catch (err) {
         logger.error(`[CustomCommand] "${row.name}" error: ${err}`);
