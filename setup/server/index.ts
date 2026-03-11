@@ -49,7 +49,7 @@ function writeEnv(values: Record<string, string>): void {
     const templateKeys = new Set(
       template.split("\n")
       .filter(l => l.includes("=") && !l.startsWith("#"))
-      .map(l => l.split("=")[0].trim())
+      .map(l => (l.split("=")[0] ?? "").trim())
     );
     for (const [k, v] of Object.entries(merged)) {
       if (!templateKeys.has(k)) lines.push(`${k}=${v}`);
@@ -151,6 +151,7 @@ export function createSetupServer() {
       });
       const userData = await userRes.json() as { data: { id: string; login: string }[] };
       const user = userData.data[0];
+      if (!user) throw new Error("Failed to fetch Twitch user info");
 
       if (session.role === "bot") {
         writeEnv({
@@ -170,7 +171,7 @@ export function createSetupServer() {
       }
 
       return new Response(
-        `<!DOCTYPE html><html><body style="font-family:sans-serif;padding:2rem;text-align:center">
+        `<!DOCTYPE html><html lang="en"><body style="font-family:sans-serif;padding:2rem;text-align:center">
         <h2>✅ ${session.role === "bot" ? "Bot" : "Broadcaster"} account authorized!</h2>
         <p><strong>${user.login}</strong> (ID: ${user.id})</p>
         <p>You can close this window.</p>
@@ -300,7 +301,7 @@ export function createSetupServer() {
   } else {
     app.get("/", () =>
       new Response(
-        `<!DOCTYPE html><html><body style="font-family:monospace;padding:2rem">
+        `<!DOCTYPE html><html lang="en"><body style="font-family:monospace;padding:2rem">
         <h2>⚠️ Setup UI not built yet</h2>
         <p>Run: <code>bun run setup:build</code></p>
         <p>Then restart: <code>bun run setup</code></p>
@@ -311,7 +312,7 @@ export function createSetupServer() {
     );
     app.get("/*", () =>
       new Response(
-        `<!DOCTYPE html><html><body style="font-family:monospace;padding:2rem">
+        `<!DOCTYPE html><html lang="en"><body style="font-family:monospace;padding:2rem">
         <h2>⚠️ Setup UI not built yet</h2>
         <p>Run: <code>bun run setup:build</code></p>
         <p>Then restart: <code>bun run setup</code></p>
