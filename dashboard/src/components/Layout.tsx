@@ -99,7 +99,7 @@ function DrawerContent({ onClose }: { onClose?: () => void }) {
               variant="caption"
               sx={{ color: "text.disabled", fontSize: "0.65rem" }}
             >
-              v5.0.0-alpha
+              Version 5
             </Typography>
           </Box>
         </Box>
