@@ -9,6 +9,9 @@ import { registerMusicAPI } from "./api/music";
 import type { CommandRegistry } from "@/core/registry";
 import type { Language } from "@/core/types";
 import { registerSoundboardAPI } from "@/server/api/soundboard.ts";
+import {registerSocketAPI} from "@/server/api/socket.ts";
+import open from "open";
+import {internalIpV4} from "internal-ip";
 
 export { io } from "./services/socket.io";
 
@@ -20,6 +23,7 @@ export function createServer(registry: CommandRegistry, lang: Language) {
   );
 
   app.get("/favicon.ico", () => Bun.file("./server/public/favicon.ico"));
+  app.get("/manao_mini.png", () => Bun.file("./server/public/manao_mini.png"));
   app.get("/scripts/socket.io/socket.io.js", () =>
     Bun.file("./node_modules/socket.io/client-dist/socket.io.js"),
   );
@@ -29,15 +33,17 @@ export function createServer(registry: CommandRegistry, lang: Language) {
   registerCustomCommandsAPI(app, registry);
   registerMusicAPI(app);
   registerSoundboardAPI(app);
+  registerSocketAPI(app);
 
   app.get("/*", () => Bun.file("./server/public/index.html"));
 
   return app;
 }
 
-export function startServer(registry: CommandRegistry, lang: Language): void {
+export function startServer(registry: CommandRegistry, lang: Language, webPort: number = PORT): void {
   const app = createServer(registry, lang);
-  app.listen({ port: PORT, hostname: "0.0.0.0" }, ({ hostname, port }) => {
-    logger.info(`[Server] Running on http://${hostname}:${port}`);
-  });
+  app.listen({ port: webPort, hostname: "0.0.0.0" }, async ({ port }) => {
+    logger.info(`[Server] Running on http://${await internalIpV4()}:${port}`);
+    await open(`http://${await internalIpV4()}:${port}`);
+  })
 }
