@@ -114,10 +114,10 @@ Add these URLs as Browser Sources in OBS, Streamlabs, or any broadcast software:
 
 | Overlay      | URL                                   |
 |:-------------|:--------------------------------------|
-| Chat Overlay | `http://localhost:3000/overlay/chat`  |
-| Event Feed   | `http://localhost:3000/overlay/feed`  |
-| Music Player | `http://localhost:3000/overlay/music` |
-| Sound Player | `http://localhost:3000/overlay/sound` |
+| Chat Overlay | `http://localhost:4600/overlay/chat`  |
+| Event Feed   | `http://localhost:4600/overlay/feed`  |
+| Music Player | `http://localhost:4600/overlay/music` |
+| Sound Player | `http://localhost:4600/overlay/sound` |
 
 
 ### Soundboard & Channel Points
@@ -131,7 +131,7 @@ Define keyword or RegEx triggers that automatically fire a response in chat. Con
 ### Dashboard
 
 A full React web dashboard for managing everything whether it's commands, soundboard, channel points, overlays, or bot settings.
-Manage everything in one place at `http://localhost:3000`.
+Manage everything in one place at `http://localhost:4600`.
 
 ---
 
