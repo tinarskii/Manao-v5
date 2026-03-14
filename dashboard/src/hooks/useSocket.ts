@@ -40,7 +40,9 @@ export function useSocket() {
         s.off("disconnect", onDisconnect);
       };
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { socket, connected };

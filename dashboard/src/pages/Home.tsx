@@ -1,11 +1,4 @@
-import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  Button,
-  Stack,
-} from "@mui/material";
+import { Box, Grid, Paper, Typography, Button, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -60,32 +53,58 @@ const QUICK_LINKS = [
 
 const OVERLAY_LINKS = [
   { label: "Chat", path: "/overlay/chat", icon: <ChatIcon fontSize="small" /> },
-  { label: "Feed", path: "/overlay/feed", icon: <GraphicEqIcon fontSize="small" /> },
-  { label: "Music", path: "/overlay/music", icon: <MusicNoteIcon fontSize="small" /> },
-  { label: "Sound", path: "/overlay/sound", icon: <VolumeUpIcon fontSize="small" /> },
+  {
+    label: "Feed",
+    path: "/overlay/feed",
+    icon: <GraphicEqIcon fontSize="small" />,
+  },
+  {
+    label: "Music",
+    path: "/overlay/music",
+    icon: <MusicNoteIcon fontSize="small" />,
+  },
+  {
+    label: "Sound",
+    path: "/overlay/sound",
+    icon: <VolumeUpIcon fontSize="small" />,
+  },
 ];
 
 export function HomePage() {
   return (
     <Box sx={{ maxWidth: 900 }}>
       {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5}}>
-          <Box
-            component="img"
-            src="/manao_mini.png"
-            alt="Manao"
-            sx={{ width: 40, height: 40, flexShrink: 0, display: { xs: "none", md: "block" } }}
-          />
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700, color: "text.primary", letterSpacing: "-0.02em", fontSize: { xs: "1.5rem", sm: "2rem" } }}
-          >
-            Manao Dashboard
-          </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <Box
+          component="img"
+          src="/manao_mini.png"
+          alt="Manao"
+          sx={{
+            width: 40,
+            height: 40,
+            flexShrink: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            color: "text.primary",
+            letterSpacing: "-0.02em",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
+          }}
+        >
+          Manao Dashboard
+        </Typography>
       </Box>
 
       {/* Quick Access */}
-      <Typography variant="overline" color="text.disabled" sx={{ mb: 1.5, display: "block" }}>
+      <Typography
+        variant="overline"
+        color="text.disabled"
+        sx={{ mb: 1.5, display: "block" }}
+      >
         Quick Access
       </Typography>
       <Grid container spacing={1.5} sx={{ mb: 5 }}>
@@ -109,7 +128,14 @@ export function HomePage() {
                 },
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  mb: 2,
+                }}
+              >
                 <Box
                   sx={{
                     width: 36,
@@ -137,10 +163,17 @@ export function HomePage() {
                   }}
                 />
               </Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "text.primary", mb: 0.5 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ fontWeight: 600, color: "text.primary", mb: 0.5 }}
+              >
                 {item.title}
               </Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.5 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ lineHeight: 1.5 }}
+              >
                 {item.description}
               </Typography>
             </Paper>
@@ -149,11 +182,23 @@ export function HomePage() {
       </Grid>
 
       {/* Overlays */}
-      <Typography variant="overline" color="text.disabled" sx={{ mb: 1.5, display: "block" }}>
+      <Typography
+        variant="overline"
+        color="text.disabled"
+        sx={{ mb: 1.5, display: "block" }}
+      >
         Stream Overlays
       </Typography>
       <Paper sx={{ p: 2.5 }}>
-        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 2,
+          }}
+        >
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
               Browser Sources

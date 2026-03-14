@@ -1,10 +1,4 @@
-import {
-  Paper,
-  Typography,
-  Button,
-  Stack,
-  Chip,
-} from "@mui/material";
+import { Paper, Typography, Button, Stack, Chip } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { SetupConfig } from "../App";
 
@@ -36,7 +30,7 @@ export default function DonePage({ config }: { config: SetupConfig }) {
       </Typography>
       <Typography color="text.secondary" sx={{ mb: 3 }}>
         {anyEnabled
-          ? "Your bot is ready. Start it by clicking at \"ManaoBot\" shortcut on your desktop! Feel free to close this page and program."
+          ? 'Your bot is ready. Start it by clicking at "ManaoBot" shortcut on your desktop! Feel free to close this page and program.'
           : "Go back and enable at least one platform to use the bot."}
       </Typography>
 

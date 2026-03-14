@@ -14,7 +14,7 @@ import TwitchPage from "./pages/Twitch";
 import DiscordPage from "./pages/Discord";
 import KickPage from "./pages/Kick";
 import DonePage from "./pages/Done";
-import {theme} from "../../dashboard/src/theme"
+import { theme } from "../../dashboard/src/theme";
 
 export interface SetupConfig {
   complete: boolean;
@@ -86,11 +86,21 @@ export default function App() {
             component="img"
             src="https://gitlab.com/uploads/-/system/project/avatar/80096207/manao_mini.png?width=96"
             alt="Manao"
-            sx={{ width: 40, height: 40, flexShrink: 0, display: { xs: "none", md: "block" } }}
+            sx={{
+              width: 40,
+              height: 40,
+              flexShrink: 0,
+              display: { xs: "none", md: "block" },
+            }}
           />
           <Typography
             variant="h4"
-            sx={{ fontWeight: 700, color: "text.primary", letterSpacing: "-0.02em", fontSize: { xs: "1.5rem", sm: "2rem" } }}
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+              letterSpacing: "-0.02em",
+              fontSize: { xs: "1.5rem", sm: "2rem" },
+            }}
           >
             Manao Setup
           </Typography>

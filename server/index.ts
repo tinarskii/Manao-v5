@@ -9,9 +9,9 @@ import { registerMusicAPI } from "./api/music";
 import type { CommandRegistry } from "@/core/registry";
 import type { Language } from "@/core/types";
 import { registerSoundboardAPI } from "@/server/api/soundboard.ts";
-import {registerSocketAPI} from "@/server/api/socket.ts";
+import { registerSocketAPI } from "@/server/api/socket.ts";
 import open from "open";
-import {internalIpV4} from "internal-ip";
+import { internalIpV4 } from "internal-ip";
 
 export { io } from "./services/socket.io";
 
@@ -40,10 +40,14 @@ export function createServer(registry: CommandRegistry, lang: Language) {
   return app;
 }
 
-export function startServer(registry: CommandRegistry, lang: Language, webPort: number = PORT): void {
+export function startServer(
+  registry: CommandRegistry,
+  lang: Language,
+  webPort: number = PORT,
+): void {
   const app = createServer(registry, lang);
   app.listen({ port: webPort, hostname: "0.0.0.0" }, async ({ port }) => {
     logger.info(`[Server] Running on http://${await internalIpV4()}:${port}`);
     await open(`http://${await internalIpV4()}:${port}`);
-  })
+  });
 }
