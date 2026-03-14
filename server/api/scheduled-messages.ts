@@ -3,7 +3,6 @@ import { getUserConfig, updateUserConfig } from "@/server/api/config";
 import {
   startOne,
   stopOne,
-  reloadScheduledMessages,
 } from "@/core/scheduled-messages";
 import type { ScheduledMessage } from "@/core/types";
 import { randomUUID } from "node:crypto";

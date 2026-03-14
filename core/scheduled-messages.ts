@@ -1,4 +1,4 @@
-import { getUserConfig, updateUserConfig } from "@/server/api/config";
+import { getUserConfig } from "@/server/api/config";
 import { logger } from "@/helpers/logger";
 import type { Platform, ScheduledMessage } from "@/core/types";
 
