@@ -29,8 +29,7 @@ const kickSchema = z.object({
 
 const baseSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]).default("development"),
-  PORT: z.coerce.number().default(3000),
-  SOCKET_PORT: z.coerce.number().default(5000),
+  PORT: z.coerce.number().default(4600),
   NGROK_AUTHTOKEN: z.string().default(""),
   NGROK_DOMAIN: z.string().default(""),
 });
@@ -52,7 +51,6 @@ const kick = useKick
 
 export const IS_PRODUCTION = base.NODE_ENV === "production";
 export const PORT = base.PORT;
-export const SOCKET_PORT = base.SOCKET_PORT;
 
 export const TWITCH = {
   ENABLED: useTwitch,
