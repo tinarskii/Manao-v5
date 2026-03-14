@@ -94,18 +94,18 @@ context.user.roles.isModerator   // true if the user is a moderator of the chann
 context.user.roles.isBroadcaster // true if the user is a broadcaster         
 
 // Information
-context.channel            // Channel name
-context.language           // Current language of the bot (e.g. "en", "th")
-context.currency           // Currency name (default: "COIN")
+context.channel                  // Channel name
+context.language                 // Current language of the bot (e.g. "en", "th")
+context.currency                 // Currency name (default: "COIN")
 
 // Functions to interact with chat
-await context.say("...")        // Send a message in chat
-await context.reply("...")      // Reply to the user in chat (mentioning them)
-await context.whisper("...")    // Send a private message to the user (if supported by the platform)
+await context.say("...")         // Send a message in chat
+await context.reply("...")       // Reply to the user in chat (mentioning them)
+await context.whisper("...")     // Send a private message to the user (if supported by the platform)
 
 // Other
-await context.lookupUser("ชื่อ")  // Lookup user by name, returns an object with the same structure as context.user
-context.emit("event", data)     // Emit a custom event that can be listened to by other commands or overlays
+await context.lookupUser("name") // Lookup user by name, returns an object with the same structure as context.user
+context.emit("event", data)      // Emit a custom event that can be listened to by other commands or overlays
 ```
 
 ### Overlays (OBS Browser Sources)
