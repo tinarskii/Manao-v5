@@ -1,6 +1,10 @@
 import type { Elysia } from "elysia";
 import { getUserConfig, updateUserConfig } from "@/server/api/config";
-import { startOne, stopOne, reloadScheduledMessages } from "@/core/scheduled-messages";
+import {
+  startOne,
+  stopOne,
+  reloadScheduledMessages,
+} from "@/core/scheduled-messages";
 import type { ScheduledMessage } from "@/core/types";
 import { randomUUID } from "node:crypto";
 
@@ -34,7 +38,11 @@ export function registerScheduledMessagesAPI(app: Elysia) {
       const list = config.scheduledMessages ?? [];
       const idx = list.findIndex((m) => m.id === params.id);
       if (idx === -1) return { success: false, error: "Not found" };
-      const updated = { ...list[idx], ...(body as Partial<ScheduledMessage>), id: params.id } as ScheduledMessage;
+      const updated = {
+        ...list[idx],
+        ...(body as Partial<ScheduledMessage>),
+        id: params.id,
+      } as ScheduledMessage;
       list[idx] = updated;
       await updateUserConfig("scheduledMessages", list);
       stopOne(params.id);
@@ -49,7 +57,9 @@ export function registerScheduledMessagesAPI(app: Elysia) {
   app.delete("/api/scheduled-messages/:id", async ({ params }) => {
     try {
       const config = await getUserConfig();
-      const list = (config.scheduledMessages ?? []).filter((m) => m.id !== params.id);
+      const list = (config.scheduledMessages ?? []).filter(
+        (m) => m.id !== params.id,
+      );
       await updateUserConfig("scheduledMessages", list);
       stopOne(params.id);
       return { success: true };

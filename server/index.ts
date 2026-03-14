@@ -12,7 +12,7 @@ import { registerSoundboardAPI } from "@/server/api/soundboard.ts";
 import { registerSocketAPI } from "@/server/api/socket.ts";
 import open from "open";
 import { internalIpV4 } from "internal-ip";
-import {registerScheduledMessagesAPI} from "@/server/api/scheduled-messages.ts";
+import { registerScheduledMessagesAPI } from "@/server/api/scheduled-messages.ts";
 
 export { io } from "./services/socket.io";
 

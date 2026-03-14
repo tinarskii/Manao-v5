@@ -52,7 +52,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Config", icon: <SettingsIcon />, path: "/config" },
   { label: "Custom Replies", icon: <ForumIcon />, path: "/replies" },
   { label: "Channel Points", icon: <RedeemIcon />, path: "/channel-points" },
-  { label: "Scheduled Messages", icon: <ScheduleIcon />, path: "/scheduled-messages" },
+  {
+    label: "Scheduled Messages",
+    icon: <ScheduleIcon />,
+    path: "/scheduled-messages",
+  },
   {
     label: "Chat Overlay",
     icon: <ChatIcon />,

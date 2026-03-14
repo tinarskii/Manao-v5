@@ -54,9 +54,9 @@ export function ScheduledMessagesPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<Omit<ScheduledMessage, "id"> & { messagesStr: string }>(
-    { ...empty(), messagesStr: "" }
-  );
+  const [form, setForm] = useState<
+    Omit<ScheduledMessage, "id"> & { messagesStr: string }
+  >({ ...empty(), messagesStr: "" });
 
   const load = useCallback(async () => {
     try {
@@ -69,7 +69,9 @@ export function ScheduledMessagesPage() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const openCreate = () => {
     setEditId(null);
@@ -88,9 +90,9 @@ export function ScheduledMessagesPage() {
     setError(null);
     try {
       const messages = form.messagesStr
-      .split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean);
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
       if (messages.length === 0) {
         setError("Add at least one message");
@@ -135,7 +137,10 @@ export function ScheduledMessagesPage() {
 
   const toggleEnabled = async (item: ScheduledMessage) => {
     try {
-      await api.put(`/api/scheduled-messages/${item.id}`, { ...item, isEnabled: !item.isEnabled });
+      await api.put(`/api/scheduled-messages/${item.id}`, {
+        ...item,
+        isEnabled: !item.isEnabled,
+      });
       await load();
     } catch {
       setError("Failed to update");
@@ -157,29 +162,58 @@ export function ScheduledMessagesPage() {
     return `${Math.floor(seconds / 3600)}h ${Math.floor((seconds % 3600) / 60)}m`;
   };
 
-  if (loading) return <Box sx={{ display: "flex", justifyContent: "center", pt: 8 }}><CircularProgress /></Box>;
+  if (loading)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", pt: 8 }}>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
+      >
         <Box>
-          <Typography variant="h5" fontWeight={700}>Scheduled Messages</Typography>
+          <Typography variant="h5" fontWeight={700}>
+            Scheduled Messages
+          </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             Messages sent automatically to chat at set intervals
           </Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={openCreate}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={openCreate}
+        >
           Add
         </Button>
       </Stack>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       {items.length === 0 ? (
         <Paper sx={{ p: 6, textAlign: "center" }}>
-          <AccessTimeIcon sx={{ fontSize: 48, color: "text.disabled", mb: 2 }} />
-          <Typography color="text.secondary">No scheduled messages yet</Typography>
-          <Button variant="outlined" startIcon={<AddIcon />} onClick={openCreate} sx={{ mt: 2 }}>
+          <AccessTimeIcon
+            sx={{ fontSize: 48, color: "text.disabled", mb: 2 }}
+          />
+          <Typography color="text.secondary">
+            No scheduled messages yet
+          </Typography>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={openCreate}
+            sx={{ mt: 2 }}
+          >
             Add first message
           </Button>
         </Paper>
@@ -207,17 +241,34 @@ export function ScheduledMessagesPage() {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2" sx={{ maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        maxWidth: 280,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
                       {item.messages[0]}
                       {item.messages.length > 1 && (
-                        <Typography component="span" variant="caption" color="text.disabled" sx={{ ml: 0.5 }}>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          color="text.disabled"
+                          sx={{ ml: 0.5 }}
+                        >
                           +{item.messages.length - 1} more
                         </Typography>
                       )}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip label={formatInterval(item.intervalSeconds)} size="small" icon={<AccessTimeIcon />} />
+                    <Chip
+                      label={formatInterval(item.intervalSeconds)}
+                      size="small"
+                      icon={<AccessTimeIcon />}
+                    />
                   </TableCell>
                   <TableCell>
                     <Chip label={item.mode} size="small" variant="outlined" />
@@ -231,10 +282,18 @@ export function ScheduledMessagesPage() {
                   </TableCell>
                   <TableCell align="right">
                     <Tooltip title="Edit">
-                      <IconButton size="small" onClick={() => openEdit(item)}><EditIcon fontSize="small" /></IconButton>
+                      <IconButton size="small" onClick={() => openEdit(item)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-                      <IconButton size="small" color="error" onClick={() => handleDelete(item.id)}><DeleteIcon fontSize="small" /></IconButton>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
                     </Tooltip>
                   </TableCell>
                 </TableRow>
@@ -244,8 +303,15 @@ export function ScheduledMessagesPage() {
         </TableContainer>
       )}
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>{editId ? "Edit Scheduled Message" : "New Scheduled Message"}</DialogTitle>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          {editId ? "Edit Scheduled Message" : "New Scheduled Message"}
+        </DialogTitle>
         <DialogContent>
           <Stack spacing={2.5} sx={{ mt: 1 }}>
             <TextField
@@ -254,7 +320,9 @@ export function ScheduledMessagesPage() {
               rows={5}
               fullWidth
               value={form.messagesStr}
-              onChange={(e) => setForm((f) => ({ ...f, messagesStr: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, messagesStr: e.target.value }))
+              }
               helperText="One message per line — the bot will cycle through these"
             />
 
@@ -264,7 +332,12 @@ export function ScheduledMessagesPage() {
                 type="number"
                 fullWidth
                 value={form.intervalSeconds}
-                onChange={(e) => setForm((f) => ({ ...f, intervalSeconds: Math.max(30, Number(e.target.value)) }))}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    intervalSeconds: Math.max(30, Number(e.target.value)),
+                  }))
+                }
                 helperText="Minimum 30 seconds"
                 inputProps={{ min: 30 }}
               />
@@ -273,7 +346,12 @@ export function ScheduledMessagesPage() {
                 <Select
                   value={form.mode}
                   label="Mode"
-                  onChange={(e) => setForm((f) => ({ ...f, mode: e.target.value as "random" | "sequential" }))}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      mode: e.target.value as "random" | "sequential",
+                    }))
+                  }
                 >
                   <MenuItem value="sequential">Sequential</MenuItem>
                   <MenuItem value="random">Random</MenuItem>
@@ -282,7 +360,9 @@ export function ScheduledMessagesPage() {
             </Stack>
 
             <Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Platforms</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Platforms
+              </Typography>
               <FormGroup row>
                 {PLATFORMS.map((p) => (
                   <FormControlLabel
@@ -301,7 +381,12 @@ export function ScheduledMessagesPage() {
             </Box>
 
             <FormControlLabel
-              control={<Switch checked={form.isEnabled} onChange={(_, v) => setForm((f) => ({ ...f, isEnabled: v }))} />}
+              control={
+                <Switch
+                  checked={form.isEnabled}
+                  onChange={(_, v) => setForm((f) => ({ ...f, isEnabled: v }))}
+                />
+              }
               label="Enabled"
             />
           </Stack>
