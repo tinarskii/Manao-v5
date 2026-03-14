@@ -1,37 +1,49 @@
 import { useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? "http://localhost:5000";
-
 let sharedSocket: Socket | null = null;
+let socketPromise: Promise<Socket> | null = null;
 
-function getSocket(): Socket {
-  if (!sharedSocket) {
-    sharedSocket = io(SOCKET_URL, { transports: ["websocket"] });
-  }
-  return sharedSocket;
+async function getSocket(): Promise<Socket> {
+  if (sharedSocket) return sharedSocket;
+  if (socketPromise) return socketPromise;
+
+  socketPromise = (async () => {
+    const res = await fetch("/api/socket");
+    const { url } = await res.json();
+    sharedSocket = io(url, { transports: ["websocket"] });
+    return sharedSocket;
+  })();
+
+  return socketPromise;
 }
 
 export function useSocket() {
   const [connected, setConnected] = useState(false);
-  const socketRef = useRef<Socket>(getSocket());
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socket = socketRef.current;
-    const onConnect = () => setConnected(true);
-    const onDisconnect = () => setConnected(false);
+    let cancelled = false;
+    getSocket().then((s) => {
+      if (cancelled) return;
+      setSocket(s);
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    setConnected(socket.connected);
+      const onConnect = () => setConnected(true);
+      const onDisconnect = () => setConnected(false);
 
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
+      s.on("connect", onConnect);
+      s.on("disconnect", onDisconnect);
+      setConnected(s.connected);
+
+      return () => {
+        s.off("connect", onConnect);
+        s.off("disconnect", onDisconnect);
+      };
+    });
+    return () => { cancelled = true; };
   }, []);
 
-  return { socket: socketRef.current, connected };
+  return { socket, connected };
 }
 
 export function useSocketEvent<T>(event: string, handler: (data: T) => void) {
@@ -42,6 +54,7 @@ export function useSocketEvent<T>(event: string, handler: (data: T) => void) {
   });
 
   useEffect(() => {
+    if (!socket) return;
     const stable = (data: T) => handlerRef.current(data);
     socket.on(event, stable);
     return () => {
