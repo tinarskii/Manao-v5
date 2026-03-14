@@ -176,6 +176,15 @@ export interface ChatReward {
   cooldown: number; // In seconds
 }
 
+export interface ScheduledMessage {
+  id: string;
+  messages: string[];
+  intervalSeconds: number;
+  mode: "random" | "sequential";
+  platforms: Platform[];
+  isEnabled: boolean;
+}
+
 export interface Configuration {
   prefix: Record<Platform, string>;
   defaultSongs: SongData[];
@@ -187,4 +196,5 @@ export interface Configuration {
   soundRewards: SoundReward[];
   soundboard: SoundEntry[];
   chatRewards: Record<Platform, ChatReward>;
+  scheduledMessages: ScheduledMessage[];
 }

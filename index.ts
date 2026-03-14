@@ -6,6 +6,7 @@ import { getUserConfig } from "@/server/api/config";
 import { getCustomCommands } from "@/db";
 import { startServer } from "@/server";
 import { setRegistry } from "@/commands/info/help";
+import { startScheduledMessages, setSendFn } from "@/core/scheduled-messages";
 
 // Economy
 import balance from "@/commands/economy/balance";
@@ -90,16 +91,21 @@ logger.info(
   `[Manao] Loaded ${registry.size()} commands (${customCommands.length} custom)`,
 );
 
+let twitchSend: ((msg: string) => Promise<void>) | null = null;
+let kickSend: ((msg: string) => Promise<void>) | null = null;
+
 if (TWITCH.ENABLED) {
   const { TwitchAdapter } = await import("@/platforms/twitch/adapter");
   const adapter = new TwitchAdapter(registry, config);
   await adapter.start();
+  twitchSend = (msg) => adapter.sendMessage(TWITCH.BROADCASTER.CHANNEL, msg);
 }
 
 if (KICK.ENABLED) {
   const { KickAdapter } = await import("@/platforms/kick/adapter");
   const adapter = new KickAdapter(registry, config);
   await adapter.start();
+  kickSend = (msg) => adapter.sendMessage("", msg);
 }
 
 if (DISCORD.ENABLED) {
@@ -107,6 +113,13 @@ if (DISCORD.ENABLED) {
   const adapter = new DiscordAdapter(registry, config);
   await adapter.start();
 }
+
+setSendFn(async (platform, message) => {
+  if (platform === "twitch") await twitchSend?.(message);
+  else if (platform === "kick") await kickSend?.(message);
+});
+
+await startScheduledMessages();
 
 try {
   startServer(registry, config.language);

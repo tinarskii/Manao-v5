@@ -49,6 +49,7 @@ function getDefaultConfig(): Configuration {
       kick: { minimum: 1, maximum: 4, chance: 75, cooldown: 60 },
       discord: { minimum: 1, maximum: 4, chance: 75, cooldown: 60 },
     },
+    scheduledMessages: [],
   };
 }
 

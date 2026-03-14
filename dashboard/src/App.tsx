@@ -13,6 +13,7 @@ import { FeedOverlay } from "./pages/overlay/Feed";
 import { MusicOverlay } from "./pages/overlay/Music";
 import { SoundOverlay } from "./pages/overlay/Sound";
 import { SoundboardPage } from "./pages/Soundboard.tsx";
+import {ScheduledMessagesPage} from "@/pages/manager/ScheduledMessages.tsx";
 
 export function App() {
   return (
@@ -32,6 +33,7 @@ export function App() {
             <Route path="/overlay/music" element={<MusicOverlay />} />
             <Route path="/overlay/sound" element={<SoundOverlay />} />
             <Route path="/soundboard" element={<SoundboardPage />} />
+            <Route path="/scheduled-messages" element={<ScheduledMessagesPage />} />
           </Routes>
         </Layout>
       </BrowserRouter>
