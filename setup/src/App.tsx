@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   CssBaseline,
   ThemeProvider,
-  createTheme,
   Box,
   Stepper,
   Step,
@@ -15,11 +14,7 @@ import TwitchPage from "./pages/Twitch";
 import DiscordPage from "./pages/Discord";
 import KickPage from "./pages/Kick";
 import DonePage from "./pages/Done";
-
-const theme = createTheme({
-  palette: { mode: "dark", primary: { main: "#9147ff" } },
-  shape: { borderRadius: 10 },
-});
+import {theme} from "../../dashboard/src/theme"
 
 export interface SetupConfig {
   complete: boolean;
@@ -86,13 +81,20 @@ export default function App() {
           py: 4,
         }}
       >
-        <Typography
-          variant="h4"
-          fontWeight={800}
-          sx={{ mb: 4, letterSpacing: -1 }}
-        >
-          🤖 Manao Setup
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 4 }}>
+          <Box
+            component="img"
+            src="https://gitlab.com/uploads/-/system/project/avatar/80096207/manao_mini.png?width=96"
+            alt="Manao"
+            sx={{ width: 40, height: 40, flexShrink: 0, display: { xs: "none", md: "block" } }}
+          />
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, color: "text.primary", letterSpacing: "-0.02em", fontSize: { xs: "1.5rem", sm: "2rem" } }}
+          >
+            Manao Setup
+          </Typography>
+        </Box>
 
         <Stepper activeStep={step} sx={{ mb: 4, width: "100%", maxWidth: 600 }}>
           {STEPS.map((label) => (

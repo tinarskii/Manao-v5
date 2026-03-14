@@ -141,7 +141,7 @@ export function SoundOverlay() {
               width: 32,
               height: 32,
               borderRadius: "8px",
-              background: "rgba(124,58,237,0.2)",
+              background: "rgba(105,240,0,0.2)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

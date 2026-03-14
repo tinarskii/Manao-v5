@@ -9,7 +9,7 @@ interface FeedItem extends FeedEvent {
 
 const STATUS_COLOR: Record<FeedStatus, string> = {
   neutral: "#94A3B8",
-  normal: "#7C3AED",
+  normal: "#69F000",
   success: "#22C55E",
   warning: "#F59E0B",
   danger: "#EF4444",

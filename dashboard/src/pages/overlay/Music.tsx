@@ -98,6 +98,7 @@ export function MusicOverlay() {
       if (!duration) return;
       const percent = (current / duration) * 100;
       setProgress(percent);
+      if (!socket) return;
       socket.emit("currentSongProgress", {
         percent,
         currentTime: current,
@@ -136,6 +137,7 @@ export function MusicOverlay() {
             } else if (e.data === window.YT.PlayerState.ENDED) {
               stopProgressTimer();
               setProgress(0);
+              if (!socket) return;
               socket.emit("songEnded");
             } else {
               stopProgressTimer();
@@ -203,7 +205,7 @@ export function MusicOverlay() {
             cursor: "pointer",
             pointerEvents: "auto",
             outline: iframeVisible
-              ? "1px solid rgba(124,58,237,0.6)"
+              ? "1px solid rgba(105,240,0,0.6)"
               : "1px solid transparent",
             animation: "musicIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
             transition: "outline 0.2s ease",
@@ -255,7 +257,7 @@ export function MusicOverlay() {
             >
               {song.author}
             </Box>
-            <Box sx={{ fontSize: 10, color: "#7C3AED", mt: 0.25 }}>
+            <Box sx={{ fontSize: 10, color: "#69F000", mt: 0.25 }}>
               ♪ {song.requestedBy}
             </Box>
           </Box>
@@ -267,7 +269,7 @@ export function MusicOverlay() {
               left: 0,
               height: 2,
               width: `${progress}%`,
-              background: "linear-gradient(90deg, #7C3AED, #06B6D4)",
+              background: "#69F000",
               transition: "width 1s linear",
             }}
           />

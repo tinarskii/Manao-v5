@@ -9,7 +9,9 @@ import {
   ListItemText,
   Typography,
   Divider,
-  Chip,
+  IconButton,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -21,12 +23,13 @@ import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import ForumIcon from "@mui/icons-material/Forum";
-import WifiIcon from "@mui/icons-material/Wifi";
-import WifiOffIcon from "@mui/icons-material/WifiOff";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import MenuIcon from "@mui/icons-material/Menu";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useSocket } from "@/hooks/useSocket";
 import * as React from "react";
 
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 232;
 
 interface NavItem {
   label: string;
@@ -59,13 +62,171 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Sound Overlay", icon: <VolumeUpIcon />, path: "/overlay/sound" },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+function DrawerContent({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
   const { connected } = useSocket();
-  const [hoveredPath, setHoveredPath] = useState<string | null>(null);
+
+  return (
+    <>
+      {/* Logo area */}
+      <Box sx={{ px: 2.5, pt: 3, pb: 2.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
+          <Box
+            component="img"
+            src="/manao_mini.png"
+            alt="Manao"
+            sx={{ width: 32, height: 32, flexShrink: 0, display: "block" }}
+          />
+          <Box>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                color: "text.primary",
+                lineHeight: 1,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Manao
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: "text.disabled", fontSize: "0.65rem" }}
+            >
+              v5.0.0-alpha
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Connection status */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.75,
+            px: 1.5,
+            py: 0.75,
+            borderRadius: 1,
+            background: connected
+              ? "rgba(105,240,0,0.06)"
+              : "rgba(255,255,255,0.03)",
+            border: "1px solid",
+            borderColor: connected
+              ? "rgba(105,240,0,0.15)"
+              : "rgba(255,255,255,0.06)",
+          }}
+        >
+          <FiberManualRecordIcon
+            sx={{
+              fontSize: 8,
+              color: connected ? "#69F000" : "#424242",
+              flexShrink: 0,
+            }}
+          />
+          <Typography
+            variant="caption"
+            sx={{
+              fontSize: "0.7rem",
+              fontWeight: 600,
+              color: connected ? "#69F000" : "text.disabled",
+              letterSpacing: "0.03em",
+            }}
+          >
+            {connected ? "Connected" : "Disconnected"}
+          </Typography>
+        </Box>
+      </Box>
+
+      <Divider />
+
+      {/* Nav */}
+      <List sx={{ flex: 1, px: 1.5, py: 1.5, overflowY: "auto" }}>
+        {NAV_ITEMS.map((item, idx) => {
+          const isActive = location.pathname === item.path;
+          const showSection =
+            item.section &&
+            (idx === 0 || NAV_ITEMS[idx - 1]?.section !== item.section);
+
+          return (
+            <Box key={item.path}>
+              {showSection && (
+                <Typography
+                  variant="overline"
+                  sx={{
+                    px: 1,
+                    py: 0.5,
+                    display: "block",
+                    color: "text.disabled",
+                    mt: idx === 0 ? 0 : 1.5,
+                    mb: 0.5,
+                  }}
+                >
+                  {item.section}
+                </Typography>
+              )}
+              <ListItemButton
+                component={Link}
+                to={item.path}
+                selected={isActive}
+                onClick={onClose}
+                sx={{ mb: 0.25, px: 1, py: 0.75, minHeight: 36 }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 32,
+                    color: isActive ? "primary.main" : "text.disabled",
+                    "& svg": { fontSize: "1rem" },
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.label}
+                  slotProps={{
+                    primary: {
+                      fontSize: "0.8125rem",
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive ? "primary.main" : "text.secondary",
+                    },
+                  }}
+                />
+              </ListItemButton>
+            </Box>
+          );
+        })}
+      </List>
+
+      <Divider />
+      <Box sx={{ px: 2.5, py: 1.5 }}>
+        <Box
+          component="a"
+          href="https://manaobot.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 0.5,
+            color: "text.disabled",
+            fontSize: "0.65rem",
+            textDecoration: "none",
+            "&:hover": { color: "primary.main" },
+            transition: "color 0.15s",
+          }}
+        >
+          Open Docs
+          <OpenInNewIcon sx={{ fontSize: "0.6rem" }} />
+        </Box>
+      </Box>
+    </>
+  );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isOverlay = location.pathname.startsWith("/overlay/");
-
   if (isOverlay) return <>{children}</>;
 
   return (
@@ -76,144 +237,93 @@ export function Layout({ children }: { children: React.ReactNode }) {
         bgcolor: "background.default",
       }}
     >
-      <Drawer
-        variant="permanent"
+      {/* Mobile top bar */}
+      <AppBar
+        position="fixed"
+        elevation={0}
         sx={{
-          width: DRAWER_WIDTH,
-          flexShrink: 0,
+          display: { xs: "flex", md: "none" },
+          background: "#111",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+      >
+        <Toolbar sx={{ minHeight: "52px !important", px: 2, gap: 1.5 }}>
+          <IconButton
+            edge="start"
+            onClick={() => setMobileOpen(true)}
+            sx={{ color: "text.secondary", p: 0.75 }}
+          >
+            <MenuIcon fontSize="small" />
+          </IconButton>
+          <Box
+            component="img"
+            src="/manao_mini.png"
+            alt="Manao"
+            sx={{ width: 24, height: 24, display: "block" }}
+          />
+          <Typography
+            variant="subtitle2"
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Manao
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile drawer (temporary) */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": {
             width: DRAWER_WIDTH,
             boxSizing: "border-box",
-            bgcolor: "background.paper",
-            borderRight: "1px solid rgba(255,255,255,0.06)",
             display: "flex",
             flexDirection: "column",
           },
         }}
       >
-        {/* Logo */}
-        <Box sx={{ p: 2.5, pb: 2 }}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 800,
-              background: "linear-gradient(135deg, #7C3AED, #06B6D4)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            🍋 Manao v5
-          </Typography>
-          <Chip
-            icon={
-              connected ? (
-                <WifiIcon sx={{ fontSize: "12px !important" }} />
-              ) : (
-                <WifiOffIcon sx={{ fontSize: "12px !important" }} />
-              )
-            }
-            label={connected ? "Connected" : "Disconnected"}
-            size="small"
-            color={connected ? "success" : "error"}
-            variant="outlined"
-            sx={{ mt: 0.5, height: 20, fontSize: "0.65rem" }}
-          />
-        </Box>
+        <DrawerContent onClose={() => setMobileOpen(false)} />
+      </Drawer>
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
-
-        {/* Nav */}
-        <List sx={{ flex: 1, px: 1, py: 1 }}>
-          {NAV_ITEMS.map((item, idx) => {
-            const isActive = location.pathname === item.path;
-            const showSection =
-              item.section &&
-              (idx === 0 || NAV_ITEMS[idx - 1]?.section !== item.section);
-
-            return (
-              <Box key={item.path}>
-                {showSection && (
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      px: 1.5,
-                      py: 0.5,
-                      display: "block",
-                      color: "text.secondary",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      fontSize: "0.65rem",
-                      mt: 1,
-                    }}
-                  >
-                    {item.section}
-                  </Typography>
-                )}
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  onMouseEnter={() => setHoveredPath(item.path)}
-                  onMouseLeave={() => setHoveredPath(null)}
-                  selected={isActive}
-                  sx={{
-                    borderRadius: 2,
-                    mb: 0.25,
-                    transition: "all 0.15s ease",
-                    "&.Mui-selected": {
-                      bgcolor: "rgba(124,58,237,0.15)",
-                      "& .MuiListItemIcon-root": { color: "primary.main" },
-                      "& .MuiListItemText-primary": {
-                        color: "primary.light",
-                        fontWeight: 600,
-                      },
-                      "&:hover": { bgcolor: "rgba(124,58,237,0.2)" },
-                    },
-                    "&:hover": {
-                      bgcolor: "rgba(255,255,255,0.05)",
-                    },
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 36,
-                      color: isActive
-                        ? "primary.main"
-                        : hoveredPath === item.path
-                          ? "text.primary"
-                          : "text.secondary",
-                      transition: "color 0.15s ease",
-                      "& svg": { fontSize: "1.1rem" },
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.label}
-                    slotProps={{
-                      primary: {
-                        fontSize: "0.875rem",
-                        fontWeight: isActive ? 600 : 400,
-                      },
-                    }}
-                  />
-                </ListItemButton>
-              </Box>
-            );
-          })}
-        </List>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
-        <Box sx={{ p: 2 }}>
-          <Typography variant="caption" color="text.secondary">
-            Manao v5.0.0-alpha.0
-          </Typography>
-        </Box>
+      {/* Desktop drawer (permanent) */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: "none", md: "block" },
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: DRAWER_WIDTH,
+            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
+      >
+        <DrawerContent />
       </Drawer>
 
       {/* Main content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3, overflow: "auto" }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: { xs: 2, sm: 3 },
+          pt: { xs: "68px", md: 3 },
+          overflow: "auto",
+          minWidth: 0,
+          background: "#0D0D0D",
+        }}
+      >
         {children}
       </Box>
     </Box>

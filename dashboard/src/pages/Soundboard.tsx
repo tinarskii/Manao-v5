@@ -108,6 +108,7 @@ export function SoundboardPage() {
   };
 
   const playSound = (url: string, name: string) => {
+    if (!socket) return;
     socket.emit("play-sound", { url, name });
   };
 
@@ -196,7 +197,7 @@ export function SoundboardPage() {
                 userSelect: "none",
                 transition: "all 0.15s ease",
                 "&:hover": {
-                  bgcolor: "rgba(124,58,237,0.12)",
+                  bgcolor: "rgba(105,240,0,0.12)",
                   borderColor: "primary.main",
                 },
                 "&:active": { transform: "scale(0.96)" },

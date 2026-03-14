@@ -51,16 +51,6 @@ export default function WelcomePage({
       </Stack>
 
       <Stack spacing={2}>
-        {config.complete && (
-          <Button
-            variant="outlined"
-            size="large"
-            fullWidth
-            onClick={() => (window.location.href = "http://localhost:3000")}
-          >
-            Open Dashboard
-          </Button>
-        )}
         <Button
           variant={config.complete ? "text" : "contained"}
           size="large"

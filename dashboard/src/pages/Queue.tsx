@@ -70,9 +70,8 @@ export function QueuePage() {
           sx={{
             p: 2.5,
             mb: 3,
-            background:
-              "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1))",
-            border: "1px solid rgba(124,58,237,0.3)",
+            background: "rgba(105,240,0,0.04)",
+            border: "1px solid rgba(105,240,0,0.18)",
           }}
         >
           <Stack direction="row" alignItems="center" spacing={2}>
