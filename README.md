@@ -1,7 +1,7 @@
 <div align="center">
   <img src="/assets/manao-banner.png" width="100%" alt="Manao v5" />
 
-  <img src="https://img.shields.io/badge/version-5.0.0--alpha.0-blueviolet?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-5.0.0-blueviolet?style=flat-square" alt="version" />
   <img src="https://img.shields.io/github/license/tinarskii/Manao-v5?style=flat-square" alt="license" />
   <img src="https://img.shields.io/badge/runtime-Bun-f9f1e1?style=flat-square&logo=bun" alt="bun" />
   <img src="https://img.shields.io/badge/platforms-Twitch%20%7C%20Kick%20%7C%20Discord-9147ff?style=flat-square" alt="platforms" />
@@ -27,7 +27,7 @@
 ## 🤔 About
 
 Manao is an all-in-one streaming toolkit that packs an essential set of features and utilities, reducing
-the need for multiple third-party services. Manao supports multiple streaming platforms (i.e. Twitch, and Kick) and
+the need for multiple third-party services. Manao supports multiple streaming platforms (i.e. Twitch, YouTube, and Kick) and
 Discord. It has a built-in chat overlay, music request system, soundboard, and a powerful custom command system that
 can be executed by multiple platforms with a single codebase. 
 
@@ -165,7 +165,7 @@ Then run the setup wizard:
 bun run setup
 ```
 
-Open `http://localhost:4000` in your browser and follow the steps to configure your platforms.
+Open `http://localhost:4000` in your browser (if it does not automatically open) and follow the steps to configure your platforms.
 
 Once setup is complete, start the bot:
 
