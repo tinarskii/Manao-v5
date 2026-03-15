@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Box } from "@mui/material";
+import { Box, Slider, IconButton, Tooltip } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import { useSocket, useSocketEvent } from "@/hooks/useSocket";
 import { api } from "@/hooks/useApi";
-import type { SongRequestData } from "@/types/api";
+import type { SongRequestData, SongData, Configuration } from "@/types/api";
 
 interface SongProgress {
   percent: number;
@@ -10,7 +15,6 @@ interface SongProgress {
   duration: number;
 }
 
-// YouTube IFrame API types
 declare global {
   interface Window {
     YT: {
@@ -24,6 +28,14 @@ declare global {
 interface YTPlayer {
   getCurrentTime: () => number;
   getDuration: () => number;
+  getVolume: () => number;
+  isMuted: () => boolean;
+  setVolume: (v: number) => void;
+  mute: () => void;
+  unMute: () => void;
+  playVideo: () => void;
+  pauseVideo: () => void;
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   destroy: () => void;
 }
 
@@ -32,10 +44,7 @@ let ytApiReady = false;
 const ytReadyCallbacks: (() => void)[] = [];
 
 function loadYTApi(onReady: () => void) {
-  if (ytApiReady) {
-    onReady();
-    return;
-  }
+  if (ytApiReady) { onReady(); return; }
   ytReadyCallbacks.push(onReady);
   if (ytApiLoaded) return;
   ytApiLoaded = true;
@@ -52,33 +61,73 @@ function loadYTApi(onReady: () => void) {
 export function MusicOverlay() {
   const [song, setSong] = useState<SongRequestData | null>(null);
   const [progress, setProgress] = useState(0);
-  const [iframeVisible, setIframeVisible] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [volume, setVolume] = useState(80);
+  const [isDefault, setIsDefault] = useState(false);
+
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const progressTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const defaultSongsRef = useRef<SongData[]>([]);
+  const defaultIndexRef = useRef(0);
+  const seekingRef = useRef(false);
+
   const { socket } = useSocket();
 
-  useEffect(() => {
-    api
-      .get<SongRequestData[]>("/api/queue")
-      .then((queue) => {
-        setSong(queue[0] ?? null);
-      })
-      .catch(() => {});
+  const playDefault = useCallback((index: number) => {
+    const defaults = defaultSongsRef.current;
+    if (defaults.length === 0) return;
+    const s = defaults[index % defaults.length]!;
+    defaultIndexRef.current = index % defaults.length;
+    setIsDefault(true);
+    setSong({ ...s, requestedBy: "" });
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
   }, []);
 
+  useEffect(() => {
+    Promise.all([
+      api.get<SongRequestData[]>("/api/queue"),
+      api.get<Configuration>("/api/config"),
+    ]).then(([queue, config]) => {
+      defaultSongsRef.current = config.defaultSongs ?? [];
+      if (queue[0]) {
+        setIsDefault(false);
+        setSong(queue[0]);
+      } else {
+        playDefault(0);
+      }
+    }).catch(() => {});
+  }, [playDefault]);
+
   useSocketEvent<{ queue: SongRequestData[] }>("songRequest", (data) => {
-    if (data.queue[0]) setSong(data.queue[0]);
+    if (data.queue[0]) {
+      setIsDefault(false);
+      setSong(data.queue[0]);
+    }
   });
 
   useSocketEvent<SongRequestData[]>("songPlayNext", (data) => {
-    setSong(data[0] ?? null);
-    setProgress(0);
+    if (data[0]) {
+      setIsDefault(false);
+      setSong(data[0]);
+      setProgress(0);
+      setCurrentTime(0);
+    } else {
+      playDefault(defaultIndexRef.current);
+    }
   });
 
-  // Allow server/other clients to push progress too
   useSocketEvent<SongProgress>("currentSongProgress", (data) => {
+    if (seekingRef.current) return;
     setProgress(data.percent ?? 0);
+    setCurrentTime(data.currentTime ?? 0);
+    setDuration(data.duration ?? 0);
   });
 
   const stopProgressTimer = useCallback(() => {
@@ -92,65 +141,146 @@ export function MusicOverlay() {
     stopProgressTimer();
     progressTimerRef.current = setInterval(() => {
       const player = playerRef.current;
-      if (!player) return;
+      if (!player || seekingRef.current) return;
       const current = player.getCurrentTime();
-      const duration = player.getDuration();
-      if (!duration) return;
-      const percent = (current / duration) * 100;
+      const dur = player.getDuration();
+      if (!dur) return;
+      const percent = (current / dur) * 100;
       setProgress(percent);
-      if (!socket) return;
-      socket.emit("currentSongProgress", {
-        percent,
-        currentTime: current,
-        duration,
-      });
+      setCurrentTime(current);
+      setDuration(dur);
+      if (!socket || isDefault) return;
+      socket.emit("currentSongProgress", { percent, currentTime: current, duration: dur });
     }, 1000);
-  }, [socket, stopProgressTimer]);
+  }, [socket, stopProgressTimer, isDefault]);
 
-  // Build/rebuild YT Player whenever song changes
   useEffect(() => {
     if (!song) {
       playerRef.current?.destroy();
       playerRef.current = null;
       stopProgressTimer();
+      setIsPlaying(false);
       return;
     }
 
     loadYTApi(() => {
       if (!playerContainerRef.current) return;
-
       playerRef.current?.destroy();
       stopProgressTimer();
 
-      // YT.Player needs a real DOM element, give it a fresh div each time
       const el = document.createElement("div");
       playerContainerRef.current.innerHTML = "";
       playerContainerRef.current.appendChild(el);
 
       playerRef.current = new window.YT.Player(el, {
         videoId: song.id,
-        playerVars: { autoplay: 1, controls: 1 },
+        playerVars: { autoplay: 1, controls: 0 },
         events: {
+          onReady: (e: { target: YTPlayer }) => {
+            e.target.unMute();
+            e.target.setVolume(volume);
+            e.target.playVideo();
+          },
           onStateChange: (e: { data: number }) => {
             if (e.data === window.YT.PlayerState.PLAYING) {
+              setIsPlaying(true);
               startProgressTimer();
+            } else if (e.data === window.YT.PlayerState.PAUSED) {
+              setIsPlaying(false);
+              stopProgressTimer();
             } else if (e.data === window.YT.PlayerState.ENDED) {
+              setIsPlaying(false);
               stopProgressTimer();
               setProgress(0);
-              if (!socket) return;
-              socket.emit("songEnded");
-            } else {
-              stopProgressTimer();
+              setCurrentTime(0);
+              if (isDefault) {
+                playDefault(defaultIndexRef.current + 1);
+              } else {
+                socket?.emit("songEnded");
+              }
             }
           },
         },
       });
     });
 
-    return () => {
-      stopProgressTimer();
-    };
-  }, [song?.id, socket, startProgressTimer, stopProgressTimer]);
+    return () => { stopProgressTimer(); };
+  }, [song?.id]);
+
+  // Sync volume changes to player
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    player.setVolume(volume);
+    if (volume === 0) {
+      player.mute();
+      setIsMuted(true);
+    } else if (isMuted) {
+      // keep muted state as-is
+    } else {
+      player.unMute();
+    }
+  }, [volume]);
+
+  const handlePlayPause = () => {
+    const player = playerRef.current;
+    if (!player) return;
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  };
+
+  const handleSkip = () => {
+    if (isDefault) {
+      playDefault(defaultIndexRef.current + 1);
+    } else {
+      socket?.emit("songEnded");
+    }
+  };
+
+  const handleMuteToggle = () => {
+    const player = playerRef.current;
+    if (!player) return;
+    if (isMuted) {
+      player.unMute();
+      player.setVolume(volume);
+      setIsMuted(false);
+    } else {
+      player.mute();
+      setIsMuted(true);
+    }
+  };
+
+  const handleVolumeChange = (_: Event, val: number | number[]) => {
+    const v = val as number;
+    setVolume(v);
+
+  };
+
+  const handleSeekChange = (_: Event, val: number | number[]) => {
+    seekingRef.current = true;
+    setProgress(val as number);
+  };
+
+  const handleSeekCommit = (_: Event | React.SyntheticEvent, val: number | number[]) => {
+    const player = playerRef.current;
+    if (player && duration) {
+      const targetTime = ((val as number) / 100) * duration;
+      player.seekTo(targetTime, true);
+      setCurrentTime(targetTime);
+    }
+    seekingRef.current = false;
+  };
+
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
+
+  const hasContent = song !== null;
 
   return (
     <Box
@@ -158,123 +288,166 @@ export function MusicOverlay() {
         position: "fixed",
         inset: 0,
         display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        justifyContent: "flex-start",
         p: 2,
         background: "transparent",
         fontFamily: "'DM Sans', sans-serif",
         pointerEvents: "none",
       }}
     >
-      {/* YT Player container — always mounted, toggled visible */}
+      {/* Hidden YT player */}
       <Box
         ref={playerContainerRef}
         sx={{
           position: "absolute",
-          bottom: iframeVisible ? 90 : 1,
-          left: iframeVisible ? 16 : 0,
-          width: iframeVisible ? 320 : 1,
-          height: iframeVisible ? 180 : 1,
-          opacity: iframeVisible ? 1 : 0,
-          borderRadius: iframeVisible ? "12px" : 0,
-          overflow: "hidden",
-          border: iframeVisible ? "1px solid rgba(255,255,255,0.15)" : "none",
-          boxShadow: iframeVisible ? "0 8px 32px rgba(0,0,0,0.6)" : "none",
-          pointerEvents: iframeVisible ? "auto" : "none",
-          transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          "& iframe": { width: "100% !important", height: "100% !important" },
+          width: 1,
+          height: 1,
+          opacity: 0,
+          pointerEvents: "none",
+          "& iframe": { width: "1px !important", height: "1px !important" },
         }}
       />
 
-      {song && (
-        <Box
-          onClick={() => setIframeVisible((v) => !v)}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1.5,
-            background: "rgba(0,0,0,0.75)",
-            backdropFilter: "blur(12px)",
-            borderRadius: "14px",
-            p: "10px 14px",
-            width: 320,
-            height: 76,
-            position: "relative",
-            overflow: "hidden",
-            cursor: "pointer",
-            pointerEvents: "auto",
-            outline: iframeVisible
-              ? "1px solid rgba(105,240,0,0.6)"
-              : "1px solid transparent",
-            animation: "musicIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-            transition: "outline 0.2s ease",
-            "@keyframes musicIn": {
-              from: { opacity: 0, transform: "translateY(20px) scale(0.92)" },
-              to: { opacity: 1, transform: "translateY(0) scale(1)" },
-            },
-          }}
-        >
+      {/* Card */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          background: "rgba(0,0,0,0.75)",
+          backdropFilter: "blur(12px)",
+          borderRadius: "14px",
+          p: "10px 14px 8px",
+          width: 320,
+          position: "relative",
+          overflow: "hidden",
+          pointerEvents: "auto",
+          outline: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        {/* Song info row */}
+        <Box onClick={() => setExpanded((v) => !v)} sx={{ display: "flex", alignItems: "center", gap: 1.5, cursor: "pointer" }}>
           <Box
-            component="img"
-            src={song.thumbnail}
-            alt="thumbnail"
             sx={{
-              width: 56,
-              height: 56,
+              width: 48,
+              height: 48,
               borderRadius: "99999px",
-              objectFit: "cover",
               flexShrink: 0,
-              animation: "spin 8s linear infinite",
+              overflow: "hidden",
+              background: "rgba(255,255,255,0.06)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              animation: isPlaying ? "spin 8s linear infinite" : "none",
               "@keyframes spin": {
                 from: { transform: "rotate(0deg)" },
                 to: { transform: "rotate(360deg)" },
               },
             }}
-          />
-
-          <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Box
-              sx={{
-                fontSize: 13,
-                fontWeight: 800,
-                color: "#fff",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {song.title}
-            </Box>
-            <Box
-              sx={{
-                fontSize: 11,
-                color: "rgba(255,255,255,0.6)",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {song.author}
-            </Box>
-            <Box sx={{ fontSize: 10, color: "#69F000", mt: 0.25 }}>
-              ♪ {song.requestedBy}
-            </Box>
+          >
+            {song?.thumbnail ? (
+              <Box component="img" src={song.thumbnail} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              <Box sx={{ fontSize: 20 }}>♪</Box>
+            )}
           </Box>
 
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              height: 2,
-              width: `${progress}%`,
-              background: "#69F000",
-              transition: "width 1s linear",
-            }}
-          />
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Box sx={{ fontSize: 13, fontWeight: 800, color: hasContent ? "#fff" : "rgba(255,255,255,0.25)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {song?.title ?? "No song playing"}
+            </Box>
+            {song?.author && (
+              <Box sx={{ fontSize: 11, color: "rgba(255,255,255,0.55)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {song.author}
+              </Box>
+            )}
+            <Box sx={{ fontSize: 10, color: isDefault ? "rgba(255,255,255,0.3)" : "#69F000" }}>
+              {hasContent ? (isDefault ? "♪ Default playlist" : `♪ ${song!.requestedBy}`) : "Waiting for requests…"}
+            </Box>
+          </Box>
         </Box>
-      )}
+
+        {/* Progress + Controls — shown when expanded */}
+        {expanded && <>
+            <Box sx={{ px: 0.5 }}>
+                <Slider
+                    size="small"
+                    value={progress}
+                    min={0}
+                    max={100}
+                    disabled={!hasContent}
+                    onChange={handleSeekChange}
+                    onChangeCommitted={handleSeekCommit}
+                    sx={{
+                      color: isDefault ? "rgba(255,255,255,0.4)" : "#69F000",
+                      height: 3,
+                      padding: "6px 0",
+                      "& .MuiSlider-thumb": { width: 10, height: 10, "&:hover, &.Mui-active": { boxShadow: "none" } },
+                      "& .MuiSlider-rail": { opacity: 0.2 },
+                    }}
+                />
+                <Box sx={{ display: "flex", justifyContent: "space-between", mt: -0.5 }}>
+                    <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>{formatTime(currentTime)}</Box>
+                    <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>{formatTime(duration)}</Box>
+                </Box>
+            </Box>
+
+          {/* Controls row */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              {/* Play / Pause */}
+                <Tooltip title={isPlaying ? "Pause" : "Play"}>
+            <span>
+              <IconButton size="small" onClick={handlePlayPause} disabled={!hasContent} sx={{ color: "#fff", p: 0.5 }}>
+                {isPlaying ? <PauseIcon fontSize="small" /> : <PlayArrowIcon fontSize="small" />}
+              </IconButton>
+            </span>
+                </Tooltip>
+
+              {/* Skip */}
+                <Tooltip title="Skip">
+            <span>
+              <IconButton size="small" onClick={handleSkip} disabled={!hasContent} sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}>
+                <SkipNextIcon fontSize="small" />
+              </IconButton>
+            </span>
+                </Tooltip>
+
+              {/* Mute toggle */}
+                <Tooltip title={isMuted ? "Unmute" : "Mute"}>
+            <span>
+              <IconButton size="small" onClick={handleMuteToggle} disabled={!hasContent} sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}>
+                {isMuted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
+              </IconButton>
+            </span>
+                </Tooltip>
+
+              {/* Volume slider */}
+                <Slider
+                    size="small"
+                    value={isMuted ? 0 : volume}
+                    min={0}
+                    max={100}
+                    disabled={!hasContent}
+                    onChange={handleVolumeChange}
+                    sx={{
+                      flex: 1,
+                      color: "rgba(255,255,255,0.5)",
+                      height: 3,
+                      ml: 0.5,
+                      "& .MuiSlider-thumb": { width: 10, height: 10, "&:hover, &.Mui-active": { boxShadow: "none" } },
+                      "& .MuiSlider-rail": { opacity: 0.2 },
+                    }}
+                />
+
+              {/* Volume % label */}
+                <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)", minWidth: 24, textAlign: "right" }}>
+                  {isMuted ? "0" : volume}%
+                </Box>
+            </Box>
+        </>}
+
+      </Box>
     </Box>
   );
 }
