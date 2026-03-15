@@ -15,14 +15,14 @@ export async function persistYoutubeTokens(
     const envPath = `${process.cwd()}/.env`;
     let envContent = await Bun.file(envPath).text();
     envContent = envContent
-    .replace(
-      /^YOUTUBE_ACCESS_TOKEN=.*$/m,
-      `YOUTUBE_ACCESS_TOKEN=${accessToken}`,
-    )
-    .replace(
-      /^YOUTUBE_REFRESH_TOKEN=.*$/m,
-      `YOUTUBE_REFRESH_TOKEN=${refreshToken}`,
-    );
+      .replace(
+        /^YOUTUBE_ACCESS_TOKEN=.*$/m,
+        `YOUTUBE_ACCESS_TOKEN=${accessToken}`,
+      )
+      .replace(
+        /^YOUTUBE_REFRESH_TOKEN=.*$/m,
+        `YOUTUBE_REFRESH_TOKEN=${refreshToken}`,
+      );
     await Bun.write(envPath, envContent);
     logger.info("[YouTube] Persisted tokens to .env");
   } catch (err) {

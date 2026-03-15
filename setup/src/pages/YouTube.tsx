@@ -17,11 +17,11 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { SetupConfig } from "../App";
 
 export default function YouTubePage({
-                                      config,
-                                      onNext,
-                                      onBack,
-                                      onReload,
-                                    }: {
+  config,
+  onNext,
+  onBack,
+  onReload,
+}: {
   config: SetupConfig;
   onNext: () => void;
   onBack: () => void;
@@ -106,7 +106,9 @@ export default function YouTubePage({
       </Typography>
 
       <FormControlLabel
-        control={<Switch checked={enabled} onChange={(_, v) => setEnabled(v)} />}
+        control={
+          <Switch checked={enabled} onChange={(_, v) => setEnabled(v)} />
+        }
         label="Enable YouTube"
         sx={{ mb: 3 }}
       />
@@ -194,7 +196,9 @@ export default function YouTubePage({
               <Button
                 variant="outlined"
                 size="small"
-                endIcon={authorizing ? <CircularProgress size={14} /> : undefined}
+                endIcon={
+                  authorizing ? <CircularProgress size={14} /> : undefined
+                }
                 disabled={!hasCredentials || authorizing}
                 onClick={authorize}
               >

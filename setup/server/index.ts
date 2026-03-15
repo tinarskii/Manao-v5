@@ -48,9 +48,9 @@ function writeEnv(values: Record<string, string>): void {
     // Append keys not in template
     const templateKeys = new Set(
       template
-      .split("\n")
-      .filter((l) => l.includes("=") && !l.startsWith("#"))
-      .map((l) => (l.split("=")[0] ?? "").trim()),
+        .split("\n")
+        .filter((l) => l.includes("=") && !l.startsWith("#"))
+        .map((l) => (l.split("=")[0] ?? "").trim()),
     );
     for (const [k, v] of Object.entries(merged)) {
       if (!templateKeys.has(k)) lines.push(`${k}=${v}`);
@@ -58,8 +58,8 @@ function writeEnv(values: Record<string, string>): void {
     writeFileSync(ENV_PATH, lines.join("\n"));
   } else {
     const content = Object.entries(merged)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
+      .map(([k, v]) => `${k}=${v}`)
+      .join("\n");
     writeFileSync(ENV_PATH, content);
   }
 }
@@ -332,7 +332,6 @@ export function createSetupServer() {
     }
   });
 
-
   // YouTube OAuth — Desktop app flow
   // Spins up a one-shot local HTTP server on a random port to receive the
   // Google callback. User does NOT need to register a redirect URI.
@@ -348,7 +347,9 @@ export function createSetupServer() {
       "https://www.googleapis.com/auth/youtube.force-ssl",
     ].join(" ");
 
-    type CallbackResult = { code: string; redirectUri: string } | { error: string };
+    type CallbackResult =
+      | { code: string; redirectUri: string }
+      | { error: string };
 
     const result = await new Promise<CallbackResult>((resolve) => {
       let redirectUri = "";
@@ -381,7 +382,10 @@ export function createSetupServer() {
 
           resolve({ code, redirectUri });
           setTimeout(() => server.stop(), 100);
-          return html("✅ YouTube account authorized!", "You can close this window.");
+          return html(
+            "✅ YouTube account authorized!",
+            "You can close this window.",
+          );
         },
       });
 
@@ -435,7 +439,6 @@ export function createSetupServer() {
       return { success: false, error: String(err) };
     }
   });
-
 
   // Save YouTube config
   app.post("/setup/api/youtube", ({ body }) => {

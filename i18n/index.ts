@@ -122,7 +122,8 @@ const en = {
     errorEventNotConnected: () => "No event is currently connected",
     shoutoutSuccess: (user: string) => `Go follow @${user}!`,
     streamTitleChanged: (title: string) => `Stream title changed to: ${title}`,
-    errorPlatformUnsupported: () => "This command is not supported on this platform.",
+    errorPlatformUnsupported: () =>
+      "This command is not supported on this platform.",
   },
 
   misc: {

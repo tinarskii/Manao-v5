@@ -64,7 +64,9 @@ export class YoutubeAdapter implements PlatformAdapter {
   async start(): Promise<void> {
     this.liveChatId = await this.fetchActiveLiveChatId();
     if (!this.liveChatId) {
-      logger.warn("[YouTube] No active live broadcast found — will retry in 60s");
+      logger.warn(
+        "[YouTube] No active live broadcast found — will retry in 60s",
+      );
       this.pollTimer = setTimeout(() => this.start(), 60_000);
       return;
     }
@@ -86,20 +88,17 @@ export class YoutubeAdapter implements PlatformAdapter {
 
   async sendMessage(_channel: string, message: string): Promise<void> {
     if (!this.liveChatId) return;
-    await this.apiFetch(
-      `${BASE_URL}/liveChat/messages?part=snippet`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          snippet: {
-            liveChatId: this.liveChatId,
-            type: "textMessageEvent",
-            textMessageDetails: { messageText: message },
-          },
-        }),
-      },
-    );
+    await this.apiFetch(`${BASE_URL}/liveChat/messages?part=snippet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        snippet: {
+          liveChatId: this.liveChatId,
+          type: "textMessageEvent",
+          textMessageDetails: { messageText: message },
+        },
+      }),
+    });
   }
 
   onMessage(handler: MessageHandler): void {
@@ -175,7 +174,8 @@ export class YoutubeAdapter implements PlatformAdapter {
     const { authorDetails, snippet } = item;
     const userId = authorDetails.channelId;
     const user = authorDetails.displayName.replace(/^@/, "");
-    const message = snippet.textMessageDetails?.messageText ?? snippet.displayMessage;
+    const message =
+      snippet.textMessageDetails?.messageText ?? snippet.displayMessage;
 
     try {
       const prefix = this.config.prefix.youtube;
@@ -232,7 +232,8 @@ export class YoutubeAdapter implements PlatformAdapter {
       user: nickname
         ? `${authorDetails.displayName} (${nickname})`
         : authorDetails.displayName,
-      message: snippet.textMessageDetails?.messageText ?? snippet.displayMessage,
+      message:
+        snippet.textMessageDetails?.messageText ?? snippet.displayMessage,
       id: item.id,
       roles: {
         isFollower: false,
@@ -282,7 +283,7 @@ export class YoutubeAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-              ] ?? "";
+            ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;
@@ -301,7 +302,10 @@ export class YoutubeAdapter implements PlatformAdapter {
 
   // ── OAuth fetch helper ────────────────────────────────────────────────────
 
-  private async apiFetch<T>(url: string, options: RequestInit = {}): Promise<T | null> {
+  private async apiFetch<T>(
+    url: string,
+    options: RequestInit = {},
+  ): Promise<T | null> {
     const doRequest = async (token: string): Promise<Response> => {
       const headers = new Headers(options.headers);
       headers.set("Authorization", `Bearer ${token}`);

@@ -7,8 +7,17 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import { useSocket, useSocketEvent } from "@/hooks/useSocket";
 import { api } from "@/hooks/useApi";
-import type { SongRequestData, SongData, Configuration, MusicOverlaySettings } from "@/types/api";
-import { resolveMusicTheme, DEFAULT_MUSIC_OVERLAY_SETTINGS, googleFontsUrl } from "../../../../helpers/overlayTheme";
+import type {
+  SongRequestData,
+  SongData,
+  Configuration,
+  MusicOverlaySettings,
+} from "@/types/api";
+import {
+  resolveMusicTheme,
+  DEFAULT_MUSIC_OVERLAY_SETTINGS,
+  googleFontsUrl,
+} from "../../../../helpers/overlayTheme";
 
 interface SongProgress {
   percent: number;
@@ -45,7 +54,10 @@ let ytApiReady = false;
 const ytReadyCallbacks: (() => void)[] = [];
 
 function loadYTApi(onReady: () => void) {
-  if (ytApiReady) { onReady(); return; }
+  if (ytApiReady) {
+    onReady();
+    return;
+  }
   ytReadyCallbacks.push(onReady);
   if (ytApiLoaded) return;
   ytApiLoaded = true;
@@ -69,7 +81,9 @@ export function MusicOverlay() {
   const [expanded, setExpanded] = useState(false);
   const [volume, setVolume] = useState(80);
   const [isDefault, setIsDefault] = useState(false);
-  const [theme, setTheme] = useState<MusicOverlaySettings>(DEFAULT_MUSIC_OVERLAY_SETTINGS);
+  const [theme, setTheme] = useState<MusicOverlaySettings>(
+    DEFAULT_MUSIC_OVERLAY_SETTINGS,
+  );
 
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
@@ -96,22 +110,26 @@ export function MusicOverlay() {
     Promise.all([
       api.get<SongRequestData[]>("/api/queue"),
       api.get<Configuration>("/api/config"),
-    ]).then(([queue, config]) => {
-      defaultSongsRef.current = config.defaultSongs ?? [];
-      const resolvedTheme = resolveMusicTheme(config.overlaySettings?.music ?? DEFAULT_MUSIC_OVERLAY_SETTINGS);
-      setTheme(resolvedTheme);
-      // Load Google Font
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = googleFontsUrl(resolvedTheme.fontFamily);
-      document.head.appendChild(link);
-      if (queue[0]) {
-        setIsDefault(false);
-        setSong(queue[0]);
-      } else {
-        playDefault(0);
-      }
-    }).catch(() => {});
+    ])
+      .then(([queue, config]) => {
+        defaultSongsRef.current = config.defaultSongs ?? [];
+        const resolvedTheme = resolveMusicTheme(
+          config.overlaySettings?.music ?? DEFAULT_MUSIC_OVERLAY_SETTINGS,
+        );
+        setTheme(resolvedTheme);
+        // Load Google Font
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = googleFontsUrl(resolvedTheme.fontFamily);
+        document.head.appendChild(link);
+        if (queue[0]) {
+          setIsDefault(false);
+          setSong(queue[0]);
+        } else {
+          playDefault(0);
+        }
+      })
+      .catch(() => {});
   }, [playDefault]);
 
   useSocketEvent<{ queue: SongRequestData[] }>("songRequest", (data) => {
@@ -159,7 +177,11 @@ export function MusicOverlay() {
       setCurrentTime(current);
       setDuration(dur);
       if (!socket || isDefault) return;
-      socket.emit("currentSongProgress", { percent, currentTime: current, duration: dur });
+      socket.emit("currentSongProgress", {
+        percent,
+        currentTime: current,
+        duration: dur,
+      });
     }, 1000);
   }, [socket, stopProgressTimer, isDefault]);
 
@@ -213,7 +235,9 @@ export function MusicOverlay() {
       });
     });
 
-    return () => { stopProgressTimer(); };
+    return () => {
+      stopProgressTimer();
+    };
   }, [song?.id]);
 
   // Sync volume changes to player
@@ -265,7 +289,6 @@ export function MusicOverlay() {
   const handleVolumeChange = (_: Event, val: number | number[]) => {
     const v = val as number;
     setVolume(v);
-
   };
 
   const handleSeekChange = (_: Event, val: number | number[]) => {
@@ -273,7 +296,10 @@ export function MusicOverlay() {
     setProgress(val as number);
   };
 
-  const handleSeekCommit = (_: Event | React.SyntheticEvent, val: number | number[]) => {
+  const handleSeekCommit = (
+    _: Event | React.SyntheticEvent,
+    val: number | number[],
+  ) => {
     const player = playerRef.current;
     if (player && duration) {
       const targetTime = ((val as number) / 100) * duration;
@@ -308,34 +334,67 @@ export function MusicOverlay() {
             color: theme.accentColor,
             height: 3,
             padding: "6px 0",
-            "& .MuiSlider-thumb": { width: 10, height: 10, "&:hover, &.Mui-active": { boxShadow: "none" } },
+            "& .MuiSlider-thumb": {
+              width: 10,
+              height: 10,
+              "&:hover, &.Mui-active": { boxShadow: "none" },
+            },
             "& .MuiSlider-rail": { opacity: 0.2 },
           }}
         />
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: -0.5 }}>
-          <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>{formatTime(currentTime)}</Box>
-          <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>{formatTime(duration)}</Box>
+        <Box
+          sx={{ display: "flex", justifyContent: "space-between", mt: -0.5 }}
+        >
+          <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>
+            {formatTime(currentTime)}
+          </Box>
+          <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>
+            {formatTime(duration)}
+          </Box>
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
         <Tooltip title={isPlaying ? "Pause" : "Play"}>
           <span>
-            <IconButton size="small" onClick={handlePlayPause} disabled={!hasContent} sx={{ color: "#fff", p: 0.5 }}>
-              {isPlaying ? <PauseIcon fontSize="small" /> : <PlayArrowIcon fontSize="small" />}
+            <IconButton
+              size="small"
+              onClick={handlePlayPause}
+              disabled={!hasContent}
+              sx={{ color: "#fff", p: 0.5 }}
+            >
+              {isPlaying ? (
+                <PauseIcon fontSize="small" />
+              ) : (
+                <PlayArrowIcon fontSize="small" />
+              )}
             </IconButton>
           </span>
         </Tooltip>
         <Tooltip title="Skip">
           <span>
-            <IconButton size="small" onClick={handleSkip} disabled={!hasContent} sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}>
+            <IconButton
+              size="small"
+              onClick={handleSkip}
+              disabled={!hasContent}
+              sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}
+            >
               <SkipNextIcon fontSize="small" />
             </IconButton>
           </span>
         </Tooltip>
         <Tooltip title={isMuted ? "Unmute" : "Mute"}>
           <span>
-            <IconButton size="small" onClick={handleMuteToggle} disabled={!hasContent} sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}>
-              {isMuted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
+            <IconButton
+              size="small"
+              onClick={handleMuteToggle}
+              disabled={!hasContent}
+              sx={{ color: "rgba(255,255,255,0.6)", p: 0.5 }}
+            >
+              {isMuted ? (
+                <VolumeOffIcon fontSize="small" />
+              ) : (
+                <VolumeUpIcon fontSize="small" />
+              )}
             </IconButton>
           </span>
         </Tooltip>
@@ -351,11 +410,22 @@ export function MusicOverlay() {
             color: "rgba(255,255,255,0.5)",
             height: 3,
             ml: 0.5,
-            "& .MuiSlider-thumb": { width: 10, height: 10, "&:hover, &.Mui-active": { boxShadow: "none" } },
+            "& .MuiSlider-thumb": {
+              width: 10,
+              height: 10,
+              "&:hover, &.Mui-active": { boxShadow: "none" },
+            },
             "& .MuiSlider-rail": { opacity: 0.2 },
           }}
         />
-        <Box sx={{ fontSize: 9, color: "rgba(255,255,255,0.35)", minWidth: 24, textAlign: "right" }}>
+        <Box
+          sx={{
+            fontSize: 9,
+            color: "rgba(255,255,255,0.35)",
+            minWidth: 24,
+            textAlign: "right",
+          }}
+        >
           {isMuted ? "0" : volume}%
         </Box>
       </Box>
@@ -368,8 +438,12 @@ export function MusicOverlay() {
         position: "fixed",
         inset: 0,
         display: "flex",
-        alignItems: theme.position.startsWith("top") ? "flex-start" : "flex-end",
-        justifyContent: theme.position.endsWith("right") ? "flex-end" : "flex-start",
+        alignItems: theme.position.startsWith("top")
+          ? "flex-start"
+          : "flex-end",
+        justifyContent: theme.position.endsWith("right")
+          ? "flex-end"
+          : "flex-start",
         p: 2,
         background: "transparent",
         fontFamily: `'${theme.fontFamily}', sans-serif`,
@@ -391,8 +465,22 @@ export function MusicOverlay() {
 
       {isClassic ? (
         /* ── Manao Classic layout ─────────────────────────────────────────── */
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, pointerEvents: "auto" }}>
-          <Box sx={{ display: "flex", flexDirection: "row", gap: 0, alignItems: "flex-end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 0,
+            pointerEvents: "auto",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 0,
+              alignItems: "flex-end",
+            }}
+          >
             {/* Spinning disc — outside card */}
             <Box
               sx={{
@@ -414,11 +502,16 @@ export function MusicOverlay() {
                   from: { transform: "rotate(0deg)" },
                   to: { transform: "rotate(360deg)" },
                 },
-                mr: 1
+                mr: 1,
               }}
             >
               {song?.thumbnail ? (
-                <Box component="img" src={song.thumbnail} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <Box
+                  component="img"
+                  src={song.thumbnail}
+                  alt=""
+                  sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               ) : (
                 <Box sx={{ fontSize: 28 }}>♪</Box>
               )}
@@ -454,7 +547,13 @@ export function MusicOverlay() {
                 />
               )}
               {/* Overlay tint */}
-              <Box sx={{ position: "absolute", inset: 0, background: theme.bgColor }} />
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  background: theme.bgColor,
+                }}
+              />
 
               {/* Content */}
               <Box
@@ -468,16 +567,35 @@ export function MusicOverlay() {
                   minHeight: 76,
                 }}
               >
-                <Box sx={{ fontSize: 18, fontWeight: 800, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <Box
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 800,
+                    color: "#fff",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {song?.title ?? "No song playing"}
                 </Box>
                 {song?.author && (
-                  <Box sx={{ fontSize: 13, color: "rgba(255,255,255,0.75)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <Box
+                    sx={{
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.75)",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {song.author}
                   </Box>
                 )}
                 {isDefault && (
-                  <Box sx={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>› Default playlist</Box>
+                  <Box sx={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                    › Default playlist
+                  </Box>
                 )}
 
                 {/* Progress bar — bottom of card */}
@@ -531,7 +649,15 @@ export function MusicOverlay() {
           }}
         >
           {/* Song info row */}
-          <Box onClick={() => setExpanded((v) => !v)} sx={{ display: "flex", alignItems: "center", gap: 1.5, cursor: "pointer" }}>
+          <Box
+            onClick={() => setExpanded((v) => !v)}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              cursor: "pointer",
+            }}
+          >
             <Box
               sx={{
                 width: 48,
@@ -551,22 +677,55 @@ export function MusicOverlay() {
               }}
             >
               {song?.thumbnail ? (
-                <Box component="img" src={song.thumbnail} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <Box
+                  component="img"
+                  src={song.thumbnail}
+                  alt=""
+                  sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               ) : (
                 <Box sx={{ fontSize: 20 }}>♪</Box>
               )}
             </Box>
             <Box sx={{ minWidth: 0, flex: 1 }}>
-              <Box sx={{ fontSize: 13, fontWeight: 800, color: hasContent ? "#fff" : "rgba(255,255,255,0.25)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <Box
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: hasContent ? "#fff" : "rgba(255,255,255,0.25)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {song?.title ?? "No song playing"}
               </Box>
               {song?.author && (
-                <Box sx={{ fontSize: 11, color: "rgba(255,255,255,0.55)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <Box
+                  sx={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.55)",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {song.author}
                 </Box>
               )}
-              <Box sx={{ fontSize: 10, color: isDefault ? "rgba(255,255,255,0.3)" : theme.accentColor }}>
-                {hasContent ? (isDefault ? "♪ Default playlist" : `♪ ${song!.requestedBy}`) : "Waiting for requests…"}
+              <Box
+                sx={{
+                  fontSize: 10,
+                  color: isDefault
+                    ? "rgba(255,255,255,0.3)"
+                    : theme.accentColor,
+                }}
+              >
+                {hasContent
+                  ? isDefault
+                    ? "♪ Default playlist"
+                    : `♪ ${song!.requestedBy}`
+                  : "Waiting for requests…"}
               </Box>
             </Box>
           </Box>

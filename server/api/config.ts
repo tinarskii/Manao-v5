@@ -1,6 +1,6 @@
 import type { Elysia } from "elysia";
 import type { Configuration } from "@/core/types";
-import {DEFAULT_OVERLAY_SETTINGS} from "@/helpers/overlayTheme.ts";
+import { DEFAULT_OVERLAY_SETTINGS } from "@/helpers/overlayTheme.ts";
 
 const CONFIG_PATH = `${process.cwd()}/userConfig.json`;
 
@@ -9,7 +9,7 @@ export async function getUserConfig(): Promise<Configuration> {
   const file = Bun.file(CONFIG_PATH);
   if (!(await file.exists())) return defaults;
 
-  const saved = await file.json() as Partial<Configuration>;
+  const saved = (await file.json()) as Partial<Configuration>;
 
   // Deep merge — saved values win, but missing keys fall back to defaults.
   // This ensures new platforms/fields added in future versions always have
@@ -21,8 +21,14 @@ export async function getUserConfig(): Promise<Configuration> {
     chatRewards: { ...defaults.chatRewards, ...saved.chatRewards },
     customMessages: { ...defaults.customMessages, ...saved.customMessages },
     overlaySettings: {
-      music: { ...defaults.overlaySettings.music, ...saved.overlaySettings?.music },
-      chat: { ...defaults.overlaySettings.chat, ...saved.overlaySettings?.chat },
+      music: {
+        ...defaults.overlaySettings.music,
+        ...saved.overlaySettings?.music,
+      },
+      chat: {
+        ...defaults.overlaySettings.chat,
+        ...saved.overlaySettings?.chat,
+      },
     },
   };
 }
@@ -69,7 +75,7 @@ function getDefaultConfig(): Configuration {
       youtube: { minimum: 1, maximum: 4, chance: 75, cooldown: 60 },
     },
     scheduledMessages: [],
-    overlaySettings: DEFAULT_OVERLAY_SETTINGS
+    overlaySettings: DEFAULT_OVERLAY_SETTINGS,
   };
 }
 

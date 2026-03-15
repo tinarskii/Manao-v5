@@ -53,8 +53,8 @@ export default function App() {
 
   useEffect(() => {
     fetch("/setup/api/config")
-    .then((r) => r.json())
-    .then((c: SetupConfig) => setConfig(c));
+      .then((r) => r.json())
+      .then((c: SetupConfig) => setConfig(c));
   }, []);
 
   const next = () => setStep((s) => Math.min(s + 1, 5));

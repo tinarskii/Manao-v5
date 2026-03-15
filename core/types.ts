@@ -192,7 +192,11 @@ export interface ScheduledMessage {
 }
 
 export type OverlayThemeId = "manao-v5" | "manao-classic" | "custom";
-export type OverlayPosition = "bottom-left" | "bottom-right" | "top-left" | "top-right";
+export type OverlayPosition =
+  | "bottom-left"
+  | "bottom-right"
+  | "top-left"
+  | "top-right";
 export type OverlayLayout = "default" | "classic";
 
 export interface MusicOverlaySettings {
@@ -209,13 +213,25 @@ export type ChatAlign = "left" | "center" | "right";
 export type ChatThemeId = "manao-v5" | "manao-classic" | "lucian" | "custom";
 export type ChatLayout = "default" | "classic" | "lucian";
 export type ChatAnimationIn =
-  | "slideInRight" | "slideInLeft" | "slideInUp" | "slideInDown"
-  | "fadeIn" | "fadeInUp" | "fadeInDown"
-  | "bounceInRight" | "bounceInLeft";
+  | "slideInRight"
+  | "slideInLeft"
+  | "slideInUp"
+  | "slideInDown"
+  | "fadeIn"
+  | "fadeInUp"
+  | "fadeInDown"
+  | "bounceInRight"
+  | "bounceInLeft";
 export type ChatAnimationOut =
-  | "slideOutRight" | "slideOutLeft" | "slideOutUp" | "slideOutDown"
-  | "fadeOut" | "fadeOutUp" | "fadeOutDown"
-  | "bounceOutRight" | "bounceOutLeft";
+  | "slideOutRight"
+  | "slideOutLeft"
+  | "slideOutUp"
+  | "slideOutDown"
+  | "fadeOut"
+  | "fadeOutUp"
+  | "fadeOutDown"
+  | "bounceOutRight"
+  | "bounceOutLeft";
 
 export interface ChatOverlaySettings {
   themeId: ChatThemeId;
@@ -270,5 +286,5 @@ export interface Configuration {
   soundboard: SoundEntry[];
   chatRewards: Record<Platform, ChatReward>;
   scheduledMessages: ScheduledMessage[];
-  overlaySettings: OverlaySettings
+  overlaySettings: OverlaySettings;
 }

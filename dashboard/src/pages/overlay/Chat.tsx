@@ -2,13 +2,20 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Box } from "@mui/material";
 import { useSocketEvent } from "@/hooks/useSocket";
 import { api } from "@/hooks/useApi";
-import type { MessageData, Configuration, ChatOverlaySettings } from "@/types/api";
-import { DEFAULT_CHAT_OVERLAY_SETTINGS, PLATFORM_COLOR, resolveChatTheme } from "../../../../helpers/overlayTheme";
+import type {
+  MessageData,
+  Configuration,
+  ChatOverlaySettings,
+} from "@/types/api";
+import {
+  DEFAULT_CHAT_OVERLAY_SETTINGS,
+  PLATFORM_COLOR,
+  resolveChatTheme,
+} from "../../../../helpers/overlayTheme";
 
 interface ChatMsg extends MessageData {
   key: string;
 }
-
 
 const ANIMATIONS = `
   @keyframes slideInRight { from { opacity:0; transform:translateX(100%) } to { opacity:1; transform:translateX(0) } }
@@ -33,16 +40,23 @@ const ANIMATIONS = `
 
 export function ChatOverlay() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [s, setS] = useState<ChatOverlaySettings>(DEFAULT_CHAT_OVERLAY_SETTINGS);
+  const [s, setS] = useState<ChatOverlaySettings>(
+    DEFAULT_CHAT_OVERLAY_SETTINGS,
+  );
   const sRef = useRef<ChatOverlaySettings>(DEFAULT_CHAT_OVERLAY_SETTINGS);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    api.get<Configuration>("/api/config").then((config) => {
-      const resolved = resolveChatTheme(config.overlaySettings?.chat ?? DEFAULT_CHAT_OVERLAY_SETTINGS);
-      sRef.current = resolved;
-      setS(resolved);
-    }).catch(() => {});
+    api
+      .get<Configuration>("/api/config")
+      .then((config) => {
+        const resolved = resolveChatTheme(
+          config.overlaySettings?.chat ?? DEFAULT_CHAT_OVERLAY_SETTINGS,
+        );
+        sRef.current = resolved;
+        setS(resolved);
+      })
+      .catch(() => {});
   }, []);
 
   // Inject Google Fonts — Classic needs Outfit + Noto Sans Thai Looped
@@ -52,12 +66,13 @@ export function ChatOverlay() {
     const link = document.createElement("link");
     link.id = id;
     link.rel = "stylesheet";
-    const families = s.themeId === "manao-classic"
-      ? ["Outfit", "Noto+Sans+Thai+Looped"]
-      : s.themeId === "lucian"
-        ? ["EB+Garamond", "IBM+Plex+Sans+Thai"]
-        : [s.fontFamily.replace(/ /g, "+")];
-    link.href = `https://fonts.googleapis.com/css2?${families.map(f => `family=${f}:wght@400;600;700;800`).join("&")}&display=swap`;
+    const families =
+      s.themeId === "manao-classic"
+        ? ["Outfit", "Noto+Sans+Thai+Looped"]
+        : s.themeId === "lucian"
+          ? ["EB+Garamond", "IBM+Plex+Sans+Thai"]
+          : [s.fontFamily.replace(/ /g, "+")];
+    link.href = `https://fonts.googleapis.com/css2?${families.map((f) => `family=${f}:wght@400;600;700;800`).join("&")}&display=swap`;
     document.head.appendChild(link);
   }, [s.fontFamily, s.themeId]);
 
@@ -77,7 +92,11 @@ export function ChatOverlay() {
     setExiting((prev) => new Set(prev).add(key));
     setTimeout(() => {
       setMessages((prev) => prev.filter((m) => m.key !== key));
-      setExiting((prev) => { const s = new Set(prev); s.delete(key); return s; });
+      setExiting((prev) => {
+        const s = new Set(prev);
+        s.delete(key);
+        return s;
+      });
     }, 750);
   }, []);
 
@@ -101,26 +120,46 @@ export function ChatOverlay() {
   const borderColor = (msg: ChatMsg) =>
     s.borderColorSource === "platform"
       ? (PLATFORM_COLOR[msg.from] ?? "#888")
-      : (msg.color || "#888");
+      : msg.color || "#888";
 
   // Lucian: role-based background colors
   const lucianBg = (roles: ChatMsg["roles"]) => {
     if (roles.isBroadcaster) return "rgba(212,175,55,0.75)";
-    if (roles.isModerator)   return "rgba(28,185,106,0.75)";
-    if (roles.isVIP)         return "rgba(224,5,185,0.75)";
-    if (roles.isSubscriber)  return "rgba(255,255,255,0.75)";
+    if (roles.isModerator) return "rgba(28,185,106,0.75)";
+    if (roles.isVIP) return "rgba(224,5,185,0.75)";
+    if (roles.isSubscriber) return "rgba(255,255,255,0.75)";
     return "rgba(0,0,0,0.75)";
   };
 
   const lucianTextColor = (roles: ChatMsg["roles"]) =>
-    roles.isSubscriber && !roles.isModerator && !roles.isVIP && !roles.isBroadcaster
-      ? "#000" : "#fff";
+    roles.isSubscriber &&
+    !roles.isModerator &&
+    !roles.isVIP &&
+    !roles.isBroadcaster
+      ? "#000"
+      : "#fff";
 
-  const alignSx = (color: string) => ({
-    left:   { alignSelf: "flex-start", borderLeft: `${s.borderWidth}px solid ${color}`, borderRight: "none", borderBottom: "none" },
-    center: { alignSelf: "center",     borderBottom: `${s.borderWidth}px solid ${color}`, borderLeft: "none", borderRight: "none" },
-    right:  { alignSelf: "flex-end",   borderRight: `${s.borderWidth}px solid ${color}`, borderLeft: "none", borderBottom: "none" },
-  }[s.align]);
+  const alignSx = (color: string) =>
+    ({
+      left: {
+        alignSelf: "flex-start",
+        borderLeft: `${s.borderWidth}px solid ${color}`,
+        borderRight: "none",
+        borderBottom: "none",
+      },
+      center: {
+        alignSelf: "center",
+        borderBottom: `${s.borderWidth}px solid ${color}`,
+        borderLeft: "none",
+        borderRight: "none",
+      },
+      right: {
+        alignSelf: "flex-end",
+        borderRight: `${s.borderWidth}px solid ${color}`,
+        borderLeft: "none",
+        borderBottom: "none",
+      },
+    })[s.align];
 
   return (
     <Box
@@ -133,67 +172,91 @@ export function ChatOverlay() {
         p: 2,
         overflow: "hidden",
         background: "transparent",
-        fontFamily: s.themeId === "manao-classic"
-          ? `'Outfit', 'Noto Sans Thai Looped', sans-serif`
-          : s.themeId === "lucian"
-            ? `'IBM Plex Sans Thai', sans-serif`
-            : `'${s.fontFamily}', 'Noto Sans Thai', sans-serif`,
+        fontFamily:
+          s.themeId === "manao-classic"
+            ? `'Outfit', 'Noto Sans Thai Looped', sans-serif`
+            : s.themeId === "lucian"
+              ? `'IBM Plex Sans Thai', sans-serif`
+              : `'${s.fontFamily}', 'Noto Sans Thai', sans-serif`,
       }}
     >
       {messages.map((msg) => {
         if (s.themeId === "lucian") {
           return (
             /* ── Lucian layout ───────────────────────────────── */
-            <Box key={msg.key} sx={{
-              position: "relative",
-              mb: 1,
-              ml: "25px",
-              mr: "5px",
-              alignSelf: "flex-end",
-              width: "fit-content",
-              maxWidth: s.maxWidth,
-              animation: exiting.has(msg.key)
-                ? `${s.animationOut} 0.75s ease forwards`
-                : `${s.animationIn} 0.75s ease forwards`,
-            }}>
+            <Box
+              key={msg.key}
+              sx={{
+                position: "relative",
+                mb: 1,
+                ml: "25px",
+                mr: "5px",
+                alignSelf: "flex-end",
+                width: "fit-content",
+                maxWidth: s.maxWidth,
+                animation: exiting.has(msg.key)
+                  ? `${s.animationOut} 0.75s ease forwards`
+                  : `${s.animationIn} 0.75s ease forwards`,
+              }}
+            >
               {/* Triangle */}
-              <Box sx={{
-                position: "absolute",
-                right: "100%",
-                bottom: 0,
-                width: 0,
-                height: 0,
-                borderTop: "20px solid transparent",
-                borderRight: `20px solid ${lucianBg(msg.roles)}`,
-                borderBottom: "0px solid transparent",
-              }} />
+              <Box
+                sx={{
+                  position: "absolute",
+                  right: "100%",
+                  bottom: 0,
+                  width: 0,
+                  height: 0,
+                  borderTop: "20px solid transparent",
+                  borderRight: `20px solid ${lucianBg(msg.roles)}`,
+                  borderBottom: "0px solid transparent",
+                }}
+              />
               {/* Card */}
-              <Box sx={{
-                p: "8px 12px",
-                background: lucianBg(msg.roles),
-                borderRight: `10px solid ${msg.color || "#fff"}`,
-                wordBreak: "break-word",
-              }}>
+              <Box
+                sx={{
+                  p: "8px 12px",
+                  background: lucianBg(msg.roles),
+                  borderRight: `10px solid ${msg.color || "#fff"}`,
+                  wordBreak: "break-word",
+                }}
+              >
                 {/* Meta: username + badges, right-aligned */}
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.5, mb: 0.25 }}>
-                  <span style={{
-                    fontFamily: "'EB Garamond', 'IBM Plex Sans Thai', serif",
-                    fontWeight: 700,
-                    fontSize: `${s.fontSize * 1.15}px`,
-                    color: lucianTextColor(msg.roles),
-                    textShadow: "2px 2px 2px rgba(0,0,0,0.3)",
-                  }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    gap: 0.5,
+                    mb: 0.25,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'EB Garamond', 'IBM Plex Sans Thai', serif",
+                      fontWeight: 700,
+                      fontSize: `${s.fontSize * 1.15}px`,
+                      color: lucianTextColor(msg.roles),
+                      textShadow: "2px 2px 2px rgba(0,0,0,0.3)",
+                    }}
+                  >
                     {msg.user}
                   </span>
-                  {!s.hideBadges && msg.badges.map((badge, i) => (
-                    <img key={i} src={badge} alt="" style={{
-                      height: "1.25rem",
-                      verticalAlign: "middle",
-                      transform: "rotate(-15deg)",
-                      filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.3))",
-                      flexShrink: 0,
-                    }} />
-                  ))}
+                  {!s.hideBadges &&
+                    msg.badges.map((badge, i) => (
+                      <img
+                        key={i}
+                        src={badge}
+                        alt=""
+                        style={{
+                          height: "1.25rem",
+                          verticalAlign: "middle",
+                          transform: "rotate(-15deg)",
+                          filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.3))",
+                          flexShrink: 0,
+                        }}
+                      />
+                    ))}
                 </Box>
                 {/* Message */}
                 <Box sx={{ textAlign: "right" }}>
@@ -236,17 +299,40 @@ export function ChatOverlay() {
           >
             {s.themeId === "manao-classic" ? (
               <>
-                <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 0.5, mb: 0.5 }}>
-                  {!s.hideBadges && msg.badges.map((badge, i) => (
-                    <img key={i} src={badge} alt="" style={{ width: "1.2em", height: "1.2em", verticalAlign: "middle", flexShrink: 0 }} />
-                  ))}
-                  <span style={{
-                    fontWeight: 700,
-                    color: msg.color || "#fff",
-                    fontSize: s.fontSize,
-                    letterSpacing: s.letterSpacing,
-                    textShadow: s.textShadow ? "0 2px 8px rgba(0,0,0,0.7)" : "none",
-                  }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: 0.5,
+                    mb: 0.5,
+                  }}
+                >
+                  {!s.hideBadges &&
+                    msg.badges.map((badge, i) => (
+                      <img
+                        key={i}
+                        src={badge}
+                        alt=""
+                        style={{
+                          width: "1.2em",
+                          height: "1.2em",
+                          verticalAlign: "middle",
+                          flexShrink: 0,
+                        }}
+                      />
+                    ))}
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      color: msg.color || "#fff",
+                      fontSize: s.fontSize,
+                      letterSpacing: s.letterSpacing,
+                      textShadow: s.textShadow
+                        ? "0 2px 8px rgba(0,0,0,0.7)"
+                        : "none",
+                    }}
+                  >
                     {msg.user}
                   </span>
                 </Box>
@@ -257,7 +343,9 @@ export function ChatOverlay() {
                     fontWeight: s.fontWeight,
                     letterSpacing: s.letterSpacing,
                     lineHeight: 1.4,
-                    textShadow: s.textShadow ? "0 2px 8px rgba(0,0,0,0.7)" : "none",
+                    textShadow: s.textShadow
+                      ? "0 2px 8px rgba(0,0,0,0.7)"
+                      : "none",
                   }}
                   dangerouslySetInnerHTML={{ __html: msg.message }}
                 />
@@ -265,29 +353,55 @@ export function ChatOverlay() {
             ) : (
               <>
                 {!s.hideBadges && msg.badges.length > 0 && (
-                  <Box sx={{ display: "inline-flex", gap: 0.25, mr: 0.5, verticalAlign: "middle" }}>
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      gap: 0.25,
+                      mr: 0.5,
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {msg.badges.map((badge, i) => (
-                      <img key={i} src={badge} alt="" style={{ width: 16, height: 16, borderRadius: 2 }} />
+                      <img
+                        key={i}
+                        src={badge}
+                        alt=""
+                        style={{ width: 16, height: 16, borderRadius: 2 }}
+                      />
                     ))}
                   </Box>
                 )}
-                <span style={{
-                  fontWeight: Math.min(parseInt(s.fontWeight) + 100, 900),
-                  color: msg.color || "#fff",
-                  fontSize: s.fontSize,
-                  letterSpacing: s.letterSpacing,
-                  textShadow: s.textShadow ? "0 2px 8px rgba(0,0,0,0.7)" : "none",
-                }}>
+                <span
+                  style={{
+                    fontWeight: Math.min(parseInt(s.fontWeight) + 100, 900),
+                    color: msg.color || "#fff",
+                    fontSize: s.fontSize,
+                    letterSpacing: s.letterSpacing,
+                    textShadow: s.textShadow
+                      ? "0 2px 8px rgba(0,0,0,0.7)"
+                      : "none",
+                  }}
+                >
                   {msg.user}
                 </span>
-                <span style={{ color: "rgba(255,255,255,0.4)", margin: "0 4px", fontSize: s.fontSize - 2 }}>·</span>
+                <span
+                  style={{
+                    color: "rgba(255,255,255,0.4)",
+                    margin: "0 4px",
+                    fontSize: s.fontSize - 2,
+                  }}
+                >
+                  ·
+                </span>
                 <span
                   style={{
                     color: s.textColor,
                     fontSize: s.fontSize,
                     fontWeight: s.fontWeight,
                     letterSpacing: s.letterSpacing,
-                    textShadow: s.textShadow ? "0 2px 8px rgba(0,0,0,0.7)" : "none",
+                    textShadow: s.textShadow
+                      ? "0 2px 8px rgba(0,0,0,0.7)"
+                      : "none",
                   }}
                   dangerouslySetInnerHTML={{ __html: msg.message }}
                 />

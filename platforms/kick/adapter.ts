@@ -6,7 +6,8 @@ import type {
   Configuration,
   CommandContext,
   MessageHandler,
-  PlatformAdapter, MessageData,
+  PlatformAdapter,
+  MessageData,
 } from "@/core/types";
 import type { CommandRegistry } from "@/core/registry";
 import { KickIt } from "@manaobot/kickit";
@@ -195,11 +196,10 @@ export class KickAdapter implements PlatformAdapter {
           event.sender.identity?.badges?.some(
             (b: any) => b.type === "moderator",
           ) ?? false,
-        isBroadcaster:
-          event.sender.user_id === event.broadcaster.user_id,
+        isBroadcaster: event.sender.user_id === event.broadcaster.user_id,
       },
       color: event.sender.identity.username_color,
-      badges: []
+      badges: [],
     };
 
     io.emit("message", messageData);

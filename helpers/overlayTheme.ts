@@ -1,6 +1,8 @@
 import type {
-  MusicOverlaySettings, OverlayThemeId,
-  ChatOverlaySettings, ChatThemeId,
+  MusicOverlaySettings,
+  OverlayThemeId,
+  ChatOverlaySettings,
+  ChatThemeId,
 } from "../core/types";
 
 // ── Music ─────────────────────────────────────────────────────────────────────
@@ -33,7 +35,7 @@ export const DEFAULT_MUSIC_OVERLAY_SETTINGS: MusicOverlaySettings =
   MUSIC_OVERLAY_PRESETS["manao-v5"];
 
 export function resolveMusicTheme(
-  settings: MusicOverlaySettings
+  settings: MusicOverlaySettings,
 ): MusicOverlaySettings {
   if (settings.themeId === "custom") return settings;
   return MUSIC_OVERLAY_PRESETS[settings.themeId] ?? settings;
@@ -70,7 +72,7 @@ export const CHAT_OVERLAY_PRESETS: Record<
     animationOut: "slideOutLeft",
     customCSS: "",
   },
-  "lucian": {
+  lucian: {
     themeId: "lucian",
     layout: "lucian",
     align: "right",
@@ -125,9 +127,8 @@ export const CHAT_OVERLAY_PRESETS: Record<
 export const DEFAULT_CHAT_OVERLAY_SETTINGS: ChatOverlaySettings =
   CHAT_OVERLAY_PRESETS["manao-v5"];
 
-
 export function resolveChatTheme(
-  settings: ChatOverlaySettings
+  settings: ChatOverlaySettings,
 ): ChatOverlaySettings {
   if (settings.themeId === "custom") return settings;
   const preset = CHAT_OVERLAY_PRESETS[settings.themeId] ?? settings;
@@ -152,15 +153,27 @@ export function googleFontsUrl(family: string): string {
 }
 
 export const ANIMATION_IN_OPTIONS: ChatOverlaySettings["animationIn"][] = [
-  "slideInRight", "slideInLeft", "slideInUp", "slideInDown",
-  "fadeIn", "fadeInUp", "fadeInDown",
-  "bounceInRight", "bounceInLeft",
+  "slideInRight",
+  "slideInLeft",
+  "slideInUp",
+  "slideInDown",
+  "fadeIn",
+  "fadeInUp",
+  "fadeInDown",
+  "bounceInRight",
+  "bounceInLeft",
 ];
 
 export const ANIMATION_OUT_OPTIONS: ChatOverlaySettings["animationOut"][] = [
-  "slideOutRight", "slideOutLeft", "slideOutUp", "slideOutDown",
-  "fadeOut", "fadeOutUp", "fadeOutDown",
-  "bounceOutRight", "bounceOutLeft",
+  "slideOutRight",
+  "slideOutLeft",
+  "slideOutUp",
+  "slideOutDown",
+  "fadeOut",
+  "fadeOutUp",
+  "fadeOutDown",
+  "bounceOutRight",
+  "bounceOutLeft",
 ];
 
 export const PLATFORM_COLOR: Record<string, string> = {
