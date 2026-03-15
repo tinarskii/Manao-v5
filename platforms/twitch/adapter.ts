@@ -31,14 +31,14 @@ async function persistTokenToEnv(
     const prefix = userType === "bot" ? "TWITCH_BOT" : "BROADCASTER";
     let envContent = await Bun.file(envPath).text();
     envContent = envContent
-      .replace(
-        new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
-        `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
-      )
-      .replace(
-        new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
-        `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
-      );
+    .replace(
+      new RegExp(`^${prefix}_ACCESS_TOKEN=.*$`, "m"),
+      `${prefix}_ACCESS_TOKEN=${token.accessToken}`,
+    )
+    .replace(
+      new RegExp(`^${prefix}_REFRESH_TOKEN=.*$`, "m"),
+      `${prefix}_REFRESH_TOKEN=${token.refreshToken ?? ""}`,
+    );
     await Bun.write(envPath, envContent);
     logger.info(`[Twitch] Persisted refreshed ${userType} token`);
   } catch (err) {
@@ -245,6 +245,42 @@ export class TwitchAdapter implements PlatformAdapter {
             if (!twitchUser) return null;
             return initAccount(twitchUser.id, "twitch");
           },
+          setGame: async (gameName) => {
+            if (!gameName) {
+              const channelInfo = await this.apiClient.channels.getChannelInfoById(
+                TWITCH.BROADCASTER.ID,
+              );
+              return channelInfo?.gameName ?? null;
+            }
+            const game = await this.apiClient.games.getGameByName(gameName);
+            if (!game) return null;
+            await this.apiClient.channels.updateChannelInfo(
+              TWITCH.BROADCASTER.ID,
+              { gameId: game.id },
+            );
+            return game.name;
+          },
+          setTitle: async (title) => {
+            await this.apiClient.channels.updateChannelInfo(
+              TWITCH.BROADCASTER.ID,
+              { title },
+            );
+          },
+          announce: async (message) => {
+            await this.apiClient.chat.sendAnnouncement(
+              TWITCH.BROADCASTER.ID,
+              { message },
+            );
+          },
+          shoutout: async (targetName) => {
+            const target = await this.apiClient.users.getUserByName(targetName);
+            if (!target) return false;
+            await this.apiClient.chat.shoutoutUser(
+              TWITCH.BROADCASTER.ID,
+              target.id,
+            );
+            return true;
+          },
         };
 
         await runCommand(
@@ -330,7 +366,7 @@ export class TwitchAdapter implements PlatformAdapter {
           response =
             reply.responses[
               Math.floor(Math.random() * reply.responses.length)
-            ] ?? "";
+              ] ?? "";
         } else {
           const key = reply.keywords.join(",");
           const idx = this.sequenceIndex.get(key) ?? 0;

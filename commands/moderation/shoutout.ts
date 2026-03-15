@@ -19,21 +19,20 @@ export default {
   ],
   execute: async (ctx, args) => {
     const t = i18n[ctx.language];
+
+    if (!ctx.shoutout) {
+      await ctx.reply(t.moderation.errorPlatformUnsupported());
+      return;
+    }
+
     const target = args[0];
     if (!target) return;
 
-    ctx.emit("shoutout", {
-      channelID: ctx.channel,
-      targetName: target,
-      onSuccess: async () => {
-        await ctx.reply(t.moderation.shoutoutSuccess(target));
-      },
-      onError: async () => {
-        await ctx.reply(t.moderation.errorCannotShoutout());
-      },
-      onNotFound: async () => {
-        await ctx.reply(t.moderation.errorUserNotFound(target));
-      },
-    });
+    const found = await ctx.shoutout(target);
+    if (found) {
+      await ctx.reply(t.moderation.shoutoutSuccess(target));
+    } else {
+      await ctx.reply(t.moderation.errorUserNotFound(target));
+    }
   },
 } satisfies Command;

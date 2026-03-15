@@ -1,5 +1,5 @@
 export type Language = "en" | "th";
-export type Platform = "twitch" | "kick" | "discord";
+export type Platform = "twitch" | "kick" | "discord" | "youtube";
 export type Permission =
   | "everyone"
   | "follower"
@@ -63,6 +63,12 @@ export interface CommandContext {
 
   // Platform-specific user lookup by display name → internal ID
   lookupUser: (name: string) => Promise<string | null>;
+
+  // Optional platform-specific actions (only available on supporting platforms)
+  setGame?: (gameName: string) => Promise<string | null>; // returns resolved game name, null if not found
+  setTitle?: (title: string) => Promise<void>;
+  announce?: (message: string) => Promise<void>;
+  shoutout?: (targetName: string) => Promise<boolean>; // returns false if user not found
 }
 
 export interface PlatformAdapter {
@@ -237,6 +243,7 @@ export interface ChatOverlaySettings {
   borderColorSource: "user" | "platform";
 
   // Behavior
+  cooldownMs: number;
   timeoutMs: number;
 
   // Animation

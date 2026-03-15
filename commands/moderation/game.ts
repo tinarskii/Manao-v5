@@ -19,20 +19,27 @@ export default {
   ],
   execute: async (ctx, args) => {
     const t = i18n[ctx.language];
+
+    if (!ctx.setGame) {
+      await ctx.reply(t.moderation.errorPlatformUnsupported());
+      return;
+    }
+
     const gameName = args.join(" ");
 
-    ctx.emit("setGame", {
-      channelID: ctx.channel,
-      gameName: gameName || null,
-      onCurrent: async (name: string) => {
-        await ctx.say(t.configuration.currentGame(name));
-      },
-      onSuccess: async (name: string) => {
-        await ctx.reply(t.configuration.currentGameChanged(name));
-      },
-      onNotFound: async () => {
-        await ctx.reply(t.configuration.errorGameNotFound(gameName));
-      },
-    });
+    if (!gameName) {
+      const current = await ctx.setGame("");
+      if (current !== null) {
+        await ctx.say(t.configuration.currentGame(current));
+      }
+      return;
+    }
+
+    const resolved = await ctx.setGame(gameName);
+    if (resolved === null) {
+      await ctx.reply(t.configuration.errorGameNotFound(gameName));
+    } else {
+      await ctx.reply(t.configuration.currentGameChanged(resolved));
+    }
   },
 } satisfies Command;

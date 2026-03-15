@@ -19,14 +19,13 @@ export default {
   ],
   execute: async (ctx, args) => {
     const t = i18n[ctx.language];
+
+    if (!ctx.announce) {
+      await ctx.reply(t.moderation.errorPlatformUnsupported());
+      return;
+    }
+
     const message = args.join(" ");
-    // Twitch announcement requires API — emitted to adapter layer
-    ctx.emit("announce", {
-      channelID: ctx.channel,
-      message,
-      onError: async () => {
-        await ctx.reply(t.moderation.errorCannotAnnounce());
-      },
-    });
+    await ctx.announce(message);
   },
 } satisfies Command;

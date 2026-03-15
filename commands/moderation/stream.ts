@@ -19,14 +19,14 @@ export default {
   ],
   execute: async (ctx, args) => {
     const t = i18n[ctx.language];
-    const title = args.join(" ");
 
-    ctx.emit("setStreamTitle", {
-      channelID: ctx.channel,
-      title,
-      onSuccess: async () => {
-        await ctx.say(t.moderation.streamTitleChanged(title));
-      },
-    });
+    if (!ctx.setTitle) {
+      await ctx.reply(t.moderation.errorPlatformUnsupported());
+      return;
+    }
+
+    const title = args.join(" ");
+    await ctx.setTitle(title);
+    await ctx.say(t.moderation.streamTitleChanged(title));
   },
 } satisfies Command;

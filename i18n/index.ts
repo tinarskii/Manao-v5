@@ -122,6 +122,7 @@ const en = {
     errorEventNotConnected: () => "No event is currently connected",
     shoutoutSuccess: (user: string) => `Go follow @${user}!`,
     streamTitleChanged: (title: string) => `Stream title changed to: ${title}`,
+    errorPlatformUnsupported: () => "This command is not supported on this platform.",
   },
 
   misc: {
@@ -254,8 +255,9 @@ const th: typeof en = {
       "มีอีเวนต์เชื่อมต่ออยู่แล้ว ใช้ !event disconnect ก่อน",
     errorUrlRequired: () => "กรุณาใส่ URL ที่ต้องการเชื่อมต่อ",
     errorEventNotConnected: () => "ไม่มีอีเวนต์ที่เชื่อมต่ออยู่",
-    shoutoutSuccess: (user) => `ไปกดฟอลให้ @${user} กันด้วยนะ!`,
-    streamTitleChanged: (title) => `เปลี่ยนชื่อสตรีมเป็น: ${title}`,
+    shoutoutSuccess: (user: string) => `ไปกดฟอลให้ @${user} กันด้วยนะ!`,
+    streamTitleChanged: (title: string) => `เปลี่ยนชื่อสตรีมเป็น: ${title}`,
+    errorPlatformUnsupported: () => "คำสั่งนี้ไม่รองรับบนแพลตฟอร์มนี้",
   },
 
   misc: {
