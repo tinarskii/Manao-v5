@@ -35,6 +35,14 @@ With the release of Manao v5, Manao has been completely rewritten from the groun
 Not only that, the web dashboard and setup wizard has been rebuilt using React (SPA) with Vite. Along with a new Go-based installer that makes setup 
 a lot easier.
 
+- **Install Manao!**: [Installer (Windows / Linux)](https://gitlab.com/mymanao/installer/-/releases)
+- **Manao Installer Source Code**: [mymanao/installer](https://gitlab.com/mymanao/installer)
+
+Or check out the older version, Manao v4, which is still maintained and receives critical bug fixes, but will not receive new features or platform support.
+
+- **Manao v4 Install Guide**: [Manao v4 Guide](https://manao-v4.otternoon.com/guides/project-installation/) 
+- **Manao v4 Source Code**: [mymanao/Manao-v4](https://github.com/mymanao/Manao-v4)
+
 ---
 
 <img src="/assets/wiki-and-docs-banner.png" width="100%" alt="Wiki & Docs" />
@@ -45,9 +53,9 @@ Manao has its own dedicated wiki that provides an easy guide for streamers and u
 is built using Astro with Starlight and has support for multiple language (English and Thai). 
 Contributions to the wiki are welcome.
 
-- **Documentation:** [ManaoWiki](https://manaobot.netlify.app/)
+- **Documentation:** [ManaoWiki](https://manao.otternoon.com/)
+- **Legacy Documentation (Manao v4)**: [ManaoWiki v4](https://manao-v4.otternoon.com/)
 - **Wiki Source:** [mymanao/manao-wiki](https://github.com/mymanao/manao-wiki)
-
 
 ---
 

@@ -217,7 +217,7 @@ function DrawerContent({ onClose }: { onClose?: () => void }) {
       <Box sx={{ px: 2.5, py: 1.5 }}>
         <Box
           component="a"
-          href="https://manaobot.netlify.app/"
+          href="https://manao.otternoon.com/"
           target="_blank"
           rel="noopener noreferrer"
           sx={{
