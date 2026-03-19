@@ -17,13 +17,13 @@ const QUICK_LINKS = [
     title: "Commands",
     description: "Enable/disable built-in commands and manage custom ones.",
     icon: <TerminalIcon />,
-    to: "/commands",
+    to: "/manager/commands",
   },
   {
     title: "Config",
     description: "Language, currency, prefixes, custom messages, chat rewards.",
     icon: <SettingsIcon />,
-    to: "/config",
+    to: "/customize/config",
   },
   {
     title: "Song Queue",
@@ -35,13 +35,13 @@ const QUICK_LINKS = [
     title: "Custom Replies",
     description: "Auto-reply to keywords in chat.",
     icon: <ForumIcon />,
-    to: "/replies",
+    to: "/manager/replies",
   },
   {
     title: "Channel Points",
     description: "Manage sound rewards and channel point redemptions.",
     icon: <RedeemIcon />,
-    to: "/channel-points",
+    to: "/manager/channel-points",
   },
   {
     title: "Soundboard",
