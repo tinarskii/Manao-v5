@@ -28,7 +28,10 @@ const ALL_PLATFORMS = ["twitch", "kick", "discord", "youtube"];
 
 // ── Regex helpers ──────────────────────────────────────────────────────────────
 
-function extractLocalized(src: string, field: string): { en: string; th: string } | null {
+function extractLocalized(
+  src: string,
+  field: string,
+): { en: string; th: string } | null {
   // Matches: field: { en: "...", th: "..." } — double-quoted values (may contain apostrophes)
   const re = new RegExp(
     `${field}:\\s*\\{\\s*en:\\s*"([^"]*)"[^}]*?th:\\s*"([^"]*)"`,
@@ -70,13 +73,21 @@ function extractPlatforms(src: string): string[] {
 
 function extractArguments(
   src: string,
-): { name: { en: string; th: string }; description: { en: string; th: string }; required?: boolean }[] {
+): {
+  name: { en: string; th: string };
+  description: { en: string; th: string };
+  required?: boolean;
+}[] {
   // Find the arguments array block
   const argsM = src.match(/arguments:\s*\[(.+?)^\s*\],/ms);
   if (!argsM) return [];
 
   const block = argsM[1];
-  const args: { name: { en: string; th: string }; description: { en: string; th: string }; required?: boolean }[] = [];
+  const args: {
+    name: { en: string; th: string };
+    description: { en: string; th: string };
+    required?: boolean;
+  }[] = [];
 
   // Split into individual argument objects by finding { ... } blocks
   const objRe = /\{[^{}]*(?:\{[^{}]*\}[^{}]*)?\}/gs;
@@ -89,7 +100,11 @@ function extractArguments(
     const reqM = obj.match(/required:\s*(true|false)/);
     const required = reqM ? reqM[1] === "true" : undefined;
 
-    args.push({ name, description, ...(required !== undefined ? { required } : {}) });
+    args.push({
+      name,
+      description,
+      ...(required !== undefined ? { required } : {}),
+    });
   }
 
   return args;

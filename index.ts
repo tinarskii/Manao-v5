@@ -4,7 +4,7 @@ import { CommandRegistry } from "@/core/registry";
 import { buildCustomCommand } from "@/core/custom-commands";
 import { getUserConfig } from "@/server/api/config";
 import { getCustomCommands } from "@/db";
-import {startServer} from "@/server";
+import { startServer } from "@/server";
 import { setRegistry } from "@/commands/info/help";
 import { startScheduledMessages, setSendFn } from "@/core/scheduled-messages";
 
@@ -46,11 +46,11 @@ import shoutout from "@/commands/moderation/shoutout";
 import game from "@/commands/moderation/game";
 import stream from "@/commands/moderation/stream";
 import event from "@/commands/moderation/event";
-import type {Configuration} from "@/core/types.ts";
+import type { Configuration } from "@/core/types.ts";
 import type { TwitchAdapter } from "@/platforms/twitch/adapter";
 import type { KickAdapter } from "@/platforms/kick/adapter";
-import type {DiscordAdapter} from "@/platforms/discord/adapter.ts";
-import type {YoutubeAdapter} from "@/platforms/youtube/adapter.ts";
+import type { DiscordAdapter } from "@/platforms/discord/adapter.ts";
+import type { YoutubeAdapter } from "@/platforms/youtube/adapter.ts";
 
 let config = await getUserConfig();
 
@@ -99,7 +99,10 @@ logger.info(
 let twitchSend: ((msg: string) => Promise<void>) | null = null;
 let kickSend: ((msg: string) => Promise<void>) | null = null;
 
-let twAdapter: TwitchAdapter, kickAdapter: KickAdapter, discordAdapter: DiscordAdapter, ytAdapter: YoutubeAdapter;
+let twAdapter: TwitchAdapter,
+  kickAdapter: KickAdapter,
+  discordAdapter: DiscordAdapter,
+  ytAdapter: YoutubeAdapter;
 
 if (TWITCH.ENABLED) {
   const { TwitchAdapter } = await import("@/platforms/twitch/adapter");
@@ -136,7 +139,8 @@ export async function updateConfig(newConfig: Configuration) {
     await twAdapter.stop();
     twAdapter = new TwitchAdapter(registry, config);
     await twAdapter.start();
-    twitchSend = (msg) => twAdapter.sendMessage(TWITCH.BROADCASTER.CHANNEL, msg);
+    twitchSend = (msg) =>
+      twAdapter.sendMessage(TWITCH.BROADCASTER.CHANNEL, msg);
   }
 
   if (KICK.ENABLED && kickAdapter) {

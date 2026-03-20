@@ -1,7 +1,7 @@
 import type { Elysia } from "elysia";
 import type { Configuration } from "@/core/types";
 import { DEFAULT_OVERLAY_SETTINGS } from "@/helpers/overlayTheme.ts";
-import {updateConfig} from "@/index.ts";
+import { updateConfig } from "@/index.ts";
 
 const CONFIG_PATH = `${process.cwd()}/userConfig.json`;
 
