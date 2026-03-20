@@ -9,6 +9,7 @@ import {
 } from "@/db";
 import type { CommandRegistry } from "@/core/registry";
 import { buildCustomCommand } from "@/core/custom-commands";
+import {logger} from "@/helpers/logger.ts";
 
 const permissionSchema = z.enum([
   "everyone",
@@ -21,11 +22,11 @@ const permissionSchema = z.enum([
 
 const createCommandSchema = z.object({
   name: z.string().min(1).max(32),
-  description: z.string().min(1).max(255),
+  description: z.string().max(255).default(""),
   aliases: z.string().default("[]"),
   arguments: z.string().default("[]"),
   permission: permissionSchema.default("everyone"),
-  code: z.string().min(1),
+  code: z.string().default(""),
   isEnabled: z.boolean().default(true),
 });
 
@@ -57,6 +58,7 @@ export function registerCustomCommandsAPI(
   app.post("/api/custom-commands", ({ body }) => {
     const parsed = createCommandSchema.safeParse(body);
     if (!parsed.success) {
+      logger.error(`[Manao] Failed to create custom command: ${parsed.error}`);
       return { success: false, error: z.treeifyError(parsed.error) };
     }
     try {
