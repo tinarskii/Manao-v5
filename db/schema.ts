@@ -25,7 +25,7 @@ export const customCommands = sqliteTable("custom_commands", {
   id: text("id").primaryKey(),
   name: text("name").notNull().unique(),
   description: text("description").notNull(),
-  aliases: text("aliases").notNull().default("{}"),
+  aliases: text("aliases").notNull().default("[]"),
   arguments: text("arguments").notNull().default("[]"),
   permission: text("permission", {
     enum: [

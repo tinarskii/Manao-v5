@@ -22,7 +22,7 @@ const permissionSchema = z.enum([
 const createCommandSchema = z.object({
   name: z.string().min(1).max(32),
   description: z.string().min(1).max(255),
-  aliases: z.string().default("{}"),
+  aliases: z.string().default("[]"),
   arguments: z.string().default("[]"),
   permission: permissionSchema.default("everyone"),
   code: z.string().min(1),

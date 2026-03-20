@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "36bc2ff3-3e3c-4af1-ace4-c183ca803c4b",
+  "id": "9b71ae1e-dd93-4126-a1f0-540977a21e1f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "custom_commands": {
@@ -34,7 +34,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'{}'"
+          "default": "'[]'"
         },
         "arguments": {
           "name": "arguments",
@@ -87,7 +87,9 @@
       "indexes": {
         "custom_commands_name_unique": {
           "name": "custom_commands_name_unique",
-          "columns": ["name"],
+          "columns": [
+            "name"
+          ],
           "isUnique": true
         }
       },
@@ -127,6 +129,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "youtube_id": {
+          "name": "youtube_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "linked_at": {
           "name": "linked_at",
           "type": "integer",
@@ -139,17 +148,30 @@
       "indexes": {
         "linked_accounts_twitch_id_unique": {
           "name": "linked_accounts_twitch_id_unique",
-          "columns": ["twitch_id"],
+          "columns": [
+            "twitch_id"
+          ],
           "isUnique": true
         },
         "linked_accounts_kick_id_unique": {
           "name": "linked_accounts_kick_id_unique",
-          "columns": ["kick_id"],
+          "columns": [
+            "kick_id"
+          ],
           "isUnique": true
         },
         "linked_accounts_discord_id_unique": {
           "name": "linked_accounts_discord_id_unique",
-          "columns": ["discord_id"],
+          "columns": [
+            "discord_id"
+          ],
+          "isUnique": true
+        },
+        "linked_accounts_youtube_id_unique": {
+          "name": "linked_accounts_youtube_id_unique",
+          "columns": [
+            "youtube_id"
+          ],
           "isUnique": true
         }
       },
