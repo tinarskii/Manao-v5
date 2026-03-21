@@ -13,7 +13,6 @@ export function registerSoundboardAPI(app: Elysia) {
   app.get("/api/sounds", () => {
     try {
       const dir = join(process.cwd(), "server/public/sounds");
-      console.log(dir);
       const files = readdirSync(dir).filter((f) =>
         /\.(mp3|wav|ogg|m4a|webm)$/i.test(f),
       );
