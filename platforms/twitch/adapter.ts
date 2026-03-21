@@ -144,6 +144,10 @@ async function processBadges(
 
 export class TwitchAdapter implements PlatformAdapter {
   readonly platform = "twitch" as const;
+  readonly eventHandlers = new Map<string, (data: unknown) => void>();
+  onEvent(event: string, handler: (data: unknown) => void): void {
+    this.eventHandlers.set(event, handler);
+  }
 
   private chatClient!: ChatClient;
   private apiClient!: ApiClient;
@@ -167,6 +171,22 @@ export class TwitchAdapter implements PlatformAdapter {
 
     this.chatClient.onConnect(() => {
       logger.info(`[Twitch] Connected to ${channel}`);
+    });
+
+    this.onEvent("getUptime", async (data) => {
+      const { callback } = data as {
+        callback: (startDate: Date | null) => Promise<void>;
+      };
+
+      try {
+        const stream = await this.apiClient.streams.getStreamByUserId(
+          TWITCH.BROADCASTER.ID,
+        );
+        await callback(stream?.startDate ?? null);
+      } catch (err) {
+        logger.error(`[Twitch] Failed to get uptime: ${err}`);
+        await callback(null);
+      }
     });
 
     this.chatClient.onMessage(async (channelName, user, message, msgObj) => {
@@ -250,7 +270,14 @@ export class TwitchAdapter implements PlatformAdapter {
               );
             }
           },
-          emit: (event, data) => io.emit(event, data),
+          emit: (event, data) => {
+            const handler = this.eventHandlers.get(event);
+            if (handler) {
+              handler(data);
+            } else {
+              io.emit(event, data);
+            }
+          },
           lookupUser: async (name) => {
             const twitchUser = await this.apiClient.users.getUserByName(name);
             if (!twitchUser) return null;

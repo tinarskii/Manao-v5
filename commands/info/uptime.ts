@@ -12,7 +12,6 @@ export default {
     const t = i18n[ctx.language];
     // Stream uptime requires Twitch API — emitted to adapter layer to resolve
     ctx.emit("getUptime", {
-      channelID: ctx.channel,
       callback: async (startDate: Date | null) => {
         if (!startDate) {
           await ctx.reply(t.info.offline());

@@ -73,10 +73,12 @@ export interface CommandContext {
 
 export interface PlatformAdapter {
   readonly platform: Platform;
+  readonly eventHandlers: Map<string, (data: unknown) => void>;
   start: () => Promise<void>;
   stop: () => Promise<void>;
   sendMessage: (channel: string, message: string) => Promise<void>;
   onMessage: (handler: MessageHandler) => void;
+  onEvent(event: string, handler: (data: unknown) => void): void;
 }
 
 export type MessageHandler = (
