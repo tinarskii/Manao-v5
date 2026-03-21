@@ -4,7 +4,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "gamble", th: "พนัน" },
-  description: { en: "For you, gambling addict", th: "สำหรับคนติดพนันอย่างคุณ" },
+  description: { en: "Gamble a certain amount and win double or lose it all", th: "พนันจำนวนหนึ่งและชนะเป็นสองเท่าหรือแพ้ทั้งหมด" },
   aliases: { en: ["bet"], th: [] },
   arguments: [
     {

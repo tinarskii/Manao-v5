@@ -2,7 +2,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "love", th: "รัก" },
-  description: { en: "How deep is your love?", th: "ความรักของคุณลึกแค่ไหน?" },
+  description: { en: "Calculate how much you love someone", th: "คำนวณว่าคุณรักใครสักคนแค่ไหน" },
   arguments: [
     {
       name: { en: "user", th: "ผู้ใช้" },

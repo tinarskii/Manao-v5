@@ -3,7 +3,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "stomp", th: "กระทืบ" },
-  description: { en: "Stomp on someone!", th: "กระทืบใครสักคน!" },
+  description: { en: "Stomp someone!", th: "กระทืบใครสักคน!" },
   aliases: { en: [], th: ["ถีบ"] },
   arguments: [
     {

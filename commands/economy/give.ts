@@ -4,7 +4,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "give", th: "ให้เงิน" },
-  description: { en: "Give money to someone else", th: "ให้เงินผู้อื่น" },
+  description: { en: "Transfer money to someone else", th: "ให้เงินผู้อื่น" },
   aliases: { en: ["transfer"], th: [] },
   arguments: [
     {

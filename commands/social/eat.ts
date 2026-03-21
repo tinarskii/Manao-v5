@@ -40,7 +40,7 @@ const foods = {
 
 export default {
   name: { en: "eat", th: "กินอะไรดี" },
-  description: { en: "What do you want to eat?", th: "อยากกินอะไรดี?" },
+  description: { en: "Suggest what to eat", th: "แนะนำว่าจะกินอะไรดี" },
   aliases: { en: [], th: ["กินอะไร", "กินไร"] },
   execute: async (ctx) => {
     const t = i18n[ctx.language];

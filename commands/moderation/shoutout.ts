@@ -3,7 +3,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "shoutout", th: "แนะนำ" },
-  description: { en: "Shoutout to someone!", th: "แนะนำใครสักคน!" },
+  description: { en: "Shoutout a user in chat", th: "แนะนำผู้ใช้ในแชท" },
   aliases: { en: ["so"], th: [] },
   permission: "moderator",
   platforms: ["twitch"],

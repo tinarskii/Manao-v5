@@ -4,7 +4,7 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "language", th: "ภาษา" },
-  description: { en: "Set your preferred language", th: "ตั้งค่าภาษาที่คุณต้องการ" },
+  description: { en: "Set channel's preferred language", th: "ตั้งค่าภาษาที่คุณต้องการ" },
   aliases: { en: ["lang"], th: [] },
   permission: "broadcaster",
   arguments: [
