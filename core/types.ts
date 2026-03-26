@@ -69,6 +69,8 @@ export interface CommandContext {
   setTitle?: (title: string) => Promise<void>;
   announce?: (message: string) => Promise<void>;
   shoutout?: (targetName: string) => Promise<boolean>; // returns false if user not found
+  getUptime?: () => Promise<Date | null>;
+  followage?: (targetName: string) => Promise<Date | null>;
 }
 
 export interface PlatformAdapter {

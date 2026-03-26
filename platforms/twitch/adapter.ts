@@ -173,22 +173,6 @@ export class TwitchAdapter implements PlatformAdapter {
       logger.info(`[Twitch] Connected to ${channel}`);
     });
 
-    this.onEvent("getUptime", async (data) => {
-      const { callback } = data as {
-        callback: (startDate: Date | null) => Promise<void>;
-      };
-
-      try {
-        const stream = await this.apiClient.streams.getStreamByUserId(
-          TWITCH.BROADCASTER.ID,
-        );
-        await callback(stream?.startDate ?? null);
-      } catch (err) {
-        logger.error(`[Twitch] Failed to get uptime: ${err}`);
-        await callback(null);
-      }
-    });
-
     this.chatClient.onMessage(async (channelName, user, message, msgObj) => {
       const userId = msgObj.userInfo?.userId;
       const channelId = msgObj.channelId;
@@ -247,7 +231,10 @@ export class TwitchAdapter implements PlatformAdapter {
             platform: "twitch",
             platformID: userId,
             roles: {
-              isFollower: false, // requires EventSub — set via eventsub handler
+              isFollower: !!(await this.apiClient.channels.getChannelFollowers(
+                TWITCH.BROADCASTER.ID,
+                userId,
+              )),
               isSubscriber: msgObj.userInfo.isSubscriber,
               isVIP: msgObj.userInfo.isVip,
               isModerator: isMod,
@@ -270,14 +257,7 @@ export class TwitchAdapter implements PlatformAdapter {
               );
             }
           },
-          emit: (event, data) => {
-            const handler = this.eventHandlers.get(event);
-            if (handler) {
-              handler(data);
-            } else {
-              io.emit(event, data);
-            }
-          },
+          emit: (event, data) => io.emit(event, data),
           lookupUser: async (name) => {
             const twitchUser = await this.apiClient.users.getUserByName(name);
             if (!twitchUser) return null;
@@ -319,6 +299,17 @@ export class TwitchAdapter implements PlatformAdapter {
             );
             return true;
           },
+          getUptime: async () => {
+            try {
+              const stream = await this.apiClient.streams.getStreamByUserId(
+                TWITCH.BROADCASTER.ID,
+              );
+              return stream?.startDate ?? null;
+            } catch (err) {
+              logger.error(`[Twitch] Failed to get uptime: ${err}`);
+              return null;
+            }
+          }
         };
 
         await runCommand(
