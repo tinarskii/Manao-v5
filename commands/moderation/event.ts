@@ -31,7 +31,7 @@ export default {
     const action = args[0]?.toLowerCase();
 
     if (action !== "connect" && action !== "disconnect") {
-      await ctx.reply(t.moderation.errorInvalidAction());
+      await ctx.reply(t.moderation.errorInvalidAction(["connect", "disconnect"]));
       return;
     }
 
