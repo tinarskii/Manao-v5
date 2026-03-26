@@ -2,7 +2,10 @@ import type { Command } from "@/core/types";
 
 export default {
   name: { en: "hate", th: "เกลียด" },
-  description: { en: "Calculate how much you hate someone", th: "คำนวณว่าคุณเกลียดใครสักคนแค่ไหน" },
+  description: {
+    en: "Calculate how much you hate someone",
+    th: "คำนวณว่าคุณเกลียดใครสักคนแค่ไหน",
+  },
   aliases: { en: [], th: ["เกลียด"] },
   arguments: [
     {

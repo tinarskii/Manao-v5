@@ -171,7 +171,7 @@ export function OverlaySettingsPage() {
         </Alert>
       )}
 
-      {/* ── Music Overlay ─────────────────────────────────────────────────── */}
+      {/* Music Overlay */}
       <Paper sx={{ p: 3, mb: 3 }}>
         <Stack direction="row" alignItems="center" gap={1} sx={{ mb: 2.5 }}>
           <MusicNoteIcon sx={{ color: "primary.main", fontSize: 20 }} />
@@ -678,7 +678,7 @@ export function OverlaySettingsPage() {
         </Box>
       </Paper>
 
-      {/* ── Chat Overlay ───────────────────────────────────────────────────── */}
+      {/* Chat Overlay */}
       <Paper sx={{ p: 3, mb: 3 }}>
         <Stack direction="row" alignItems="center" gap={1} sx={{ mb: 2.5 }}>
           <ChatIcon sx={{ color: "primary.main", fontSize: 20 }} />

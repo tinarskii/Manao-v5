@@ -464,7 +464,7 @@ export function MusicOverlay() {
       />
 
       {isClassic ? (
-        /* ── Manao Classic layout ─────────────────────────────────────────── */
+        /* Manao Classic */
         <Box
           sx={{
             display: "flex",

@@ -153,7 +153,7 @@ export class KickAdapter implements PlatformAdapter {
               return null;
             }
             return new Date(stream.started_at) ?? null;
-          }
+          },
         };
 
         await runCommand(

@@ -183,7 +183,7 @@ export function ChatOverlay() {
       {messages.map((msg) => {
         if (s.themeId === "lucian") {
           return (
-            /* ── Lucian layout ───────────────────────────────── */
+            /* Lucian */
             <Box
               key={msg.key}
               sx={{

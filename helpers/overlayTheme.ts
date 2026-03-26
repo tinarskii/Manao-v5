@@ -5,7 +5,7 @@ import type {
   ChatThemeId,
 } from "../core/types";
 
-// ── Music ─────────────────────────────────────────────────────────────────────
+// Music
 
 export const MUSIC_OVERLAY_PRESETS: Record<
   Exclude<OverlayThemeId, "custom">,

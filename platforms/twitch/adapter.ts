@@ -308,16 +308,21 @@ export class TwitchAdapter implements PlatformAdapter {
           },
           followage: async (targetID) => {
             if (targetID === TWITCH.BROADCASTER.ID) {
-              const channelInfo = await this.apiClient.users.getUserById(TWITCH.BROADCASTER.ID);
+              const channelInfo = await this.apiClient.users.getUserById(
+                TWITCH.BROADCASTER.ID,
+              );
               return channelInfo?.creationDate ?? null;
             }
-            let follow = await this.apiClient.channels.getChannelFollowers(TWITCH.BROADCASTER.ID, targetID);
+            let follow = await this.apiClient.channels.getChannelFollowers(
+              TWITCH.BROADCASTER.ID,
+              targetID,
+            );
             if (follow && follow.data.length > 0) {
               return follow.data[0]!.followDate ?? null;
             } else {
               return null;
             }
-          }
+          },
         };
 
         await runCommand(

@@ -255,7 +255,8 @@ const th: typeof en = {
     errorCannotAnnounce: () => "ไม่สามารถส่งประกาศได้",
     errorCannotShoutout: () => "ไม่สามารถ Shoutout ได้",
     errorUserNotFound: (user) => `ไม่พบผู้ใช้: ${user}`,
-    errorInvalidAction: (actions: string[]) => `คำสั่งไม่ถูกต้อง คำสั่งที่ถูกต้อง: ${actions.join(", ")}`,
+    errorInvalidAction: (actions: string[]) =>
+      `คำสั่งไม่ถูกต้อง คำสั่งที่ถูกต้อง: ${actions.join(", ")}`,
     errorEventAlreadyConnected: () =>
       "มีอีเวนต์เชื่อมต่ออยู่แล้ว ใช้ !event disconnect ก่อน",
     errorUrlRequired: () => "กรุณาใส่ URL ที่ต้องการเชื่อมต่อ",

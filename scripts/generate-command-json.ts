@@ -26,8 +26,6 @@ const OUT_FILE = join(OUT_DIR, "commands.generated.json");
 
 const ALL_PLATFORMS = ["twitch", "kick", "discord", "youtube"];
 
-// ── Regex helpers ──────────────────────────────────────────────────────────────
-
 function extractLocalized(
   src: string,
   field: string,
@@ -107,8 +105,6 @@ function extractArguments(src: string): {
 
   return args;
 }
-
-// ── Main ───────────────────────────────────────────────────────────────────────
 
 const commands: unknown[] = [];
 
