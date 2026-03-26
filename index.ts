@@ -19,6 +19,7 @@ import set from "@/commands/economy/set";
 import version from "@/commands/info/version";
 import help from "@/commands/info/help";
 import uptime from "@/commands/info/uptime";
+import followage from "@/commands/info/followage.ts";
 
 // Social
 import love from "@/commands/social/love";
@@ -66,6 +67,7 @@ function registerCommand() {
     version,
     help,
     uptime,
+    followage,
     love,
     hate,
     stomp,
