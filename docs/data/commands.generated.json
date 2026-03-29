@@ -11,11 +11,18 @@
       "th": "พนันอัตโนมัติหลายครั้ง"
     },
     "aliases": {
-      "en": ["ab"],
+      "en": [
+        "ab"
+      ],
       "th": []
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "balance",
@@ -29,11 +36,19 @@
       "th": "ตรวจสอบยอดเงินของคุณ"
     },
     "aliases": {
-      "en": ["bal", "money"],
+      "en": [
+        "bal",
+        "money"
+      ],
       "th": []
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "gamble",
@@ -47,11 +62,18 @@
       "th": "พนันจำนวนหนึ่งและชนะเป็นสองเท่าหรือแพ้ทั้งหมด"
     },
     "aliases": {
-      "en": ["bet"],
+      "en": [
+        "bet"
+      ],
       "th": []
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "give",
@@ -65,11 +87,15 @@
       "th": "ให้เงินผู้อื่น"
     },
     "aliases": {
-      "en": ["transfer"],
+      "en": [
+        "transfer"
+      ],
       "th": []
     },
     "permission": "everyone",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "set",
@@ -83,11 +109,17 @@
       "th": "ตั้งค่าเงินของผู้ใช้"
     },
     "aliases": {
-      "en": ["s"],
-      "th": ["ตั้งเงิน"]
+      "en": [
+        "s"
+      ],
+      "th": [
+        "ตั้งเงิน"
+      ]
     },
     "permission": "moderator",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "help",
@@ -101,11 +133,22 @@
       "th": "ดูคำสั่งทั้งหมดที่ใช้ได้"
     },
     "aliases": {
-      "en": ["h", "commands", "command"],
-      "th": ["คำสั่ง"]
+      "en": [
+        "h",
+        "commands",
+        "command"
+      ],
+      "th": [
+        "คำสั่ง"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "uptime",
@@ -119,7 +162,10 @@
       "th": "ตรวจสอบระยะเวลาที่สตรีมเปิดอยู่"
     },
     "permission": "everyone",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch",
+      "kick"
+    ]
   },
   {
     "key": "version",
@@ -133,11 +179,37 @@
       "th": "ตรวจสอบเวอร์ชันของบอท"
     },
     "aliases": {
-      "en": ["v", "ver"],
-      "th": ["ว"]
+      "en": [
+        "v",
+        "ver"
+      ],
+      "th": [
+        "ว"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
+  },
+  {
+    "key": "followage",
+    "category": "info",
+    "name": {
+      "en": "followage",
+      "th": "อายุฟอล"
+    },
+    "description": {
+      "en": "Get how long you've been following the channel",
+      "th": "ตรวจสอบระยะเวลาที่คุณติดตามช่องนี้"
+    },
+    "permission": "everyone",
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "announce",
@@ -151,11 +223,19 @@
       "th": "ประกาศข้อความไปยังช่อง"
     },
     "aliases": {
-      "en": ["a", "an"],
-      "th": ["ป", "แจ้ง"]
+      "en": [
+        "a",
+        "an"
+      ],
+      "th": [
+        "ป",
+        "แจ้ง"
+      ]
     },
     "permission": "moderator",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "game",
@@ -169,11 +249,15 @@
       "th": "เปลี่ยนเกมของสตรีม"
     },
     "aliases": {
-      "en": ["g"],
+      "en": [
+        "g"
+      ],
       "th": []
     },
     "permission": "moderator",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "shoutout",
@@ -187,11 +271,15 @@
       "th": "แนะนำผู้ใช้ในแชท"
     },
     "aliases": {
-      "en": ["so"],
+      "en": [
+        "so"
+      ],
       "th": []
     },
     "permission": "moderator",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "stream",
@@ -205,11 +293,17 @@
       "th": "เปลี่ยนชื่อของสตรีม"
     },
     "aliases": {
-      "en": ["title"],
-      "th": ["สตรีม"]
+      "en": [
+        "title"
+      ],
+      "th": [
+        "สตรีม"
+      ]
     },
     "permission": "moderator",
-    "platforms": ["twitch"]
+    "platforms": [
+      "twitch"
+    ]
   },
   {
     "key": "event",
@@ -223,11 +317,21 @@
       "th": "เริ่มต้นอีเวนต์ใหม่"
     },
     "aliases": {
-      "en": ["e", "ev"],
-      "th": ["อ"]
+      "en": [
+        "e",
+        "ev"
+      ],
+      "th": [
+        "อ"
+      ]
     },
     "permission": "moderator",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-default",
@@ -241,11 +345,20 @@
       "th": "ตั้งเพลงเริ่มต้น"
     },
     "aliases": {
-      "en": ["sd"],
-      "th": ["เพลงเริ่ม"]
+      "en": [
+        "sd"
+      ],
+      "th": [
+        "เพลงเริ่ม"
+      ]
     },
     "permission": "broadcaster",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-playing",
@@ -259,11 +372,23 @@
       "th": "แสดงเพลงที่กำลังเล่นอยู่"
     },
     "aliases": {
-      "en": ["playing", "nowplaying", "np"],
-      "th": ["เพลงอะไร", "เพลงไร"]
+      "en": [
+        "playing",
+        "nowplaying",
+        "np"
+      ],
+      "th": [
+        "เพลงอะไร",
+        "เพลงไร"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-queue",
@@ -277,11 +402,21 @@
       "th": "ตรวจสอบคิวเพลง"
     },
     "aliases": {
-      "en": ["queue", "sq"],
-      "th": ["คิว"]
+      "en": [
+        "queue",
+        "sq"
+      ],
+      "th": [
+        "คิว"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-remove",
@@ -295,11 +430,21 @@
       "th": "ลบเพลงออกจากคิว"
     },
     "aliases": {
-      "en": ["remove", "rm"],
-      "th": ["ลบ"]
+      "en": [
+        "remove",
+        "rm"
+      ],
+      "th": [
+        "ลบ"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-request",
@@ -313,11 +458,21 @@
       "th": "ขอเพลงที่ต้องการ"
     },
     "aliases": {
-      "en": ["sr"],
-      "th": ["ข", "ขอ"]
+      "en": [
+        "sr"
+      ],
+      "th": [
+        "ข",
+        "ขอ"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "song-skip",
@@ -331,11 +486,21 @@
       "th": "ข้ามเพลงปัจจุบัน"
     },
     "aliases": {
-      "en": ["skip", "sk"],
-      "th": ["ช้าม"]
+      "en": [
+        "skip",
+        "sk"
+      ],
+      "th": [
+        "ช้าม"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "eat",
@@ -350,10 +515,18 @@
     },
     "aliases": {
       "en": [],
-      "th": ["กินอะไร", "กินไร"]
+      "th": [
+        "กินอะไร",
+        "กินไร"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "hate",
@@ -368,10 +541,17 @@
     },
     "aliases": {
       "en": [],
-      "th": ["เกลียด"]
+      "th": [
+        "เกลียด"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "love",
@@ -385,7 +565,12 @@
       "th": "คำนวณว่าคุณรักใครสักคนแค่ไหน"
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "stomp",
@@ -400,10 +585,17 @@
     },
     "aliases": {
       "en": [],
-      "th": ["ถีบ"]
+      "th": [
+        "ถีบ"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "currency",
@@ -417,7 +609,12 @@
       "th": "เปลี่ยนสกุลเงินของช่อง"
     },
     "permission": "broadcaster",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "language",
@@ -431,11 +628,18 @@
       "th": "ตั้งค่าภาษาที่คุณต้องการ"
     },
     "aliases": {
-      "en": ["lang"],
+      "en": [
+        "lang"
+      ],
       "th": []
     },
     "permission": "broadcaster",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "link",
@@ -449,11 +653,20 @@
       "th": "เชื่อมบัญชีกับแพลตฟอร์มอื่น หรือสร้างรหัสเพื่อให้แพลตฟอร์มอื่นเชื่อมมาหาคุณ"
     },
     "aliases": {
-      "en": ["connect"],
-      "th": ["เชื่อม"]
+      "en": [
+        "connect"
+      ],
+      "th": [
+        "เชื่อม"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   },
   {
     "key": "nickname",
@@ -467,10 +680,20 @@
       "th": "เปลี่ยนหรือแสดงชื่อเล่นของคุณ"
     },
     "aliases": {
-      "en": ["nick", "name"],
-      "th": ["ชื่อ"]
+      "en": [
+        "nick",
+        "name"
+      ],
+      "th": [
+        "ชื่อ"
+      ]
     },
     "permission": "everyone",
-    "platforms": ["twitch", "kick", "discord", "youtube"]
+    "platforms": [
+      "twitch",
+      "kick",
+      "discord",
+      "youtube"
+    ]
   }
 ]
